@@ -1,0 +1,68 @@
+<!-- Login Modal -->
+<div
+  class="modal fade"
+  id="loginmodal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 w-100 text-center" id="loginmodalLabel">
+          Attendance Sign In
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-center">would you like to SignIn Attendance?</p>
+        <table class="table table-custom">
+          <tbody>
+            <tr>
+              <td>Date</td>
+              <td>:</td>
+              <td>{{ logintimedetails.date }}</td>
+            </tr>
+            <tr>
+              <td>Shift Start Time</td>
+              <td>:</td>
+              <td>{{ logintimedetails.shiftStartTime }}</td>
+            </tr>
+            <tr>
+              <td>Login Time</td>
+              <td>:</td>
+              <td>{{ logintimedetails.loginTime }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button
+          type="button"
+          class="btn btn-primary btn-custom"
+          (click)="setLoginTime()"
+        >
+          OK
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger btn-custom"
+          data-bs-dismiss="modal"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- -------------------------------------------------------------------------------------------------- -->
+<p>dashboard works!</p>
+<button class="btn btn-primary">Dashboard</button>

@@ -21,6 +21,13 @@ const routes: Route[] = [
       { path: 'reports', component: ReportComponent },
     ],
   },
+  {
+    path: 'calendar',
+    loadComponent: () =>
+      import('./shared/monthcalendar/monthcalendar.component').then(
+        (m) => m.MonthcalendarComponent
+      ),
+  },
 ];
 
 export const appConfig: ApplicationConfig = {

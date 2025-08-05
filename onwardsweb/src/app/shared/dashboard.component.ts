@@ -76,7 +76,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (isPlatformBrowser(this.platformId) && this.isLoggedin === '0') {
+    if (
+      isPlatformBrowser(this.platformId) &&
+      sessionStorage.getItem('isloggedin') === '0'
+    ) {
       const bootstrap = (window as any).bootstrap;
       const loginEl = document.getElementById('loginmodal');
 

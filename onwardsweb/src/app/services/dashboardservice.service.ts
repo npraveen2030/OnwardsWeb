@@ -29,8 +29,8 @@ export class DashBoardService {
 
     return this.http.post<UserShiftLogResponse>(
       `${this.apiService}/UserShiftDetails/InsertOrUpdate/${userId}`,
-      null, // <-- No request body, so pass `null`
-      { headers, withCredentials: true } // <-- Correct place for headers and credentials
+      null,
+      { headers, withCredentials: true }
     );
   }
 }

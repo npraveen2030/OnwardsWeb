@@ -137,3 +137,63 @@
   padding: 2px;
   cursor: default; /* optional */
 }
+
+.context-style {
+  width: 350px;
+}
+
+.btn-transparent {
+  border: none;
+  outline: none;
+  background: inherit;
+}
+
+.form-label {
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.form-section {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.form-text-muted {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.required:after {
+  content: "*";
+  color: red;
+  margin-left: 2px;
+}
+
+textarea {
+  resize: none;
+}
+
+.char-count {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.drag-drop-box {
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  color: #999;
+  transition: border-color 0.3s, background-color 0.3s;
+  cursor: pointer;
+}
+
+.drag-drop-box.dragover {
+  border-color: #007bff;
+  background-color: #f8f9fa;
+}

@@ -129,4 +129,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         },
       });
   }
+
+  toleavemanager() {
+    this.router.navigate(['/leavemanagement']);
+  }
 }

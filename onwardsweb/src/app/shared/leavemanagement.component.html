@@ -1,0 +1,240 @@
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <button class="btn btn-outline-primary" (click)="previousMonth()">
+    &larr; Previous
+  </button>
+
+  <h3>{{ viewDate | calendarDate : "monthViewTitle" : "en" }}</h3>
+
+  <button class="btn btn-outline-primary" (click)="nextMonth()">
+    Next &rarr;
+  </button>
+</div>
+
+<!-- CALENDER -->
+<ng-template #customCellTemplate let-day="day">
+  <div
+    class="custom-day-cell"
+    (contextmenu)="onRightClick($event, day)"
+    [ngClass]="{ 'outside-month': !day.inMonth }"
+  >
+    <div class="cal-cell-top">
+      {{ day.date | date : "d" }}
+    </div>
+    <div class="event-dot-container">
+      <span
+        *ngFor="let event of day.events"
+        class="event-dot"
+        [ngStyle]="{ 'background-color': event.color?.primary }"
+      ></span>
+    </div>
+  </div>
+</ng-template>
+
+<mwl-calendar-month-view
+  [viewDate]="viewDate"
+  [events]="events"
+  [refresh]="refresh"
+  [cellTemplate]="customCellTemplate"
+>
+</mwl-calendar-month-view>
+
+<!-- rightclick popup -->
+<div
+  class="custom-context-menu context-style"
+  *ngIf="showContextMenu"
+  [ngStyle]="{ top: menuY + 'px', left: menuX + 'px' }"
+  (click)="$event.stopPropagation()"
+>
+  <div class="position-relative">
+    <div class="text-center">{{ rightClickDay | date : "fullDate" }}</div>
+    <button
+      (click)="showContextMenu = false"
+      class="position-absolute end-0 top-0 btn-transparent"
+    >
+      X
+    </button>
+  </div>
+  <div style="color: blue">Apply Leave or Regularization for above date?</div>
+  <div>
+    <div class="dropdown">
+      <button
+        class="btn dropdown-toggle w-100"
+        type="button"
+        data-bs-toggle="dropdown"
+      >
+        -select-
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a class="dropdown-item" (click)="showleaverequest()"
+            >Leave Request</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item">Other Option</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Leave Request Modal -->
+<div
+  class="modal fade"
+  id="leaverequestmodal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 w-100 text-center" id="loginmodalLabel">
+          Leave Request
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          [formGroup]="leaveRequestForm"
+          id="leaveForm"
+          (ngSubmit)="submit()"
+        >
+          <!-- Employee Name -->
+          <div class="mb-3">
+            <label class="form-label required">Employee Name</label>
+            <input
+              class="form-control-plaintext ps-1"
+              formControlName="employeename"
+              [readonly]="true"
+            />
+          </div>
+
+          <!-- Leave Type -->
+          <div class="mb-3">
+            <label class="form-label required">Leave Type</label>
+            <select class="form-select" formControlName="leavetype">
+              <option value="" disabled>Select Leave Type</option>
+              <option value="sick">Sick Leave</option>
+              <option value="casual">Casual Leave</option>
+              <option value="earned">Earned Leave</option>
+            </select>
+          </div>
+
+          <!-- Start Date and Day Period -->
+          <div class="row mb-3">
+            <div class="col">
+              <label class="form-label required">Start Date</label>
+              <input
+                type="date"
+                class="form-control"
+                formControlName="startDate"
+              />
+            </div>
+            <div class="col">
+              <label class="form-label required">Day Period</label>
+              <select class="form-select" formControlName="dayPeriod">
+                <option value="" disabled>Select</option>
+                <option value="full">Full Day</option>
+                <option value="half-am">Half Day - Morning</option>
+                <option value="half-pm">Half Day - Evening</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- End Date -->
+          <div class="mb-3">
+            <label class="form-label required">End Date</label>
+            <input type="date" class="form-control" formControlName="endDate" />
+          </div>
+
+          <!-- Phone Number -->
+          <div class="mb-3">
+            <label class="form-label">Phone Number</label>
+            <input
+              type="tel"
+              class="form-control"
+              formControlName="phone"
+              placeholder="Optional"
+            />
+          </div>
+
+          <!-- Employees to be notified -->
+          <div class="mb-3">
+            <label class="form-label">Employees to be notified</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="notify"
+              placeholder="Enter names or emails"
+            />
+          </div>
+
+          <!-- Reason -->
+          <div class="mb-1">
+            <label class="form-label required">Reason</label>
+            <textarea
+              class="form-control"
+              rows="3"
+              formControlName="reason"
+              maxlength="250"
+            ></textarea>
+          </div>
+          <div class="char-count">
+            {{ leaveRequestForm.get("reason")?.value?.length || 0 }} / 250
+          </div>
+
+          <!-- Single File Upload -->
+          <div class="container my-4" style="max-width: 500px">
+            <div class="mb-2 text-muted small">
+              Recommended file upload size <strong>500kb</strong>.
+            </div>
+
+            <!-- Drag & Drop Box -->
+            <div
+              class="drag-drop-box"
+              id="dropZone"
+              onclick="document.getElementById('fileInput').click()"
+            >
+              Drop supporting document here or click to upload
+              <input
+                type="file"
+                id="fileInput"
+                accept=".pdf,.jpg,.jpeg"
+                hidden
+              />
+            </div>
+
+            <!-- File info display -->
+            <div class="file-info" id="fileNameDisplay"></div>
+          </div>
+        </form>
+        <div class="modal-footer d-flex justify-content-center">
+          <button type="button" class="btn btn-primary btn-custom">
+            Submit
+          </button>
+
+          <button type="button" class="btn btn-secondary btn-custom">
+            Clear Data
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-danger btn-custom"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

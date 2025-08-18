@@ -64,5 +64,174 @@
 </div>
 
 <!-- -------------------------------------------------------------------------------------------------- -->
-<p>dashboard works!</p>
-<button class="btn btn-primary">Dashboard</button>
+<!-- <p>dashboard works!</p>
+<button class="btn btn-primary">Dashboard</button> -->
+<style> 
+   
+  </style> 
+
+  <!-- Main Layout -->
+  <div class="container"> 
+    <div>
+      <div class="main-card"> 
+         <div class="underline-tabs mb-5">
+      <div class="card" >
+          <div class="card-header">
+             <ul class="nav nav-tabs" id="underlineTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab2" data-bs-toggle="tab" data-bs-target="#home2" type="button" role="tab">
+                            MD Address
+                        </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab2" data-bs-toggle="tab" data-bs-target="#profile2" type="button" role="tab">
+                            Onward Tech Updates
+                        </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab2" data-bs-toggle="tab" data-bs-target="#contact2" type="button" role="tab">
+                            Reward & Recognition
+                        </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab2" data-bs-toggle="tab" data-bs-target="#marketing" type="button" role="tab">
+                    Marketing
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab2" data-bs-toggle="tab" data-bs-target="#life" type="button" role="tab">
+                    Life &#64;Onward Tech
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab2" data-bs-toggle="tab" data-bs-target="#employeeEng" type="button" role="tab">
+                    Employee Engagement
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab2" data-bs-toggle="tab" data-bs-target="#aboutme" type="button" role="tab">
+                    About Me!
+                </button>
+            </li>
+        </ul>
+          </div>
+          <ul class="list-group list-group-flush">
+             <div class="tab-content" id="underlineTabsContent">
+            <div class="tab-pane fade show active" id="home2" role="tabpanel">
+                <h4>Home Content</h4>
+                <p>This is the home tab content with underline style.</p>
+            </div>
+            <div class="tab-pane fade" id="profile2" role="tabpanel">
+                <h4>Profile Content</h4>
+                <p>This is the profile tab content with underline style.</p>
+            </div>
+            <div class="tab-pane fade" id="contact2" role="tabpanel">
+                <h4>Contact Content</h4>
+                <p>This is the contact tab content with underline style.</p>
+            </div>
+            <div class="tab-pane fade" id="marketing" role="tabpanel">
+                <h4>marketingmarketingmarketing Content</h4>
+                <p>This is the contact tab content with underline style.</p>
+            </div>
+            <div class="tab-pane fade" id="life" role="tabpanel">
+                <h4>Life Life Life Life Content</h4>
+                <p>This is the contact tab content with underline style.</p>
+            </div>
+            <div class="tab-pane fade" id="employeeEng" role="tabpanel">
+                <h4>employeeEng Content</h4>
+                <p>This is the contact tab content with underline style.</p>
+            </div>
+            <div class="tab-pane fade" id="aboutme" role="tabpanel">
+                <h4>aboutme Content</h4>
+                <p>This is the contact tab content with underline style.</p>
+            </div> 
+        </div>
+          </ul>
+        </div>
+     
+      
+       
+      </div>
+    </div>
+
+      <!-- Holidays and Training -->
+      <div class="sub-sections">
+        <!-- Holidays -->
+         <div class="card" >
+          <div class="card-header">
+            My Holidays
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <table class="table table-striped" >
+                <tr>
+                  <th>Sl.No</th>
+                  <th>Date</th>
+                  <th>Day</th>
+                  <th>Location</th>
+                  <th>Description</th>
+                </tr>
+                <!-- <tr><td>1</td><td>01-Jan-2025</td><td>Wednesday</td><td>INCHN</td><td>New Year</td></tr>
+                <tr><td>2</td><td>14-Jan-2025</td><td>Tuesday</td><td>INCHN</td><td>Pongal</td></tr>
+                <tr><td>3</td><td>31-Mar-2025</td><td>Monday</td><td>INCHN</td><td>Ramzan</td></tr> -->
+                 <tr *ngFor="let holiday of holidaylist">
+                  <td>{{ holiday.id }}</td>
+                  <td>{{ holiday.holidayDate | date: 'dd-MMM-yyyy' }}</td>
+                  <td>{{ holiday.day }}</td>
+                   <!-- <td>DAY</td> -->
+                  <td>{{ holiday.location }}</td>
+                  <td>{{ holiday.holidayName }}</td>
+                </tr>
+              </table>
+            </li> 
+          </ul>
+        </div> 
+
+        <!-- Training -->
+        
+        <div class="card">
+          <div class="card-header">
+            Training
+          </div>
+         <ul  *ngFor="let item of trainingDetails">
+            <li>{{ item.name }}</li> 
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="profile-card">
+        <!-- Header -->
+        <div class="profile-header">
+          <span>👤 About Me!</span>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="profile-body">
+          <!-- Left: Avatar -->
+          <img src="../../assets/profile.jpg" alt="User Avatar">
+
+          <!-- Right: User Details -->
+          <div class="profile-details">
+            <h4>Gedam Nagesh (13339)</h4>
+            <p>Sr. Software Engineer</p>
+            <p>RM - Mookambiga P V</p>
+          </div>
+        </div>
+      </div> 
+
+      <!-- Sidebar Menu -->
+      <div class="menu">
+        <a href="#">My Approvals</a>
+        <a href="#">My Workspace</a>
+        <a href="#">Policies</a>
+        <a href="#">Guidelines / Procedures</a>
+        <a href="#">Formats / Templates</a>
+        <a href="#">Leave Management System</a>
+        <a href="#">Organization Chart</a>
+        <a href="#">Reports</a>
+      </div>
+    </div>
+  </div>

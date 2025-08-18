@@ -5,7 +5,7 @@ import {
   AfterViewInit,
   OnInit,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { DashBoardService } from '../services/dashboardservice.service';
 import { UserShiftLogResponse } from '../models/DashBoardResponseModel';
@@ -14,14 +14,18 @@ import { LoginResponse } from '../models/loginResponseModel';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
   loginModal: any;
   isLoggedin: string = '0';
+  locationId: number = 1; //TO DO:
+  holidaylist: any; //TO DO: remove any
+  trainingDetails: any; //TO DO: remove any
   errorMessage: string = '';
+
   logintimedetails: UserShiftLogResponse = {
     logId: 0,
     shiftId: 0,
@@ -67,9 +71,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       if (isLoggedinJson === null) {
         sessionStorage.setItem('isloggedin', '0');
         this.getUserShiftLogDetails();
+        this.getHolidayList();
+        this.getTrainingDetails();
       } else {
         if (JSON.parse(isLoggedinJson) === '0') {
           this.getUserShiftLogDetails();
+          this.getHolidayList();
+          this.getTrainingDetails();
         }
       }
     }
@@ -88,6 +96,23 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.loginModal?.show();
       }
     }
+  }
+
+  getHolidayList() {
+    this.dashboardservice.getHolidayList(this.locationId).subscribe({
+      next: (response) => {
+        this.holidaylist = response;
+      },
+      error: (err: any) => {
+        // ------------------<need to modify error responses>--------------------
+        if (err.status === 401) {
+          this.errorMessage = 'Holidaylist not found';
+        } else {
+          this.errorMessage = 'An error occurred. Please try again.';
+        }
+        console.error('Login error:', err);
+      },
+    });
   }
 
   getUserShiftLogDetails() {
@@ -130,7 +155,22 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       });
   }
 
-  toleavemanager() {
-    this.router.navigate(['/leavemanagement']);
+  getTrainingDetails() {
+    this.dashboardservice
+      .getTrainingDetailsByLocationId(this.locationId)
+      .subscribe({
+        next: (response) => {
+          this.trainingDetails = response;
+        },
+        error: (err: any) => {
+          // ------------------<need to modify error responses>--------------------
+          if (err.status === 401) {
+            this.errorMessage = 'Training details not found';
+          } else {
+            this.errorMessage = 'An error occurred. Please try again.';
+          }
+          console.error('Login error:', err);
+        },
+      });
   }
 }

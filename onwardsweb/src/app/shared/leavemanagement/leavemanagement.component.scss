@@ -16,7 +16,6 @@
   opacity: 0.4;
 }
 
-/* Remove default hover and selection highlights */
 ::ng-deep .cal-month-view .cal-cell:hover,
 ::ng-deep .cal-month-view .cal-cell-top:hover,
 ::ng-deep .cal-month-view .cal-cell:focus,
@@ -102,15 +101,11 @@
   background-color: transparent !important;
 }
 
-// -----------------------always show green bg for present day-------------------------------
-
-/* ✅ Only highlight today's cell in the day grid (not header) */
 ::ng-deep .cal-month-view .cal-days .cal-cell.cal-today {
   background-color: #e6ffe6 !important;
   z-index: 1;
 }
 
-/* ✅ Prevent hover/focus/click from overriding today's highlight */
 ::ng-deep .cal-month-view .cal-days .cal-cell.cal-today:hover,
 ::ng-deep .cal-month-view .cal-days .cal-cell.cal-today:focus,
 ::ng-deep .cal-month-view .cal-days .cal-cell.cal-today:active,
@@ -119,23 +114,21 @@
   outline: none !important;
   box-shadow: none !important;
 }
-// -------------------------disbling cursor change on event cells-------------------
-/* ❌ Disable cursor change on calendar cells */
+
 ::ng-deep .cal-month-view .cal-cell {
   cursor: default !important;
 }
 
-/* ❌ Remove tooltips (default browser behavior on title attribute) */
 ::ng-deep .cal-month-view .cal-event[title] {
   pointer-events: none !important;
 }
-// -----------------------right click hadler---------------------------------------
+
 ::ng-deep .custom-day-cell {
   position: relative;
   height: 100%;
   width: 100%;
   padding: 2px;
-  cursor: default; /* optional */
+  cursor: default;
 }
 
 .context-style {
@@ -197,3 +190,13 @@ textarea {
   border-color: #007bff;
   background-color: #f8f9fa;
 }
+
+.dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+// ------------------------------------------------------------------------------------------------------

@@ -8,7 +8,7 @@ import { DashboardComponent } from './shared/dashboard.component';
 import { ReportComponent } from './report/report.component';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { SessionGuard } from './gaurds/session.gaurd';
-import { LeaveManagementComponent } from './shared/leavemanagement.component';
+import { LeaveManagementComponent } from './shared/leavemanagement/leavemanagement.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },

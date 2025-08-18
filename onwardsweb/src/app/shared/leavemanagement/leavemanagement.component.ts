@@ -6,7 +6,7 @@ import {
   Inject,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { addMonths, subMonths, startOfDay } from 'date-fns';
+import { addMonths, subMonths } from 'date-fns';
 import {
   CalendarEvent,
   CalendarView,
@@ -20,15 +20,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { CalendarWrapperModule } from '../services/calendar-wrapper.service';
+import { CalendarWrapperModule } from '../../services/calendar-wrapper.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  startWith,
-} from 'rxjs/operators';
+import { AutocompleteComponent } from './autocomplete.component';
 
 @Component({
   selector: 'app-leavemanagement',
@@ -36,7 +30,12 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './leavemanagement.component.html',
   styleUrls: ['./leavemanagement.component.scss'],
-  imports: [CommonModule, CalendarWrapperModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    CalendarWrapperModule,
+    ReactiveFormsModule,
+    AutocompleteComponent,
+  ],
   providers: [CalendarDateFormatter],
 })
 export class LeaveManagementComponent {
@@ -44,7 +43,9 @@ export class LeaveManagementComponent {
   viewDate: Date = new Date();
   refresh = new Subject<void>();
   leaverequestModal: any;
+  attendanceregularizationModal: any;
   leaveRequestForm: FormGroup;
+  attendanceForm: FormGroup;
 
   events: CalendarEvent[] = [
     {
@@ -66,21 +67,6 @@ export class LeaveManagementComponent {
   menuY = 0;
   showContextMenu = false;
 
-  notifyOpen = false;
-  notifyActiveIndex = -1;
-  notifyOptions: string[] = [
-    'Sameer Mohammad',
-    'Samuel Green',
-    'Eero Saarinen',
-    'Sameer Singh',
-    'Ameer Khan',
-    'Seerat Kaur',
-    'Mohammad Sami',
-    'Engineer Team',
-    'Pearl Eerie',
-  ];
-  filteredNotify$!: Observable<string[]>;
-
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
@@ -97,77 +83,43 @@ export class LeaveManagementComponent {
       reason: [''],
       file: [null],
     });
-  }
-
-  ngOnInit() {
-    const notifyCtrl = this.leaveRequestForm.get('notify')!;
-    this.filteredNotify$ = notifyCtrl.valueChanges.pipe(
-      startWith(notifyCtrl.value ?? ''),
-      debounceTime(120),
-      distinctUntilChanged(),
-      map((v) => this.filterNotify((v ?? '').toString()))
-    );
+    this.attendanceForm = this.fb.group({
+      employeeName: ['', Validators.required],
+      type: ['day', Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      duration: [{ value: '', disabled: true }],
+      reason: ['', [Validators.required, Validators.maxLength(250)]],
+    });
   }
 
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
       const bootstrap = (window as any).bootstrap;
-      const leaverequestEl = document.getElementById('leaverequestmodal');
 
+      // Leave Request Modal
+      const leaverequestEl = document.getElementById('leaverequestmodal');
       if (leaverequestEl && bootstrap?.Modal) {
         this.leaverequestModal = new bootstrap.Modal(leaverequestEl);
+      }
+
+      // Attendance Regularization Modal
+      const attendanceEl = document.getElementById(
+        'attendanceRegularizationModal'
+      );
+      if (attendanceEl && bootstrap?.Modal) {
+        this.attendanceregularizationModal = new bootstrap.Modal(attendanceEl);
       }
     }
   }
 
-  //--------------------------------------- AutoComplete Search input------------------------------------
-  private filterNotify(input: string): string[] {
-    const terms = input
-      .trim()
-      .split(/\s+/)
-      .filter(Boolean)
-      .map((t) => t.toLowerCase());
-
-    if (!terms.length) return this.notifyOptions;
-
-    return this.notifyOptions.filter((opt) => {
-      const o = opt.toLowerCase();
-      return terms.some((t) => o.includes(t));
+  clear() {
+    this.attendanceForm.reset({
+      type: 'day',
+      duration: '',
     });
   }
 
-  selectNotify(opt: string) {
-    this.leaveRequestForm.patchValue({ notify: opt });
-    this.notifyOpen = false;
-    this.notifyActiveIndex = -1;
-  }
-
-  onNotifyKeydown(e: KeyboardEvent, list: string[] | null) {
-    const items = list ?? [];
-    if (!items.length) return;
-
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      this.notifyActiveIndex = (this.notifyActiveIndex + 1) % items.length;
-      this.notifyOpen = true;
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      this.notifyActiveIndex =
-        (this.notifyActiveIndex <= 0 ? items.length : this.notifyActiveIndex) -
-        1;
-      this.notifyOpen = true;
-    } else if (e.key === 'Enter') {
-      e.preventDefault();
-      if (this.notifyActiveIndex >= 0)
-        this.selectNotify(items[this.notifyActiveIndex]);
-    } else if (e.key === 'Escape') {
-      this.notifyOpen = false;
-    }
-  }
-
-  closeNotifyDropdownSoon() {
-    setTimeout(() => (this.notifyOpen = false), 120);
-  }
   // ----------------------------------calender control ---------------------------
 
   onRightClick(event: MouseEvent, day: CalendarMonthViewDay): void {
@@ -193,6 +145,8 @@ export class LeaveManagementComponent {
     this.viewDate = addMonths(this.viewDate, 1);
   }
 
+  // ----------------------------------------Context Menu------------------------------------------------------
+
   @HostListener('document:click')
   onGlobalClick() {
     this.showContextMenu = false;
@@ -201,6 +155,11 @@ export class LeaveManagementComponent {
   showleaverequest() {
     this.showContextMenu = false;
     this.leaverequestModal.show();
+  }
+
+  showattendanceregularization() {
+    this.showContextMenu = false;
+    this.attendanceregularizationModal.show();
   }
 
   submit() {}

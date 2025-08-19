@@ -8,7 +8,9 @@ import { DashboardComponent } from './shared/dashboard.component';
 import { ReportComponent } from './report/report.component';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { SessionGuard } from './gaurds/session.gaurd';
-import { LeavemanagementComponent } from './shared/leavemanagement/leavemanagement.component';
+import { LeaveManagementComponent } from './shared/leavemanagement/leavemanagement.component';
+import { ResignationComponent } from './myworkspace/resignation/resignation.component';
+import { WorkspaceComponent } from './myworkspace/workspace.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -20,7 +22,9 @@ const routes: Route[] = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'reports', component: ReportComponent },
-      { path: 'leavemanagement', component: LeavemanagementComponent },
+      { path: 'leavemanagement', component: LeaveManagementComponent },
+      { path: 'resignation', component: ResignationComponent },
+      { path: 'myworkspace', component: WorkspaceComponent },
     ],
   },
 ];

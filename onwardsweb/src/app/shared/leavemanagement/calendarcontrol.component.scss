@@ -1,0 +1,206 @@
+/* monthcalendar.component.scss */
+
+.event-dot-container {
+  margin-top: 4px;
+}
+
+.event-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin: 1px;
+}
+
+.outside-month {
+  opacity: 0.4;
+}
+
+::ng-deep .cal-month-view .cal-cell:hover,
+::ng-deep .cal-month-view .cal-cell-top:hover,
+::ng-deep .cal-month-view .cal-cell:focus,
+::ng-deep .cal-month-view .cal-cell:active,
+::ng-deep .cal-month-view .cal-cell.cal-cell-selected,
+::ng-deep .cal-month-view .cal-cell.cal-cell-selected:hover,
+::ng-deep .cal-month-view .cal-cell.cal-cell-selected:focus,
+::ng-deep .cal-month-view .cal-days .cal-cell-row:hover,
+::ng-deep .cal-month-view .cal-days .cal-cell-row:focus,
+::ng-deep .cal-month-view .cal-days .cal-cell-row:active,
+::ng-deep .cal-month-view .cal-days .cal-cell-row.cal-row-selected {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Custom context menu */
+.custom-context-menu {
+  position: fixed;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  z-index: 9999;
+  padding: 8px;
+  min-width: 160px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  border-radius: 4px;
+}
+.custom-context-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0 0;
+}
+.custom-context-menu li {
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.custom-context-menu li:hover {
+  background-color: #f2f2f2;
+}
+
+::ng-deep .cal-month-view .cal-cell {
+  position: relative;
+}
+
+::ng-deep .cal-cell-top {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 1rem;
+}
+
+::ng-deep .event-dot-container {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  display: flex;
+  gap: 2px;
+}
+
+::ng-deep .event-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+::ng-deep .cal-month-view .cal-header,
+::ng-deep .cal-month-view .cal-header:hover,
+::ng-deep .cal-month-view .cal-header:focus,
+::ng-deep .cal-month-view .cal-header:active {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+::ng-deep .cal-month-view table thead tr:hover,
+::ng-deep .cal-month-view table thead tr:focus,
+::ng-deep .cal-month-view table thead tr:active {
+  background-color: transparent !important;
+}
+
+::ng-deep .cal-month-view table thead tr,
+::ng-deep .cal-month-view table thead td {
+  background-color: transparent !important;
+}
+
+::ng-deep .cal-month-view .cal-days .cal-cell.cal-today {
+  background-color: #e6ffe6 !important;
+  z-index: 1;
+}
+
+::ng-deep .cal-month-view .cal-days .cal-cell.cal-today:hover,
+::ng-deep .cal-month-view .cal-days .cal-cell.cal-today:focus,
+::ng-deep .cal-month-view .cal-days .cal-cell.cal-today:active,
+::ng-deep .cal-month-view .cal-days .cal-cell.cal-today.cal-cell-selected {
+  background-color: #e6ffe6 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+::ng-deep .cal-month-view .cal-cell {
+  cursor: default !important;
+}
+
+::ng-deep .cal-month-view .cal-event[title] {
+  pointer-events: none !important;
+}
+
+::ng-deep .custom-day-cell {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  padding: 2px;
+  cursor: default;
+}
+
+.context-style {
+  width: 350px;
+}
+
+.btn-transparent {
+  border: none;
+  outline: none;
+  background: inherit;
+}
+
+.form-label {
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.form-section {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.form-text-muted {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.required:after {
+  content: "*";
+  color: red;
+  margin-left: 2px;
+}
+
+textarea {
+  resize: none;
+}
+
+.char-count {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.drag-drop-box {
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  color: #999;
+  transition: border-color 0.3s, background-color 0.3s;
+  cursor: pointer;
+}
+
+.drag-drop-box.dragover {
+  border-color: #007bff;
+  background-color: #f8f9fa;
+}
+
+.dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+// ------------------------------------------------------------------------------------------------------
+
+.daypicker-custom {
+  margin-right: 9%;
+}

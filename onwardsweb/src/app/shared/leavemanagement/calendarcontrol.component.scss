@@ -161,7 +161,7 @@
 }
 
 .required:after {
-  content: "*";
+  content: '*';
   color: red;
   margin-left: 2px;
 }
@@ -203,4 +203,17 @@ textarea {
 
 .daypicker-custom {
   margin-right: 9%;
+}
+
+.calendar-container {
+  width: auto;
+  height: 500px;
+}
+
+.calendar-container mwl-calendar-month-view {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: scale(0.9); /* shrink content */
+  transform-origin: top left;
 }

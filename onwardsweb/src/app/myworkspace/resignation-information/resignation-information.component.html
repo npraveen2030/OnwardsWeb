@@ -1,0 +1,91 @@
+<div class="card">
+  <h5 class="mb-4">Resignation Information</h5>
+  <form class="row g-3">
+    <!-- Row 1 -->
+    <div class="col-md-3 form-floating">
+      <select class="form-select" id="resignationType">
+        <option selected>Personal Reasons</option>
+        <option>Better Opportunity</option>
+        <option>Relocation</option>
+      </select>
+      <label for="resignationType">Resignation Type*</label>
+    </div>
+
+    <div class="col-md-3 form-floating">
+      <select class="form-select" id="resignationReason">
+        <option selected>Relocation</option>
+        <option>Health Issues</option>
+        <option>Other</option>
+      </select>
+      <label for="resignationReason">Resignation Reason*</label>
+    </div>
+
+    <div class="col-md-3 form-floating">
+      <input type="date" class="form-control" id="letterDate" value="2025-06-04" />
+      <label for="letterDate">Resignation Letter Date*</label>
+    </div>
+
+    <div class="col-md-3 form-floating">
+      <input type="date" class="form-control" id="requestRelieving" value="2025-09-02" />
+      <label for="requestRelieving">Request Relieving Date*</label>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="col-md-3 form-floating">
+      <input type="date" class="form-control" id="actualRelieving" value="2025-09-02" />
+      <label for="actualRelieving">Actual Relieving Date</label>
+    </div>
+
+    <div class="col-md-3 form-floating">
+      <input type="text" class="form-control" id="noticePeriod" value="90 Days" />
+      <label for="noticePeriod">Notice Period</label>
+    </div>
+
+    <div class="col-md-3 form-floating">
+      <input type="text" class="form-control" id="endOfNotice" value="90" />
+      <label for="endOfNotice">End of Notice Period</label>
+    </div>
+
+    <div class="col-md-3 form-floating">
+      <input type="text" class="form-control" id="nextEmployer" placeholder="Next Employer" />
+      <label for="nextEmployer">Next Employer</label>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="col-md-6 form-floating">
+      <input type="text" class="form-control" id="mailingAddress" value="Current Address" />
+      <label for="mailingAddress">Mailing Address</label>
+    </div>
+
+    <div class="col-md-6 form-floating">
+      <input type="email" class="form-control" id="email" value="gedamanagesh2040@gmail.com" />
+      <label for="email">Personal Email ID</label>
+    </div>
+
+    <!-- Comments -->
+    <div class="col-12 form-floating">
+      <textarea class="form-control" id="comments" style="height: 100px">
+Caterpillar want me to relocate to Bengaluru, it's very difficult for me to relocate</textarea
+      >
+      <label for="comments">Comments</label>
+    </div>
+
+    <!-- Attachment -->
+    <div class="col-12">
+      <label class="form-label">Attachment File</label>
+      <input class="form-control" type="file" id="formFile" />
+    </div>
+
+    <!-- Pullback Comment -->
+    <div class="col-12 form-floating">
+      <textarea class="form-control" id="pullback" style="height: 100px"></textarea>
+      <label for="pullback">Pullback Comment*</label>
+    </div>
+
+    <!-- Buttons -->
+    <div class="col-12 btn-container">
+      <button type="submit" class="btn btn-success">Pullback</button>
+      <button type="button" class="btn btn-danger">Cancel</button>
+    </div>
+  </form>
+</div>

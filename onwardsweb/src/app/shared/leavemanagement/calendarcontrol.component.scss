@@ -217,3 +217,16 @@ textarea {
   transform: scale(0.9); /* shrink content */
   transform-origin: top left;
 }
+
+.file-info {
+  font-size: 14px;
+  color: #555;
+}
+
+.btn-remove {
+  background: transparent;
+  color: black;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+}

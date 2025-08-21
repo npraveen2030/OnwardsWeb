@@ -13,16 +13,14 @@ import {
   CalendarDateFormatter,
   CalendarMonthViewDay,
 } from 'angular-calendar';
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { CalendarWrapperModule } from '../../services/calendar-wrapper.service';
 import { Router } from '@angular/router';
 import { AutocompleteComponent } from './autocomplete.component';
+import { LoginResponse } from '../../models/loginResponseModel';
+import { LeaveManagementService } from '../../services/leavemanagement.service';
+import { LeaveTypes } from '../../models/leavemanagementResponseModel';
 
 @Component({
   selector: 'app-calendarcontrol',
@@ -30,12 +28,7 @@ import { AutocompleteComponent } from './autocomplete.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './calendarcontrol.component.html',
   styleUrls: ['./calendarcontrol.component.scss'],
-  imports: [
-    CommonModule,
-    CalendarWrapperModule,
-    ReactiveFormsModule,
-    AutocompleteComponent,
-  ],
+  imports: [CommonModule, CalendarWrapperModule, ReactiveFormsModule, AutocompleteComponent],
   providers: [CalendarDateFormatter],
 })
 export class CalendarControlComponent {
@@ -46,7 +39,18 @@ export class CalendarControlComponent {
   attendanceregularizationModal: any;
   leaveRequestForm: FormGroup;
   attendanceForm: FormGroup;
+  fileName: string = '';
+  fileData!: File | null;
+  rightClickDay: Date | null = null;
+  menuX = 0;
+  menuY = 0;
+  showContextMenu = false;
+  userDetails!: LoginResponse;
+  leavetypes: LeaveTypes[] = [];
+  today = new Date();
+  minDate = new Date(new Date().setDate(this.today.getDate() - 30)).toISOString().split('T')[0];
 
+  // --> To be retrived form Backend
   events: CalendarEvent[] = [
     {
       start: new Date(),
@@ -62,18 +66,14 @@ export class CalendarControlComponent {
     },
   ];
 
-  rightClickDay: Date | null = null;
-  menuX = 0;
-  menuY = 0;
-  showContextMenu = false;
-
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private leavemanagementservice: LeaveManagementService
   ) {
     this.leaveRequestForm = this.fb.group({
-      employeename: ['Gedam Nagesh (13339)', Validators.required],
+      employeename: ['', Validators.required],
       leavetype: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
@@ -93,6 +93,29 @@ export class CalendarControlComponent {
     });
   }
 
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const userDetailsJson: string | null = sessionStorage.getItem('userDetails');
+
+      if (userDetailsJson !== null) {
+        this.userDetails = JSON.parse(userDetailsJson);
+      }
+
+      this.leaveRequestForm.patchValue({
+        employeename: `${this.userDetails.fullName} (${this.userDetails.employeeCode})`,
+      });
+
+      this.leavemanagementservice.GetLeaveTypes().subscribe({
+        next: (response) => {
+          this.leavetypes = response;
+        },
+        error: (err) => {
+          console.error('Error fetching leave types', err);
+        },
+      });
+    }
+  }
+
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
       const bootstrap = (window as any).bootstrap;
@@ -104,20 +127,15 @@ export class CalendarControlComponent {
       }
 
       // Attendance Regularization Modal
-      const attendanceEl = document.getElementById(
-        'attendanceRegularizationModal'
-      );
+      const attendanceEl = document.getElementById('attendanceRegularizationModal');
       if (attendanceEl && bootstrap?.Modal) {
         this.attendanceregularizationModal = new bootstrap.Modal(attendanceEl);
       }
     }
   }
 
-  clear() {
-    this.attendanceForm.reset({
-      type: 'day',
-      duration: '',
-    });
+  clearAttendanceForm() {
+    this.attendanceForm.reset();
   }
 
   // ----------------------------------calender control ---------------------------
@@ -163,4 +181,45 @@ export class CalendarControlComponent {
   }
 
   submit() {}
+
+  //--------------------------------------------------file upload------------------------------------------
+  onFileSelected(event: any): void {
+    const file: File = event.target.files?.[0];
+    if (file) {
+      this.fileName = file.name;
+      this.fileData = file;
+      this.leaveRequestForm.patchValue({ file });
+      this.leaveRequestForm.get('file')?.updateValueAndValidity();
+    }
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    if (this.fileData) return;
+    const file = event.dataTransfer?.files[0];
+    if (file) {
+      this.fileName = file.name;
+      this.fileData = file;
+      this.leaveRequestForm.patchValue({ file });
+      this.leaveRequestForm.get('file')?.updateValueAndValidity();
+    }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    (event.target as HTMLElement).classList.add('dragover');
+  }
+
+  onDragLeave(event: DragEvent): void {
+    (event.target as HTMLElement).classList.remove('dragover');
+  }
+
+  RemoveFile(): void {
+    this.fileName = '';
+    this.fileData = null;
+    this.leaveRequestForm.patchValue({ file: null });
+    this.leaveRequestForm.get('file')?.updateValueAndValidity();
+  }
+
+  submitLeaveRequestForm() {}
 }

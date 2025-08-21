@@ -131,7 +131,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form [formGroup]="leaveRequestForm" id="leaveForm" (ngSubmit)="submit()">
+          <form [formGroup]="leaveRequestForm" id="leaveForm" (ngSubmit)="submitLeaveRequestForm()">
             <!-- Employee Name -->
             <div class="mb-3">
               <label class="form-label required">Employee Name</label>
@@ -147,9 +147,9 @@
               <label class="form-label required">Leave Type</label>
               <select class="form-select" formControlName="leavetype">
                 <option value="" disabled>Select Leave Type</option>
-                <option value="sick">Sick Leave</option>
-                <option value="casual">Casual Leave</option>
-                <option value="earned">Earned Leave</option>
+                @for (type of leavetypes; track type.id) {
+                <option [value]="type.id">{{ type.leaveTypeName }}</option>
+                }
               </select>
             </div>
 
@@ -157,15 +157,19 @@
             <div class="row mb-3">
               <div class="col">
                 <label class="form-label required">Start Date</label>
-                <input type="date" class="form-control" formControlName="startDate" />
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="startDate"
+                  [min]="minDate"
+                />
               </div>
               <div class="col">
                 <label class="form-label required">Day Period</label>
                 <select class="form-select" formControlName="dayPeriod">
                   <option value="" disabled>Select</option>
                   <option value="full">Full Day</option>
-                  <option value="half-am">Half Day - Morning</option>
-                  <option value="half-pm">Half Day - Evening</option>
+                  <option value="half">Half Day</option>
                 </select>
               </div>
             </div>
@@ -173,7 +177,7 @@
             <!-- End Date -->
             <div class="mb-3">
               <label class="form-label required">End Date</label>
-              <input type="date" class="form-control" formControlName="endDate" />
+              <input type="date" class="form-control" formControlName="endDate" [min]="minDate" />
             </div>
 
             <!-- Phone Number -->
@@ -204,35 +208,66 @@
               {{ leaveRequestForm.get('reason')?.value?.length || 0 }} / 250
             </div>
 
-            <!-- Single File Upload -->
+            <!-- Drag & Drop File Upload -->
             <div class="container my-4" style="max-width: 500px">
               <div class="mb-2 text-muted small">
                 Recommended file upload size <strong>500kb</strong>.
               </div>
 
-              <!-- Drag & Drop Box -->
               <div
                 class="drag-drop-box"
-                id="dropZone"
-                onclick="document.getElementById('fileInput').click()"
+                (drop)="onDrop($event)"
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)"
+                (click)="!fileData && fileInput.click()"
               >
-                Drop supporting document here or click to upload
-                <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg" hidden />
+                >
+                <ng-container *ngIf="!fileData">
+                  Drop supporting document here or click to upload
+                </ng-container>
+                <input
+                  type="file"
+                  #fileInput
+                  (change)="onFileSelected($event)"
+                  accept=".pdf,.jpg,.jpeg"
+                  hidden
+                />
               </div>
 
-              <!-- File info display -->
-              <div class="file-info" id="fileNameDisplay"></div>
+              <!-- File info with cross -->
+              <div class="file-info d-flex align-items-center mt-2" *ngIf="fileName">
+                <span>{{ fileName }}</span>
+                <button
+                  type="button"
+                  class="btn-remove ms-2"
+                  aria-label="Remove"
+                  (click)="RemoveFile()"
+                >
+                  X
+                </button>
+              </div>
+
+              <!-- Validation message -->
+              <div
+                *ngIf="
+                  leaveRequestForm.get('file')?.invalid && leaveRequestForm.get('file')?.touched
+                "
+                class="text-danger small"
+              >
+                File is required
+              </div>
+            </div>
+
+            <div class="modal-footer d-flex justify-content-center">
+              <button type="button" class="btn btn-primary btn-custom">Submit</button>
+
+              <button type="button" class="btn btn-secondary btn-custom">Clear Data</button>
+
+              <button type="button" class="btn btn-danger btn-custom" data-bs-dismiss="modal">
+                Cancel
+              </button>
             </div>
           </form>
-          <div class="modal-footer d-flex justify-content-center">
-            <button type="button" class="btn btn-primary btn-custom">Submit</button>
-
-            <button type="button" class="btn btn-secondary btn-custom">Clear Data</button>
-
-            <button type="button" class="btn btn-danger btn-custom" data-bs-dismiss="modal">
-              Cancel
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -342,7 +377,11 @@
             <button type="submit" class="btn btn-success btn-custom" (click)="submit()">
               Submit
             </button>
-            <button type="button" class="btn btn-warning btn-custom" (click)="clear()">
+            <button
+              type="button"
+              class="btn btn-warning btn-custom"
+              (click)="clearAttendanceForm()"
+            >
               Clear Data
             </button>
             <button type="button" class="btn btn-danger btn-custom" data-bs-dismiss="modal">

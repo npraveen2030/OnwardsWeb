@@ -1,10 +1,4 @@
-import {
-  Component,
-  Inject,
-  PLATFORM_ID,
-  AfterViewInit,
-  OnInit,
-} from '@angular/core';
+import { Component, Inject, PLATFORM_ID, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { DashBoardService } from '../services/dashboardservice.service';
@@ -54,40 +48,30 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      // Retriving UserDetails from sessionStorage
-      const userDetailsJson: string | null =
-        sessionStorage.getItem('userDetails');
+      const userDetailsJson: string | null = sessionStorage.getItem('userDetails');
 
-      if (userDetailsJson === null) {
-        this.router.navigate(['/']);
-      } else {
+      if (userDetailsJson !== null) {
         this.userDetails = JSON.parse(userDetailsJson);
       }
 
       // Implementing session based logintime popup
-      const isLoggedinJson: string | null =
-        sessionStorage.getItem('isloggedin');
+      const isLoggedinJson: string | null = sessionStorage.getItem('isloggedin');
 
       if (isLoggedinJson === null) {
         sessionStorage.setItem('isloggedin', '0');
         this.getUserShiftLogDetails();
-        this.getHolidayList();
-        this.getTrainingDetails();
       } else {
         if (JSON.parse(isLoggedinJson) === '0') {
           this.getUserShiftLogDetails();
-          this.getHolidayList();
-          this.getTrainingDetails();
         }
       }
+      this.getHolidayList();
+      this.getTrainingDetails();
     }
   }
 
   ngAfterViewInit() {
-    if (
-      isPlatformBrowser(this.platformId) &&
-      sessionStorage.getItem('isloggedin') === '0'
-    ) {
+    if (isPlatformBrowser(this.platformId) && sessionStorage.getItem('isloggedin') === '0') {
       const bootstrap = (window as any).bootstrap;
       const loginEl = document.getElementById('loginmodal');
 
@@ -135,42 +119,38 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   setLoginTime() {
-    this.dashboardservice
-      .InsertOrUpdateUserShiftLog(this.userDetails.id)
-      .subscribe({
-        next: (response) => {
-          console.log(response);
-          this.loginModal.hide();
-          sessionStorage.setItem('isloggedin', '1');
-        },
-        error: (err: any) => {
-          // ------------------<need to modify error responses>--------------------
-          if (err.status === 401) {
-            this.errorMessage = 'UserShiftLog not saved';
-          } else {
-            this.errorMessage = 'An error occurred. Please try again.';
-          }
-          console.error('Login error:', err);
-        },
-      });
+    this.dashboardservice.InsertOrUpdateUserShiftLog(this.userDetails.id).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.loginModal.hide();
+        sessionStorage.setItem('isloggedin', '1');
+      },
+      error: (err: any) => {
+        // ------------------<need to modify error responses>--------------------
+        if (err.status === 401) {
+          this.errorMessage = 'UserShiftLog not saved';
+        } else {
+          this.errorMessage = 'An error occurred. Please try again.';
+        }
+        console.error('Login error:', err);
+      },
+    });
   }
 
   getTrainingDetails() {
-    this.dashboardservice
-      .getTrainingDetailsByLocationId(this.locationId)
-      .subscribe({
-        next: (response) => {
-          this.trainingDetails = response;
-        },
-        error: (err: any) => {
-          // ------------------<need to modify error responses>--------------------
-          if (err.status === 401) {
-            this.errorMessage = 'Training details not found';
-          } else {
-            this.errorMessage = 'An error occurred. Please try again.';
-          }
-          console.error('Login error:', err);
-        },
-      });
+    this.dashboardservice.getTrainingDetailsByLocationId(this.locationId).subscribe({
+      next: (response) => {
+        this.trainingDetails = response;
+      },
+      error: (err: any) => {
+        // ------------------<need to modify error responses>--------------------
+        if (err.status === 401) {
+          this.errorMessage = 'Training details not found';
+        } else {
+          this.errorMessage = 'An error occurred. Please try again.';
+        }
+        console.error('Login error:', err);
+      },
+    });
   }
 }

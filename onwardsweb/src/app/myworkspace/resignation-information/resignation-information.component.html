@@ -1,3 +1,27 @@
+<div class="p-4 max-w-md mx-auto">
+  <h2 class="text-lg font-bold mb-2">Resignation Form</h2>
+
+  <!-- Resignation Reason Dropdown -->
+  <label class="block mb-1 font-medium">Select Resignation Reason</label>
+  <select [(ngModel)]="selectedReasonId" class="border rounded w-full p-2 mb-4">
+    <option [ngValue]="null" disabled selected>-- Select Reason --</option>
+    <option *ngFor="let reason of reasons" [value]="reason.id">
+      {{ reason.reason }}
+    </option>
+  </select>
+
+  <!-- Resignation Type Dropdown -->
+  <label class="block mb-1 font-medium">Select Resignation Type</label>
+  <select [(ngModel)]="selectedTypeId" class="border rounded w-full p-2 mb-4">
+    <option [ngValue]="null" disabled selected>-- Select Type --</option>
+    <option *ngFor="let type of types" [value]="type.id">
+      {{ type.typeName }}
+    </option>
+  </select>
+
+  <button (click)="onSubmit()" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+</div>
+
 <div class="card">
   <h5 class="mb-4">Resignation Information</h5>
   <form class="row g-3">
@@ -8,8 +32,14 @@
         <option>Better Opportunity</option>
         <option>Relocation</option>
       </select>
+      <!-- <select [(ngModel)]="selectedTypeId" class="form-select" id="resignationType">
+        <option [ngValue]="null" disabled selected>-- Select Type --</option>
+        <option *ngFor="let type of types" [value]="type.id">
+          {{ type.typeName }}
+        </option>
+      </select> -->
       <label for="resignationType">Resignation Type*</label>
-    </div>
+    </div> 
 
     <div class="col-md-3 form-floating">
       <select class="form-select" id="resignationReason">
@@ -17,6 +47,12 @@
         <option>Health Issues</option>
         <option>Other</option>
       </select>
+      <!-- <select [(ngModel)]="selectedReasonId" class="form-select" id="resignationReason">
+        <option [ngValue]="null" disabled selected>-- Select Reason --</option>
+        <option *ngFor="let reason of reasons" [value]="reason.id">
+          {{ reason.reason }}
+        </option>
+      </select> -->
       <label for="resignationReason">Resignation Reason*</label>
     </div>
 

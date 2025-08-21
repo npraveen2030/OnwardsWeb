@@ -5,7 +5,7 @@ import { BasicInformationComponent } from '../basic-information/basic-informatio
 @Component({
   selector: 'app-resignation',
   standalone: true,
-  imports: [ResignationInformationComponent,BasicInformationComponent],
+  imports: [ResignationInformationComponent, BasicInformationComponent],
   templateUrl: './resignation.component.html',
   styleUrl: './resignation.component.scss',
 })

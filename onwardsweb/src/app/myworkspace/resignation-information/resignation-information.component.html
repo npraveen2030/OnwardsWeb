@@ -1,127 +1,237 @@
-<div class="p-4 max-w-md mx-auto">
-  <h2 class="text-lg font-bold mb-2">Resignation Form</h2>
-
-  <!-- Resignation Reason Dropdown -->
-  <label class="block mb-1 font-medium">Select Resignation Reason</label>
-  <select [(ngModel)]="selectedReasonId" class="border rounded w-full p-2 mb-4">
-    <option [ngValue]="null" disabled selected>-- Select Reason --</option>
-    <option *ngFor="let reason of reasons" [value]="reason.id">
-      {{ reason.reason }}
-    </option>
-  </select>
-
-  <!-- Resignation Type Dropdown -->
-  <label class="block mb-1 font-medium">Select Resignation Type</label>
-  <select [(ngModel)]="selectedTypeId" class="border rounded w-full p-2 mb-4">
-    <option [ngValue]="null" disabled selected>-- Select Type --</option>
-    <option *ngFor="let type of types" [value]="type.id">
-      {{ type.typeName }}
-    </option>
-  </select>
-
-  <button (click)="onSubmit()" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
-</div>
-
 <div class="card">
-  <h5 class="mb-4">Resignation Information</h5>
-  <form class="row g-3">
-    <!-- Row 1 -->
-    <div class="col-md-3 form-floating">
-      <select class="form-select" id="resignationType">
-        <option selected>Personal Reasons</option>
-        <option>Better Opportunity</option>
-        <option>Relocation</option>
-      </select>
-      <!-- <select [(ngModel)]="selectedTypeId" class="form-select" id="resignationType">
+  <form [formGroup]="resignationForm" (ngSubmit)="onSubmit()">
+    <!-- <h4>Resignation Information</h4> -->
+    <h5 class="mb-4">Resignation Information</h5>
+    <div class="row g-3">
+      <!-- <div class="col-md-6 mb-3">
+        <label>Resignation Type*</label>
+        <select class="form-control" formControlName="resignationType">
+          <option value="">Select</option>
+          <option *ngFor="let type of resignationTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div> -->
+
+      <div class="col-md-3 form-floating">
+        <select class="form-select" formControlName="resignationTypeId">
+          <option value="0">-- Select --</option>
+          <option *ngFor="let tp of types" [value]="tp.id">{{ tp.typeName }}</option>
+        </select>
+        <!-- <select class="form-select" id="resignationType">
+          <option selected>Personal Reasons</option>
+          <option>Better Opportunity</option>
+          <option>Relocation</option>
+        </select> -->
+        <!-- <select [(ngModel)]="selectedTypeId" class="form-select" id="resignationType">
         <option [ngValue]="null" disabled selected>-- Select Type --</option>
         <option *ngFor="let type of types" [value]="type.id">
           {{ type.typeName }}
         </option>
       </select> -->
-      <label for="resignationType">Resignation Type*</label>
-    </div> 
+        <label for="resignationType">Resignation Type*</label>
+        <div class="text-danger small" *ngIf="isInvalid('resignationTypeId')">
+          Resignation type is required.
+        </div>
+      </div>
 
-    <div class="col-md-3 form-floating">
-      <select class="form-select" id="resignationReason">
-        <option selected>Relocation</option>
-        <option>Health Issues</option>
-        <option>Other</option>
-      </select>
-      <!-- <select [(ngModel)]="selectedReasonId" class="form-select" id="resignationReason">
-        <option [ngValue]="null" disabled selected>-- Select Reason --</option>
-        <option *ngFor="let reason of reasons" [value]="reason.id">
-          {{ reason.reason }}
-        </option>
-      </select> -->
-      <label for="resignationReason">Resignation Reason*</label>
-    </div>
+      <!-- <div class="col-md-6 mb-3">
+        <label>Resignation Reason*</label>
+        <select class="form-control" formControlName="resignationReason">
+          <option value="">Select</option>
+          <option *ngFor="let reason of resignationReasons" [value]="reason">{{ reason }}</option>
+        </select>
+      </div> -->
 
-    <div class="col-md-3 form-floating">
-      <input type="date" class="form-control" id="letterDate" value="2025-06-04" />
-      <label for="letterDate">Resignation Letter Date*</label>
-    </div>
+      <div class="col-md-3 form-floating">
+        <select class="form-select" formControlName="resignationReasonId">
+          <option value="0">-- Select --</option>
+          <option *ngFor="let res of reasons" [value]="res.id">{{ res.reason }}</option>
+        </select>
+        <label for="resignationReason">Resignation Reason*</label>
+        <div class="text-danger small" *ngIf="isInvalid('resignationReasonId')">
+          Resignation reason is required.
+        </div>
+      </div>
 
-    <div class="col-md-3 form-floating">
-      <input type="date" class="form-control" id="requestRelieving" value="2025-09-02" />
-      <label for="requestRelieving">Request Relieving Date*</label>
-    </div>
+      <!-- <div class="col-md-3 form-floating">
+        <input type="date" class="form-control" formControlName="resignationLetterDate" />
+        <label>Resignation Letter Date*</label>
+      </div> -->
+      <div class="col-md-3 form-floating">
+        <input
+          type="date"
+          class="form-control"
+          formControlName="resignationLetterDate"
+          value="2025-06-04"
+        />
+        <label for="letterDate">Resignation Letter Date*</label>
+        <div class="text-danger small" *ngIf="isInvalid('resignationLetterDate')">
+          Letter date is required.
+        </div>
+      </div>
 
-    <!-- Row 2 -->
-    <div class="col-md-3 form-floating">
-      <input type="date" class="form-control" id="actualRelieving" value="2025-09-02" />
-      <label for="actualRelieving">Actual Relieving Date</label>
-    </div>
+      <!-- <div class="col-md-6 mb-3">
+        <label>Request Relieving Date*</label>
+        <input type="date" class="form-control" formControlName="requestRelievingDate" />
+      </div> -->
+      <div class="col-md-3 form-floating">
+        <input
+          type="date"
+          class="form-control"
+          formControlName="requestedRelievingDate"
+          value="2025-09-02"
+        />
+        <label for="requestRelieving">Request Relieving Date*</label>
+        <div class="text-danger small" *ngIf="isInvalid('requestedRelievingDate')">
+          Request relieving date is required.
+        </div>
+      </div>
 
-    <div class="col-md-3 form-floating">
-      <input type="text" class="form-control" id="noticePeriod" value="90 Days" />
-      <label for="noticePeriod">Notice Period</label>
-    </div>
+      <!-- <div class="col-md-6 mb-3">
+        <label>Actual Relieving Date*</label>
+        <input type="date" class="form-control" formControlName="actualRelievingDate" />
+      </div> -->
+      <div class="col-md-3 form-floating">
+        <input
+          type="date"
+          class="form-control"
+          formControlName="actualRelievingDate"
+          value="2025-09-02"
+        />
+        <label for="actualRelieving">Actual Relieving Date</label>
+        <div class="text-danger small" *ngIf="isInvalid('actualRelievingDate')">
+          Actual relieving date is required.
+        </div>
+      </div>
 
-    <div class="col-md-3 form-floating">
-      <input type="text" class="form-control" id="endOfNotice" value="90" />
-      <label for="endOfNotice">End of Notice Period</label>
-    </div>
+      <!-- <div class="col-md-6 mb-3">
+        <label>Notice Period</label>
+        <input type="number" class="form-control" formControlName="noticePeriod" />
+      </div> -->
+      <div class="col-md-3 form-floating">
+        <input type="text" class="form-control" formControlName="noticePeriod" value="90 Days" />
+        <label for="noticePeriod">Notice Period</label>
+        <div class="text-danger small" *ngIf="isInvalid('noticePeriod')">
+          Enter a valid notice period.
+        </div>
+      </div>
 
-    <div class="col-md-3 form-floating">
-      <input type="text" class="form-control" id="nextEmployer" placeholder="Next Employer" />
-      <label for="nextEmployer">Next Employer</label>
-    </div>
+      <!-- <div class="col-md-6 mb-3">
+        <label>End of Notice Period</label>
+        <input type="number" class="form-control" formControlName="endOfNoticePeriod" />
+      </div> -->
+      <div class="col-md-3 form-floating">
+        <input type="text" class="form-control" formControlName="endOfNoticePeriod" value="90" />
+        <label for="endOfNotice">End of Notice Period</label>
+        <div class="text-danger small" *ngIf="isInvalid('endOfNoticePeriod')">
+          End of notice is required.
+        </div>
+      </div>
 
-    <!-- Row 3 -->
-    <div class="col-md-6 form-floating">
-      <input type="text" class="form-control" id="mailingAddress" value="Current Address" />
-      <label for="mailingAddress">Mailing Address</label>
-    </div>
+      <!-- <div class="col-md-6 mb-3">
+        <label>Next Employer</label>
+        <input type="text" class="form-control" formControlName="nextEmployer" />
+      </div> -->
+      <div class="col-md-3 form-floating">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="nextEmployer"
+          placeholder="Next Employer"
+        />
+        <label for="nextEmployer">Next Employer</label>
+      </div>
+      <!-- <div class="col-md-6 mb-3">
+        <label>Mailing Address*</label>
+        <textarea rows="2" class="form-control" formControlName="mailingAddress"></textarea>
+      </div> -->
+      <div class="col-md-4 form-floating">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="mailingAddress"
+          value="Current Address"
+        />
+        <label for="mailingAddress">Mailing Address*</label>
+        <div class="text-danger small" *ngIf="isInvalid('mailingAddress')">
+          Mailing Address is required.
+        </div>
+      </div>
 
-    <div class="col-md-6 form-floating">
-      <input type="email" class="form-control" id="email" value="gedamanagesh2040@gmail.com" />
-      <label for="email">Personal Email ID</label>
-    </div>
+      <div class="col-md-4 form-floating">
+        <input type="text" class="form-control" formControlName="address" value="Address" />
+        <label for="Address">Address*</label>
+        <div class="text-danger small" *ngIf="isInvalid('address')">Address is required.</div>
+      </div>
 
-    <!-- Comments -->
-    <div class="col-12 form-floating">
-      <textarea class="form-control" id="comments" style="height: 100px">
+      <!-- <div class="col-md-6 mb-3">
+        <label>Personal Email ID*</label>
+        <input type="email" class="form-control" formControlName="personalEmailId" />
+      </div> -->
+      <div class="col-md-4 form-floating">
+        <input
+          type="email"
+          class="form-control"
+          formControlName="personalEmailId"
+          value="gedamanagesh2040@gmail.com"
+        />
+        <label for="email">Personal Email ID*</label>
+        <div class="text-danger small" *ngIf="isInvalid('personalEmailId', 'required')">
+          Email is required.
+        </div>
+        <div class="text-danger small" *ngIf="isInvalid('personalEmailId', 'email')">
+          Enter a valid email.
+        </div>
+      </div>
+
+      <!-- <div class="col-md-12 mb-3">
+        <label>Comments</label>
+        <textarea rows="2" class="form-control" formControlName="comments"></textarea>
+      </div> -->
+      <!-- Comments -->
+      <div class="col-12 form-floating">
+        <textarea class="form-control" formControlName="comments" style="height: 100px">
 Caterpillar want me to relocate to Bengaluru, it's very difficult for me to relocate</textarea
-      >
-      <label for="comments">Comments</label>
-    </div>
+        >
+        <label for="comments">Comments</label>
+      </div>
+      <!-- <div class="col-md-12 mb-3">
+        <label>Attachment File</label>
+        <input type="file" class="form-control" (change)="onFileChange($event)" />
+      </div> -->
+      <!-- Attachment -->
+      <div class="col-12">
+        <label class="form-label">Attachment File</label>
+        <input class="form-control" type="file" id="formFile" (change)="onFileChange($event)" />
+      </div>
+      <!-- <div class="col-md-12 mb-3">
+        <label>Pullback Comment*</label>
+        <textarea rows="2" class="form-control" formControlName="pullbackComment"></textarea>
+      </div>
+    </div> -->
+      <!-- Pullback Comment -->
+      <div class="col-12 form-floating">
+        <textarea
+          class="form-control"
+          formControlName="pullbackComment"
+          style="height: 100px"
+        ></textarea>
+        <label for="pullback">Pullback Comment*</label>
+        <div class="text-danger small" *ngIf="isInvalid('pullbackComment')">
+          Pullback comment is required.
+        </div>
+      </div>
 
-    <!-- Attachment -->
-    <div class="col-12">
-      <label class="form-label">Attachment File</label>
-      <input class="form-control" type="file" id="formFile" />
-    </div>
-
-    <!-- Pullback Comment -->
-    <div class="col-12 form-floating">
-      <textarea class="form-control" id="pullback" style="height: 100px"></textarea>
-      <label for="pullback">Pullback Comment*</label>
-    </div>
-
-    <!-- Buttons -->
-    <div class="col-12 btn-container">
+      <div class="d-flex justify-content-center gap-3">
+        <button type="button" class="btn btn-success" (click)="onPullback()">Pullback</button>
+        <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+      <!-- Buttons -->
+      <!-- <div class="col-12 btn-container">
       <button type="submit" class="btn btn-success">Pullback</button>
       <button type="button" class="btn btn-danger">Cancel</button>
+    </div> -->
     </div>
   </form>
 </div>
+ 

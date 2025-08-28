@@ -1,45 +1,17 @@
 <div class="card">
   <form [formGroup]="resignationForm" (ngSubmit)="onSubmit()">
-    <!-- <h4>Resignation Information</h4> -->
     <h5 class="mb-4">Resignation Information</h5>
     <div class="row g-3">
-      <!-- <div class="col-md-6 mb-3">
-        <label>Resignation Type*</label>
-        <select class="form-control" formControlName="resignationType">
-          <option value="">Select</option>
-          <option *ngFor="let type of resignationTypes" [value]="type">{{ type }}</option>
-        </select>
-      </div> -->
-
       <div class="col-md-3 form-floating">
         <select class="form-select" formControlName="resignationTypeId">
           <option value="0">-- Select --</option>
           <option *ngFor="let tp of types" [value]="tp.id">{{ tp.typeName }}</option>
         </select>
-        <!-- <select class="form-select" id="resignationType">
-          <option selected>Personal Reasons</option>
-          <option>Better Opportunity</option>
-          <option>Relocation</option>
-        </select> -->
-        <!-- <select [(ngModel)]="selectedTypeId" class="form-select" id="resignationType">
-        <option [ngValue]="null" disabled selected>-- Select Type --</option>
-        <option *ngFor="let type of types" [value]="type.id">
-          {{ type.typeName }}
-        </option>
-      </select> -->
         <label for="resignationType">Resignation Type*</label>
         <div class="text-danger small" *ngIf="isInvalid('resignationTypeId')">
           Resignation type is required.
         </div>
       </div>
-
-      <!-- <div class="col-md-6 mb-3">
-        <label>Resignation Reason*</label>
-        <select class="form-control" formControlName="resignationReason">
-          <option value="">Select</option>
-          <option *ngFor="let reason of resignationReasons" [value]="reason">{{ reason }}</option>
-        </select>
-      </div> -->
 
       <div class="col-md-3 form-floating">
         <select class="form-select" formControlName="resignationReasonId">
@@ -52,10 +24,6 @@
         </div>
       </div>
 
-      <!-- <div class="col-md-3 form-floating">
-        <input type="date" class="form-control" formControlName="resignationLetterDate" />
-        <label>Resignation Letter Date*</label>
-      </div> -->
       <div class="col-md-3 form-floating">
         <input
           type="date"
@@ -69,10 +37,6 @@
         </div>
       </div>
 
-      <!-- <div class="col-md-6 mb-3">
-        <label>Request Relieving Date*</label>
-        <input type="date" class="form-control" formControlName="requestRelievingDate" />
-      </div> -->
       <div class="col-md-3 form-floating">
         <input
           type="date"
@@ -86,10 +50,6 @@
         </div>
       </div>
 
-      <!-- <div class="col-md-6 mb-3">
-        <label>Actual Relieving Date*</label>
-        <input type="date" class="form-control" formControlName="actualRelievingDate" />
-      </div> -->
       <div class="col-md-3 form-floating">
         <input
           type="date"
@@ -103,10 +63,6 @@
         </div>
       </div>
 
-      <!-- <div class="col-md-6 mb-3">
-        <label>Notice Period</label>
-        <input type="number" class="form-control" formControlName="noticePeriod" />
-      </div> -->
       <div class="col-md-3 form-floating">
         <input type="text" class="form-control" formControlName="noticePeriod" value="90 Days" />
         <label for="noticePeriod">Notice Period</label>
@@ -115,10 +71,6 @@
         </div>
       </div>
 
-      <!-- <div class="col-md-6 mb-3">
-        <label>End of Notice Period</label>
-        <input type="number" class="form-control" formControlName="endOfNoticePeriod" />
-      </div> -->
       <div class="col-md-3 form-floating">
         <input type="text" class="form-control" formControlName="endOfNoticePeriod" value="90" />
         <label for="endOfNotice">End of Notice Period</label>
@@ -127,10 +79,6 @@
         </div>
       </div>
 
-      <!-- <div class="col-md-6 mb-3">
-        <label>Next Employer</label>
-        <input type="text" class="form-control" formControlName="nextEmployer" />
-      </div> -->
       <div class="col-md-3 form-floating">
         <input
           type="text"
@@ -140,10 +88,6 @@
         />
         <label for="nextEmployer">Next Employer</label>
       </div>
-      <!-- <div class="col-md-6 mb-3">
-        <label>Mailing Address*</label>
-        <textarea rows="2" class="form-control" formControlName="mailingAddress"></textarea>
-      </div> -->
       <div class="col-md-4 form-floating">
         <input
           type="text"
@@ -163,10 +107,6 @@
         <div class="text-danger small" *ngIf="isInvalid('address')">Address is required.</div>
       </div>
 
-      <!-- <div class="col-md-6 mb-3">
-        <label>Personal Email ID*</label>
-        <input type="email" class="form-control" formControlName="personalEmailId" />
-      </div> -->
       <div class="col-md-4 form-floating">
         <input
           type="email"
@@ -183,10 +123,6 @@
         </div>
       </div>
 
-      <!-- <div class="col-md-12 mb-3">
-        <label>Comments</label>
-        <textarea rows="2" class="form-control" formControlName="comments"></textarea>
-      </div> -->
       <!-- Comments -->
       <div class="col-12 form-floating">
         <textarea class="form-control" formControlName="comments" style="height: 100px">
@@ -194,20 +130,11 @@ Caterpillar want me to relocate to Bengaluru, it's very difficult for me to relo
         >
         <label for="comments">Comments</label>
       </div>
-      <!-- <div class="col-md-12 mb-3">
-        <label>Attachment File</label>
-        <input type="file" class="form-control" (change)="onFileChange($event)" />
-      </div> -->
       <!-- Attachment -->
       <div class="col-12">
         <label class="form-label">Attachment File</label>
         <input class="form-control" type="file" id="formFile" (change)="onFileChange($event)" />
       </div>
-      <!-- <div class="col-md-12 mb-3">
-        <label>Pullback Comment*</label>
-        <textarea rows="2" class="form-control" formControlName="pullbackComment"></textarea>
-      </div>
-    </div> -->
       <!-- Pullback Comment -->
       <div class="col-12 form-floating">
         <textarea
@@ -222,16 +149,10 @@ Caterpillar want me to relocate to Bengaluru, it's very difficult for me to relo
       </div>
 
       <div class="d-flex justify-content-center gap-3">
-        <button type="button" class="btn btn-success" (click)="onPullback()">Pullback</button>
+        <button type="submit" *ngIf="showPullback" class="btn btn-success">Pullback</button>
         <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" *ngIf="!showPullback" class="btn btn-primary">Submit</button>
       </div>
-      <!-- Buttons -->
-      <!-- <div class="col-12 btn-container">
-      <button type="submit" class="btn btn-success">Pullback</button>
-      <button type="button" class="btn btn-danger">Cancel</button>
-    </div> -->
     </div>
   </form>
 </div>
- 

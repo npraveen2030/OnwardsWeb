@@ -12,6 +12,7 @@ import { SharedModule } from '../../modules/shared/shared-module';
 import { ResignationService } from '../../services/resignation.service';
 import { Resignation } from '../../models/Resignation';
 import { LoginResponse } from '../../models/loginResponseModel';
+import { ResignationStatus } from '../../core/enums/resignation-status.enum';
 
 @Component({
   selector: 'app-resignation-information',
@@ -25,11 +26,13 @@ export class ResignationInformationComponent implements OnInit {
 
   reasons: ResignationReason[] = [];
   types: ResignationType[] = [];
-  resignationDetails: Resignation | undefined; 
+  resignationDetails: Resignation | undefined;
 
   selectedReasonId: number | null = null;
   selectedTypeId: number | null = null;
   errorMessage: string | undefined;
+
+  showPullback: boolean = false;
 
   resignationForm!: FormGroup;
 
@@ -48,20 +51,17 @@ export class ResignationInformationComponent implements OnInit {
       this.resignationForm.patchValue({ attachmentFile: file });
     }
   }
-  
+
   onSubmit(): void {
     if (this.resignationForm.valid) {
-      console.log(this.resignationForm.value);
-      console.log('Valid');
-
       const formValue = this.resignationForm.value;
 
       if (formValue.id && formValue.id > 0) {
-
         const resignation: Resignation = {
           ...this.resignationForm.value,
-          userId: this.userDetails?.id ?? 0, 
-          loginId: this.userDetails?.id ?? 0, 
+          userId: this.userDetails?.id ?? 0,
+          loginId: this.userDetails?.id ?? 0,
+          statusId: this.showPullback ? ResignationStatus.PULLOVER : ResignationStatus.PENDING,
         };
         debugger;
         this.resignationService.updateResignation(resignation).subscribe({
@@ -74,9 +74,7 @@ export class ResignationInformationComponent implements OnInit {
           },
         });
       } else {
-        // 🔹 Insert case
         const resignation: Resignation = this.resignationForm.value;
-        debugger;
         this.resignationService.insertResignation(resignation).subscribe({
           next: (res) => {
             alert('Resignation inserted successfully!');
@@ -93,16 +91,11 @@ export class ResignationInformationComponent implements OnInit {
     }
   }
 
-  onPullback() {
-    console.log('Pullback Requested:', this.resignationForm.value.pullbackComment);
-  }
-
   onCancel() {
     this.resignationForm.reset();
   }
 
-  ngOnInit(): void { 
-
+  ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       const userStr = sessionStorage.getItem('userDetails');
       if (userStr !== null) {
@@ -114,11 +107,11 @@ export class ResignationInformationComponent implements OnInit {
     this.resignationForm = this.fb.group({
       id: [0],
       userId: this.userDetails?.id ?? 0,
-      resignationTypeId: [0, Validators.min(1)], 
+      resignationTypeId: [0, Validators.min(1)],
       resignationReasonId: [0, Validators.min(1)],
       resignationLetterDate: ['', Validators.required],
       requestedRelievingDate: ['', Validators.required],
-      actualRelievingDate: ['', Validators.required], 
+      actualRelievingDate: ['', Validators.required],
       noticePeriod: [90, [Validators.required, Validators.min(0)]],
       endOfNoticePeriod: [90, Validators.required],
       nextEmployer: [''],
@@ -134,7 +127,6 @@ export class ResignationInformationComponent implements OnInit {
       pullbackComment: ['', Validators.required],
       loginId: this.userDetails?.id ?? 0,
     });
-    debugger;
   }
 
   loadReasonsAndTypes(): void {
@@ -166,11 +158,12 @@ export class ResignationInformationComponent implements OnInit {
 
       if ('error' in result.resignationDetails) {
         console.error('ResignationType failed', result.resignationDetails.error);
+        this.showPullback = false;
       } else {
+        this.showPullback = true;
         this.resignationDetails = result.resignationDetails;
       }
     });
- 
   }
 
   loadReasons(): void {
@@ -183,7 +176,6 @@ export class ResignationInformationComponent implements OnInit {
   }
 
   loadTypes(): void {
-
     this.typeService.getResignationTypes().subscribe({
       next: (response) => {
         this.types = response;
@@ -206,5 +198,4 @@ export class ResignationInformationComponent implements OnInit {
       ? control.touched && !!control.errors?.[errorName]
       : control.touched && control.invalid;
   }
-  
 }

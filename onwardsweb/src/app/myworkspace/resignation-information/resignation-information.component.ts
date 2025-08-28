@@ -25,17 +25,13 @@ export class ResignationInformationComponent implements OnInit {
 
   reasons: ResignationReason[] = [];
   types: ResignationType[] = [];
-  resignationDetails: Resignation | undefined; // = [];
+  resignationDetails: Resignation | undefined; 
 
   selectedReasonId: number | null = null;
   selectedTypeId: number | null = null;
   errorMessage: string | undefined;
-  // selectedTypeId: number | null = null;
 
   resignationForm!: FormGroup;
-
-  // resignationTypes = ['Personal Reasons', 'Health', 'Career Growth'];
-  // resignationReasons = ['Relocation', 'Better Opportunity', 'Family', 'Others'];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -46,41 +42,83 @@ export class ResignationInformationComponent implements OnInit {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit(): void {
-    // id: number;,// userId: number;
-    // resignationTypeId: number;
-    // resignationReasonId: number;
-    // resignationLetterDate: string; // Date from API usually comes as ISO string
-    // resignationRelievingDate: string;
-    // resignationActualDate: string;
-    // attachmentFile?: string;
-    // statusId?: number;
-    // approvedBy?: number;
-    // approvalDate?: string;
-    // approverRemarks?: string;
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.resignationForm.patchValue({ attachmentFile: file });
+    }
+  }
+  
+  onSubmit(): void {
+    if (this.resignationForm.valid) {
+      console.log(this.resignationForm.value);
+      console.log('Valid');
+
+      const formValue = this.resignationForm.value;
+
+      if (formValue.id && formValue.id > 0) {
+
+        const resignation: Resignation = {
+          ...this.resignationForm.value,
+          userId: this.userDetails?.id ?? 0, 
+          loginId: this.userDetails?.id ?? 0, 
+        };
+        debugger;
+        this.resignationService.updateResignation(resignation).subscribe({
+          next: (res) => {
+            alert('Resignation updated successfully!');
+          },
+          error: (err) => {
+            console.error(err);
+            alert('Error while updated resignation');
+          },
+        });
+      } else {
+        // 🔹 Insert case
+        const resignation: Resignation = this.resignationForm.value;
+        debugger;
+        this.resignationService.insertResignation(resignation).subscribe({
+          next: (res) => {
+            alert('Resignation inserted successfully!');
+          },
+          error: (err) => {
+            console.error(err);
+            alert('Error while inserting resignation');
+          },
+        });
+      }
+    } else {
+      console.log('In Valid');
+      this.resignationForm.markAllAsTouched();
+    }
+  }
+
+  onPullback() {
+    console.log('Pullback Requested:', this.resignationForm.value.pullbackComment);
+  }
+
+  onCancel() {
+    this.resignationForm.reset();
+  }
+
+  ngOnInit(): void { 
 
     if (isPlatformBrowser(this.platformId)) {
-      // this.loadReasons();
-      // this.loadTypes();
       const userStr = sessionStorage.getItem('userDetails');
       if (userStr !== null) {
         this.userDetails = JSON.parse(userStr);
       }
-
       this.loadReasonsAndTypes();
     }
-    // this.loadReasonsAndTypes();
 
     this.resignationForm = this.fb.group({
       id: [0],
       userId: this.userDetails?.id ?? 0,
-      // resignationType: [null, Validators.required], //NEED TO CORRECT
-      // resignationReasonId: [null, Validators.required], //NEED TO CORRECT
-      resignationTypeId: [0, Validators.min(1)], //NEED TO CORRECT
-      resignationReasonId: [0, Validators.min(1)], //NEED TO CORRECT
+      resignationTypeId: [0, Validators.min(1)], 
+      resignationReasonId: [0, Validators.min(1)],
       resignationLetterDate: ['', Validators.required],
       requestedRelievingDate: ['', Validators.required],
-      actualRelievingDate: ['', Validators.required], //NEED TO CORRECT - resignationActualDate -ResignationActualDate
+      actualRelievingDate: ['', Validators.required], 
       noticePeriod: [90, [Validators.required, Validators.min(0)]],
       endOfNoticePeriod: [90, Validators.required],
       nextEmployer: [''],
@@ -110,7 +148,6 @@ export class ResignationInformationComponent implements OnInit {
         .getResignationDetailsByUserId(this.userDetails?.id ?? 0)
         .pipe(catchError((err) => of({ error: err }))),
     }).subscribe((result) => {
-      // patch whole object
       this.resignationForm.patchValue(result.resignationDetails);
 
       // Check if reasons has error
@@ -133,25 +170,7 @@ export class ResignationInformationComponent implements OnInit {
         this.resignationDetails = result.resignationDetails;
       }
     });
-
-    // forkJoin({
-    //   reasons: this.reasonService
-    //     .getResignationReason()
-    //     .pipe(catchError((err) => of({ error: err }))),
-    //   types: this.typeService.getResignationTypes().pipe(catchError((err) => of({ error: err }))),
-    // }).subscribe((result) => {
-    //   if (result.reasons.error) {
-    //     console.error('ResignationReason failed', result.reasons.error);
-    //   } else {
-    //     console.log('Reasons:', result.reasons);
-    //   }
-
-    //   if (result.types.error) {
-    //     console.error('ResignationType failed', result.types.error);
-    //   } else {
-    //     console.log('Types:', result.types);
-    //   }
-    // });
+ 
   }
 
   loadReasons(): void {
@@ -164,17 +183,12 @@ export class ResignationInformationComponent implements OnInit {
   }
 
   loadTypes(): void {
-    // this.typeService.getResignationTypes().subscribe({
-    //   next: (data) => (this.types = data),
-    //   error: (err) => console.error('Error fetching resignation types', err),
-    // });
 
     this.typeService.getResignationTypes().subscribe({
       next: (response) => {
         this.types = response;
       },
       error: (err: any) => {
-        // ------------------<need to modify error responses>--------------------
         if (err.status === 401) {
           this.errorMessage = 'Training details not found';
         } else {
@@ -185,100 +199,6 @@ export class ResignationInformationComponent implements OnInit {
     });
   }
 
-  // onSubmit(): void {
-  //   console.log('Selected ReasonId:', this.selectedReasonId);
-  //   console.log('Selected TypeId:', this.selectedTypeId);
-  // }
-
-  // constructor(private fb: FormBuilder) {}
-
-  // ngOnInit(): void {
-  //   this.resignationForm = this.fb.group({
-  //     resignationType: ['', Validators.required],
-  //     resignationReason: ['', Validators.required],
-  //     resignationLetterDate: ['', Validators.required],
-  //     requestRelievingDate: ['', Validators.required],
-  //     actualRelievingDate: ['', Validators.required],
-  //     noticePeriod: [90, [Validators.required, Validators.min(0)]],
-  //     endOfNoticePeriod: [90, Validators.required],
-  //     nextEmployer: [''],
-  //     mailingAddress: ['', Validators.required],
-  //     personalEmailId: ['', [Validators.required, Validators.email]],
-  //     comments: [''],
-  //     attachmentFile: [null],
-  //     pullbackComment: ['', Validators.required]
-  //   });
-  // }
-
-  onFileChange(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.resignationForm.patchValue({ attachmentFile: file });
-    }
-  }
-
-  onSubmit(): void {
-    if (this.resignationForm.valid) {
-      console.log(this.resignationForm.value);
-      console.log('Valid');
-
-      const formValue = this.resignationForm.value;
-
-      if (formValue.id && formValue.id > 0) {
-        // const resignation: Resignation = this.resignationForm.value;
-
-        const resignation: Resignation = {
-          ...this.resignationForm.value,
-          userId: this.userDetails?.id ?? 0, //Number(sessionStorage.getItem('userId')), // overwrite userId
-          loginId: this.userDetails?.id ?? 0, // Number(sessionStorage.getItem('loginUserId')), // if required
-        };
-        debugger;
-        this.resignationService.updateResignation(resignation).subscribe({
-          next: (res) => {
-            alert('Resignation updated successfully!');
-            // this.resignationForm.reset();
-            // this.submitted = false;
-          },
-          error: (err) => {
-            console.error(err);
-            alert('Error while updated resignation');
-          },
-        });
-      } else {
-        // 🔹 Insert case
-        const resignation: Resignation = this.resignationForm.value;
-        debugger;
-        this.resignationService.insertResignation(resignation).subscribe({
-          next: (res) => {
-            alert('Resignation inserted successfully!');
-            // this.resignationForm.reset();
-            // this.submitted = false;
-          },
-          error: (err) => {
-            console.error(err);
-            alert('Error while inserting resignation');
-          },
-        });
-      }
-
-      // alert('Form Submitted Successfully');
-    } else {
-      console.log('In Valid');
-      this.resignationForm.markAllAsTouched();
-    }
-
-    console.log('Selected ReasonId:', this.selectedReasonId);
-    console.log('Selected TypeId:', this.selectedTypeId);
-  }
-
-  onPullback() {
-    console.log('Pullback Requested:', this.resignationForm.value.pullbackComment);
-  }
-
-  onCancel() {
-    this.resignationForm.reset();
-  }
-
   isInvalid(controlName: string, errorName?: string): boolean {
     const control = this.resignationForm.get(controlName);
     if (!control) return false;
@@ -286,4 +206,5 @@ export class ResignationInformationComponent implements OnInit {
       ? control.touched && !!control.errors?.[errorName]
       : control.touched && control.invalid;
   }
+  
 }

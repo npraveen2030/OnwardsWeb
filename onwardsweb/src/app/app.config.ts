@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter, Route } from '@angular/router';
+import { provideRouter, Route, withComponentInputBinding } from '@angular/router';
 
 import { provideClientHydration } from '@angular/platform-browser';
 import { LoginComponent } from './shared/login.component';
@@ -12,6 +12,8 @@ import { SessionGuard } from './gaurds/session.gaurd';
 import { ResignationComponent } from './myworkspace/resignation/resignation.component';
 import { WorkspaceComponent } from './myworkspace/workspace.component';
 import { LeavemanagementComponent } from './shared/leavemanagement/leavemanagement.component';
+import { ExitInterviewComponent } from './myworkspace/exit-interview/exit-interview.component';
+import { MyApprovalComponent } from './myworkspace/my-approval/my-approval.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -26,6 +28,8 @@ const routes: Route[] = [
       { path: 'leavemanagement', component: LeavemanagementComponent },
       { path: 'resignation', component: ResignationComponent },
       { path: 'myworkspace', component: WorkspaceComponent },
+      { path: 'my-approvals', component: MyApprovalComponent },
+      { path: 'exit-interview', component: ExitInterviewComponent },
     ],
   },
 ];
@@ -35,6 +39,7 @@ export const appConfig: ApplicationConfig = {
     // provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection(),
     provideHttpClient(withFetch()),
-    provideRouter(routes),
+    // provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()) // 👈 enable router
   ],
 };

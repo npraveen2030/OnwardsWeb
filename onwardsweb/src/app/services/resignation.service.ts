@@ -31,4 +31,16 @@ export class ResignationService {
   updateResignation(resignation: Resignation): Observable<Resignation> {
     return this.http.post<Resignation>(`${this.apiService}/Resignation/Update`, resignation);
   }
+
+  getResignationsByUserId(userId: number): Observable<Resignation[]> {
+    return this.http.get<Resignation[]>(
+      `${this.apiService}/Resignation/GetAllResignations/${userId}`
+    );
+  }
+
+  approveResignations(ids: number[]): Observable<any> {
+    return this.http.post(`${this.apiService}/approve`, ids);
+    // <-- Adjust if your API expects different payload
+  }
+  
 }

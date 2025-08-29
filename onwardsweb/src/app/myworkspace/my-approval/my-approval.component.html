@@ -1,0 +1,37 @@
+<div class="resignation-container">
+  <h2>Resignation Approvals</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>
+          <input type="checkbox"
+                 [(ngModel)]="masterSelected"
+                 (change)="toggleAllSelection()" />
+        </th>
+        <th>Employee Name</th>
+        <!-- <th>Created Date</th> -->
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of resignations">
+        <td>
+          <input type="checkbox"
+                 [(ngModel)]="r.selected"
+                 (change)="updateMasterCheckbox()"
+                 [disabled]="r.status !== 'Pending'" />
+        </td>
+        <td>{{ r.fullName }}</td>
+        <!-- <td>{{ r.createdDate | date:'short' }}</td> -->
+        <td>
+          <span [ngClass]="{'pending': r.status==='Pending', 'approved': r.status==='Approved'}">
+            {{ r.status }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button class="btn-approve" (click)="approveSelected()">Approve</button>
+</div>

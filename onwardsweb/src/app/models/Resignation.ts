@@ -20,4 +20,11 @@ export interface Resignation extends BaseEntity {
   approvedBy?: number;
   approvalDate?: string;
   approverRemarks?: string;
+
+  // userId: number;
+  fullName: string;
+  // createdDate: Date;
+  
+  status: string;
+  selected?: boolean; // UI property
 }

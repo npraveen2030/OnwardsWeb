@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Resignation } from '../models/Resignation';
 import { Observable } from 'rxjs';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -24,12 +25,33 @@ export class ResignationService {
     );
   }
 
-  insertResignation(resignation: Resignation): Observable<Resignation> {
-    return this.http.post<Resignation>(`${this.apiService}/Resignation/Insert`, resignation);
-  }
+  insertorupdateResignation(resignationForm: FormGroup): Observable<{ message: string }> {
+    const formData = new FormData();
 
-  updateResignation(resignation: Resignation): Observable<Resignation> {
-    return this.http.post<Resignation>(`${this.apiService}/Resignation/Update`, resignation);
+    Object.keys(resignationForm.controls).forEach((key) => {
+      if (key !== 'attachmentFile') {
+        const value = resignationForm.get(key)?.value;
+        if (value !== null && value !== undefined) {
+          // Capitalize first letter to match C# model
+          const pascalKey = key.charAt(0).toUpperCase() + key.slice(1);
+          formData.append(pascalKey, value);
+        }
+      }
+    });
+
+    // Add file separately
+    if (resignationForm.get('attachmentFile')?.value) {
+      formData.append('AttachmentFile', resignationForm.get('attachmentFile')?.value);
+    }
+
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
+
+    return this.http.post<{ message: string }>(
+      `${this.apiService}/Resignation/insertorupdate`,
+      formData
+    );
   }
 
   getResignationsByUserId(userId: number): Observable<Resignation[]> {
@@ -42,5 +64,4 @@ export class ResignationService {
     return this.http.post(`${this.apiService}/approve`, ids);
     // <-- Adjust if your API expects different payload
   }
-  
 }

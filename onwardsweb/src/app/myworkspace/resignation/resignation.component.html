@@ -1,22 +1,57 @@
+<!-- Top Navigation -->
+<!-- <div class="top-nav">
+  <button class="active">Resignation</button>
+  <button>My Approvals</button>
+  <button>Exit Interview</button>
+</div> -->
 <div class="top-section">
   <!-- <h1>Top Section (100%)</h1>
   <p>This section spans the full width of the page.</p> -->
-  <div class="custom-tabs">
+  <!-- <div class="custom-tabs">
     <a href="#" class="active">Resignation</a>
-    <a href="#">My Approvals</a>
+    <a (click)="goToResignation()">My Approvals</a>
     <a href="#">Exit Interview</a>
+  </div> -->
+  <!-- <div class="custom-tabs">
+    <a routerLink="/resignation" routerLinkActive="active">Resignation</a>
+    <a routerLink="/my-approvals" routerLinkActive="active">My Approvals</a>
+    <a routerLink="/exit-interview" routerLinkActive="active">Exit Interview</a>
   </div>
-</div>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div> -->
+  <div class="custom-tabs">
+    <a (click)="setActiveTab('resignation')" [class.active]="activeTab === 'resignation'"
+      >Resignation</a
+    >
 
-<div class="container">
-  <div class="left-section">
-    <!-- <h2>Left Section (25%)</h2>
-    <p>Sidebar or navigation.</p> -->
-    <app-basic-information></app-basic-information>
+    <a (click)="setActiveTab('my-approvals')" [class.active]="activeTab === 'my-approvals'"
+      >My Approvals</a
+    >
+
+    <a (click)="setActiveTab('exit-interview')" [class.active]="activeTab === 'exit-interview'"
+      >Exit Interview</a
+    >
   </div>
-  <div class="right-section">
-    <!-- <h2>Right Section (75%)</h2>
+
+  <!-- <div class="container"></div> -->
+
+  <div class="container">
+    <div class="left-section">
+      <!-- <h2>Left Section (25%)</h2>
+    <p>Sidebar or navigation.</p> -->
+      <app-basic-information></app-basic-information>
+    </div>
+    <div class="right-section">
+      <!-- <h2>Right Section (75%)</h2>
     <p>Main content area.</p> -->
-    <app-resignation-information></app-resignation-information>
+      <!-- <app-resignation-information></app-resignation-information> -->
+      <!-- If-Else condition -->
+      <app-resignation-information
+        *ngIf="activeTab === 'resignation'"
+      ></app-resignation-information>
+      <app-my-approval *ngIf="activeTab === 'my-approvals'"></app-my-approval>
+      <app-exit-interview *ngIf="activeTab === 'exit-interview'"></app-exit-interview>
+    </div>
   </div>
 </div>

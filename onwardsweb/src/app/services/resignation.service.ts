@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Resignation } from '../models/Resignation';
 import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
+import { approveResignations } from '../models/ApproveResignationRequestModel';
 
 @Injectable({
   providedIn: 'root',
@@ -60,8 +61,7 @@ export class ResignationService {
     );
   }
 
-  approveResignations(ids: number[]): Observable<any> {
-    return this.http.post(`${this.apiService}/approve`, ids);
-    // <-- Adjust if your API expects different payload
+  approveResignations(approvals: approveResignations): Observable<any> {
+    return this.http.post(`${this.apiService}/approve`, approvals);
   }
 }

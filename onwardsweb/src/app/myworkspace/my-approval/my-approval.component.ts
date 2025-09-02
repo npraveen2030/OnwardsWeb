@@ -5,6 +5,7 @@ import { LoginResponse } from '../../models/loginResponseModel';
 import { isPlatformBrowser } from '@angular/common';
 import { SharedModule } from '../../modules/shared/shared-module';
 import { debug } from 'console';
+import { approveResignations } from '../../models/ApproveResignationRequestModel';
 
 @Component({
   selector: 'app-my-approval',
@@ -91,10 +92,15 @@ export class MyApprovalComponent implements OnInit {
     let selectedResignationsIds = [];
 
     for (let resignation of selectedResignations) {
-      selectedResignationsIds.push(resignation.id);
+      selectedResignationsIds.push(resignation.userId);
     }
 
-    this.resignationService.approveResignations(selectedResignationsIds).subscribe({
+    const approveResignationsIds: approveResignations = {
+      loginId: this.userDetails?.id ?? 0,
+      ids: selectedResignationsIds,
+    };
+
+    this.resignationService.approveResignations(approveResignationsIds).subscribe({
       next: (res) => {
         console.log('Approved');
       },

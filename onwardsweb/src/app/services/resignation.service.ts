@@ -62,6 +62,6 @@ export class ResignationService {
   }
 
   approveResignations(approvals: approveResignations): Observable<any> {
-    return this.http.post(`${this.apiService}/approve`, approvals);
+    return this.http.post(`${this.apiService}/Resignation/approve`, approvals);
   }
 }

@@ -5,9 +5,7 @@
     <thead>
       <tr>
         <th>
-          <input type="checkbox"
-                 [(ngModel)]="masterSelected"
-                 (change)="toggleAllSelection()" />
+          <input type="checkbox" [(ngModel)]="masterSelected" (change)="toggleAllSelection()" />
         </th>
         <th>Employee Name</th>
         <!-- <th>Created Date</th> -->
@@ -17,15 +15,17 @@
     <tbody>
       <tr *ngFor="let r of resignations">
         <td>
-          <input type="checkbox"
-                 [(ngModel)]="r.selected"
-                 (change)="updateMasterCheckbox()"
-                 [disabled]="r.status !== 'Pending'" />
+          <input
+            type="checkbox"
+            [(ngModel)]="r.selected"
+            (change)="updateMasterCheckbox()"
+            [disabled]="r.status !== 'Pending'"
+          />
         </td>
         <td>{{ r.fullName }}</td>
         <!-- <td>{{ r.createdDate | date:'short' }}</td> -->
         <td>
-          <span [ngClass]="{'pending': r.status==='Pending', 'approved': r.status==='Approved'}">
+          <span [ngClass]="{ pending: r.status === 'Pending', approved: r.status === 'Approved' }">
             {{ r.status }}
           </span>
         </td>
@@ -33,5 +33,34 @@
     </tbody>
   </table>
 
-  <button class="btn-approve" (click)="approveSelected()">Approve</button>
+  <button type="button" class="btn-approve" data-bs-toggle="modal" data-bs-target="#ApproveModal">
+    Approve
+  </button>
+</div>
+
+<!-- --------------------------------------------Approval Modal--------------------------------------- -->
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="ApproveModal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ApproveModalLabel">Approval Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">Do you want to approve?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="approveSelected()">Approve</button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -21,6 +21,7 @@ import { AutocompleteComponent } from './autocomplete.component';
 import { LoginResponse } from '../../models/loginResponseModel';
 import { LeaveManagementService } from '../../services/leavemanagement.service';
 import { LeaveTypes } from '../../models/leavemanagementResponseModel';
+import { LeaveRequest } from '../../models/leavemanagementRequestModel';
 
 @Component({
   selector: 'app-calendarcontrol',
@@ -81,7 +82,6 @@ export class CalendarControlComponent {
       phone: ['', Validators.required],
       notify: ['', Validators.required],
       reason: [''],
-      file: [null],
     });
     this.attendanceForm = this.fb.group({
       employeeName: ['', Validators.required],
@@ -134,11 +134,17 @@ export class CalendarControlComponent {
     }
   }
 
-  clearAttendanceForm() {
-    this.attendanceForm.reset();
+  // ----------------------------------calender control ---------------------------
+
+  previousMonth(): void {
+    this.viewDate = subMonths(this.viewDate, 1);
   }
 
-  // ----------------------------------calender control ---------------------------
+  nextMonth(): void {
+    this.viewDate = addMonths(this.viewDate, 1);
+  }
+
+  // ----------------------------------------Context Menu------------------------------------------------------
 
   onRightClick(event: MouseEvent, day: CalendarMonthViewDay): void {
     event.preventDefault();
@@ -155,16 +161,6 @@ export class CalendarControlComponent {
     this.showContextMenu = false;
   }
 
-  previousMonth(): void {
-    this.viewDate = subMonths(this.viewDate, 1);
-  }
-
-  nextMonth(): void {
-    this.viewDate = addMonths(this.viewDate, 1);
-  }
-
-  // ----------------------------------------Context Menu------------------------------------------------------
-
   @HostListener('document:click')
   onGlobalClick() {
     this.showContextMenu = false;
@@ -179,9 +175,6 @@ export class CalendarControlComponent {
     this.showContextMenu = false;
     this.attendanceregularizationModal.show();
   }
-
-  submit() {}
-
   //--------------------------------------------------file upload------------------------------------------
   onFileSelected(event: any): void {
     const file: File = event.target.files?.[0];
@@ -221,5 +214,31 @@ export class CalendarControlComponent {
     this.leaveRequestForm.get('file')?.updateValueAndValidity();
   }
 
-  submitLeaveRequestForm() {}
+  //--------------------Leave Request----------------------------------
+  submitLeaveRequestForm(): void {
+    let leaverequest: LeaveRequest = {
+      loginId: this.userDetails.id,
+      userId: this.userDetails.id,
+      leaveTypeId: this.leaveRequestForm.get('leavetype')?.value,
+      locationId: this.userDetails.locationId,
+      year: 0,
+      reason: this.leaveRequestForm.get('reason')?.value,
+      startDate: this.leaveRequestForm.get('startDate')?.value,
+      endDate: this.leaveRequestForm.get('endDate')?.value,
+      leaveStatusId: 1, // Requested
+    };
+
+    this.leavemanagementservice.InsertOrUpdateLeaveRequest(leaverequest, this.fileData).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+    });
+  }
+
+  //--------------------Attendance Regularization----------------------------------
+  submitAttendanceRegualrization() {}
+
+  clearAttendanceForm() {
+    this.attendanceForm.reset();
+  }
 }

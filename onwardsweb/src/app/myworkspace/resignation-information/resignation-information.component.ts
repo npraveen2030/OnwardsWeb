@@ -13,6 +13,7 @@ import { ResignationService } from '../../services/resignation.service';
 import { Resignation } from '../../models/Resignation';
 import { LoginResponse } from '../../models/loginResponseModel';
 import { ResignationStatus } from '../../core/enums/resignation-status.enum';
+import { application } from 'express';
 
 @Component({
   selector: 'app-resignation-information',
@@ -35,6 +36,7 @@ export class ResignationInformationComponent implements OnInit {
   showPullback: boolean = false;
 
   resignationForm!: FormGroup;
+  isPdf: boolean | null = null;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -48,46 +50,54 @@ export class ResignationInformationComponent implements OnInit {
   onFileChange(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.resignationForm.patchValue({ attachmentFile: file });
+      if (file.type === 'application/pdf') {
+        this.isPdf = true;
+        this.resignationForm.patchValue({ attachmentFile: file, attachmentFileName: file.name });
+      } else {
+        this.isPdf = false;
+      }
     }
   }
 
   onSubmit(): void {
     if (this.resignationForm.valid) {
-      const formValue = this.resignationForm.value;
+      this.resignationService.insertorupdateResignation(this.resignationForm).subscribe({
+        next: (res) => {
+          alert('Resignation inserted or updated successfully!');
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Error while inserting or updating resignation');
+        },
+      });
 
-      if (formValue.id && formValue.id > 0) {
-        const resignation: Resignation = {
-          ...this.resignationForm.value,
-          userId: this.userDetails?.id ?? 0,
-          loginId: this.userDetails?.id ?? 0,
-          statusId: this.showPullback ? ResignationStatus.PULLOVER : ResignationStatus.PENDING,
-        };
-        debugger;
-        this.resignationService.updateResignation(resignation).subscribe({
-          next: (res) => {
-            alert('Resignation updated successfully!');
-          },
-          error: (err) => {
-            console.error(err);
-            alert('Error while updated resignation');
-          },
-        });
-      } else {
-        const resignation: Resignation = this.resignationForm.value;
-        this.resignationService.insertResignation(resignation).subscribe({
-          next: (res) => {
-            alert('Resignation inserted successfully!');
-          },
-          error: (err) => {
-            console.error(err);
-            alert('Error while inserting resignation');
-          },
-        });
-      }
-    } else {
-      console.log('In Valid');
-      this.resignationForm.markAllAsTouched();
+      //   const formValue = this.resignationForm.value;
+
+      //   if (formValue.id && formValue.id > 0) {
+      //     // const resignation: Resignation = {
+      //     //   ...this.resignationForm.value,
+      //     //   userId: this.userDetails?.id ?? 0,
+      //     //   loginId: this.userDetails?.id ?? 0,
+      //     //   statusId: this.showPullback ? ResignationStatus.PULLOVER : ResignationStatus.PENDING,
+      //     // };
+      //     debugger;
+      //     this.resignationService.updateResignation(this.resignationForm).subscribe({
+      //       next: (res) => {
+      //         alert('Resignation updated successfully!');
+      //       },
+      //       error: (err) => {
+      //         console.error(err);
+      //         alert('Error while updated resignation');
+      //       },
+      //     });
+      //   } else {
+      //     const resignation: Resignation = this.resignationForm.value;
+
+      //   }
+      // } else {
+      //   console.log('In Valid');
+      //   this.resignationForm.markAllAsTouched();
+      // }
     }
   }
 
@@ -119,6 +129,7 @@ export class ResignationInformationComponent implements OnInit {
       address: ['', Validators.required],
       personalEmailId: ['', [Validators.required, Validators.email]],
       comments: [''],
+      attachmentFileName: [''],
       attachmentFile: [null],
       statusId: [1],
       approvedBy: [null],

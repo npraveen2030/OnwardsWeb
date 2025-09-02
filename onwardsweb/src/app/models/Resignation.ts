@@ -14,7 +14,8 @@ export interface Resignation extends BaseEntity {
   address?: string;
   personalEmailId?: string;
   comments?: string;
-  attachmentFile?: string;
+  attachmentFileName?: string;
+  attachmentFile?: File;
   pullbackComment?: string;
   statusId?: number;
   approvedBy?: number;
@@ -24,7 +25,7 @@ export interface Resignation extends BaseEntity {
   // userId: number;
   fullName: string;
   // createdDate: Date;
-  
+
   status: string;
   selected?: boolean; // UI property
 }

@@ -134,6 +134,9 @@ Caterpillar want me to relocate to Bengaluru, it's very difficult for me to relo
       <div class="col-12">
         <label class="form-label">Attachment File</label>
         <input class="form-control" type="file" id="formFile" (change)="onFileChange($event)" />
+        @if(isPdf === false) {
+        <div class="text-danger small">Only PDF Format</div>
+        }
       </div>
       <!-- Pullback Comment -->
       <div class="col-12 form-floating">

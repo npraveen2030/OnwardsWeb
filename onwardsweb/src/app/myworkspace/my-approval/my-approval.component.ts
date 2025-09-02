@@ -17,6 +17,7 @@ export class MyApprovalComponent implements OnInit {
   resignations: Resignation[] = [];
   masterSelected: boolean = false;
   userDetails: LoginResponse | null = null;
+  ApproveModal: any;
 
   constructor(
     private resignationService: ResignationService,
@@ -39,11 +40,22 @@ export class MyApprovalComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const bootstrap = (window as any).bootstrap;
+      const ApproveModal = document.getElementById('ApproveModal');
+
+      if (ApproveModal && bootstrap?.Modal) {
+        this.ApproveModal = new bootstrap.Modal(ApproveModal);
+      }
+    }
+  }
+
   loadResignations(): void {
     this.resignationService.getResignationsByUserId(this.userDetails?.id ?? 0).subscribe({
       next: (data) => {
         // this.resignations = data;
-      this.resignations = Array.isArray(data) ? data : [data];
+        this.resignations = Array.isArray(data) ? data : [data];
         // debugger
       },
       error: (err) => {
@@ -74,7 +86,21 @@ export class MyApprovalComponent implements OnInit {
       return;
     }
 
-    console.log('Approving:', selectedResignations);
-    // Call API service here to approve selected resignations
+    this.ApproveModal?.hide();
+
+    let selectedResignationsIds = [];
+
+    for (let resignation of selectedResignations) {
+      selectedResignationsIds.push(resignation.id);
+    }
+
+    this.resignationService.approveResignations(selectedResignationsIds).subscribe({
+      next: (res) => {
+        console.log('Approved');
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
 }

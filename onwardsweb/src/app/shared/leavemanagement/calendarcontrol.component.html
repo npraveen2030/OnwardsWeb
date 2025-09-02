@@ -259,7 +259,7 @@
             </div>
 
             <div class="modal-footer d-flex justify-content-center">
-              <button type="button" class="btn btn-primary btn-custom">Submit</button>
+              <button type="submit" class="btn btn-primary btn-custom">Submit</button>
 
               <button type="button" class="btn btn-secondary btn-custom">Clear Data</button>
 
@@ -298,7 +298,11 @@
         </div>
 
         <div class="modal-body">
-          <form [formGroup]="attendanceForm" id="attendanceForm" (ngSubmit)="submit()">
+          <form
+            [formGroup]="attendanceForm"
+            id="attendanceForm"
+            (ngSubmit)="submitAttendanceRegualrization()"
+          >
             <!-- Employee Name -->
             <div class="mb-3">
               <label class="form-label required">Employee Name</label>
@@ -374,7 +378,11 @@
 
           <!-- Footer Buttons -->
           <div class="modal-footer d-flex justify-content-center">
-            <button type="submit" class="btn btn-success btn-custom" (click)="submit()">
+            <button
+              type="submit"
+              class="btn btn-success btn-custom"
+              (click)="submitAttendanceRegualrization()"
+            >
               Submit
             </button>
             <button

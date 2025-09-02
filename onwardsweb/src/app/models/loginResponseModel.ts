@@ -3,6 +3,7 @@ export interface LoginResponse {
   username: string;
   loginTime: string;
   employeeCode: string;
+  locationId: number;
   fullName: string;
   email: string;
   roleName: string;

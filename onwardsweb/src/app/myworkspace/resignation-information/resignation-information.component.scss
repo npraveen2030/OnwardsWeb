@@ -1,7 +1,7 @@
-.card { 
+.card {
   padding: 0.6rem;
-  border-radius: 0px; 
-  border: 1px solid #0a7ea4; 
+  border-radius: 0px;
+  border: 1px solid #0a7ea4;
 }
 .form-floating > label {
   font-size: 0.9rem;
@@ -24,4 +24,13 @@
 }
 textarea {
   resize: none;
+}
+
+.btn-filecancel {
+  background-color: transparent;
+  margin: 0;
+  margin-left: 1%;
+  padding: 0;
+  border: 0;
+  outline: none;
 }

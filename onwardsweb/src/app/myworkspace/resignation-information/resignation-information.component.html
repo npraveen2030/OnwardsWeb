@@ -133,7 +133,18 @@ Caterpillar want me to relocate to Bengaluru, it's very difficult for me to relo
       <!-- Attachment -->
       <div class="col-12">
         <label class="form-label">Attachment File</label>
-        <input class="form-control" type="file" id="formFile" (change)="onFileChange($event)" />
+        <div class="d-flex">
+          <input
+            class="form-control"
+            type="file"
+            id="formFile"
+            #fileInput
+            (change)="onFileChange($event, fileInput)"
+          />
+          @if (isPdf === true) {
+          <button type="button" class="btn-filecancel" (click)="clearFile(fileInput)">X</button>
+          }
+        </div>
         @if(isPdf === false) {
         <div class="text-danger small">Only PDF Format</div>
         }

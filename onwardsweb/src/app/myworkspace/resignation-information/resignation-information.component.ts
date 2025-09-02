@@ -48,7 +48,7 @@ export class ResignationInformationComponent implements OnInit {
     private fb: FormBuilder
   ) {}
 
-  onFileChange(event: any) {
+  onFileChange(event: any, fileInput: HTMLInputElement) {
     const file = event.target.files[0];
     if (file) {
       if (file.type === 'application/pdf') {
@@ -56,8 +56,14 @@ export class ResignationInformationComponent implements OnInit {
         this.resignationForm.patchValue({ attachmentFile: file, attachmentFileName: file.name });
       } else {
         this.isPdf = false;
+        fileInput.value = '';
       }
     }
+  }
+
+  clearFile(fileInput: HTMLInputElement) {
+    fileInput.value = '';
+    this.isPdf = null;
   }
 
   onSubmit(): void {
@@ -71,34 +77,9 @@ export class ResignationInformationComponent implements OnInit {
           alert('Error while inserting or updating resignation');
         },
       });
-
-      //   const formValue = this.resignationForm.value;
-
-      //   if (formValue.id && formValue.id > 0) {
-      //     // const resignation: Resignation = {
-      //     //   ...this.resignationForm.value,
-      //     //   userId: this.userDetails?.id ?? 0,
-      //     //   loginId: this.userDetails?.id ?? 0,
-      //     //   statusId: this.showPullback ? ResignationStatus.PULLOVER : ResignationStatus.PENDING,
-      //     // };
-      //     debugger;
-      //     this.resignationService.updateResignation(this.resignationForm).subscribe({
-      //       next: (res) => {
-      //         alert('Resignation updated successfully!');
-      //       },
-      //       error: (err) => {
-      //         console.error(err);
-      //         alert('Error while updated resignation');
-      //       },
-      //     });
-      //   } else {
-      //     const resignation: Resignation = this.resignationForm.value;
-
-      //   }
-      // } else {
-      //   console.log('In Valid');
-      //   this.resignationForm.markAllAsTouched();
-      // }
+    } else {
+      console.log('In Valid');
+      this.resignationForm.markAllAsTouched();
     }
   }
 

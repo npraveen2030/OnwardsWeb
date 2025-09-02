@@ -148,9 +148,8 @@ export class ResignationInformationComponent implements OnInit {
       } else {
         this.types = result.types; // Safe: it's ResignationType[]
       }
-
-      if (result?.resignationDetails && 'error' in result.resignationDetails) {
-        console.error('ResignationType failed', result.resignationDetails.error);
+      if (result?.resignationDetails || result?.resignationDetails == null) {
+        // console.error('ResignationType failed', result.resignationDetails.error);
         this.showPullback = false;
       } else {
         this.showPullback = true;

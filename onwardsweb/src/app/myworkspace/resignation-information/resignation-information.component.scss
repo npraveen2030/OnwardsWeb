@@ -6,15 +6,17 @@
 .form-floating > label {
   font-size: 0.9rem;
 }
+.btn {
+  min-width: 120px;
+}
 .btn-success {
   background-color: #28a745;
   border: none;
-  width: 120px;
 }
 .btn-danger {
   background-color: #dc3545;
   border: none;
-  width: 120px;
+  // width: 120px;
 }
 .btn-container {
   display: flex;

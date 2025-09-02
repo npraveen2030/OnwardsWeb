@@ -1,0 +1,95 @@
+<div class="container mt-4">
+  
+
+  <div class="info-wrapper">
+    <!-- Left Section -->
+    <div class="left-section">
+      <app-basic-information></app-basic-information>
+    </div>
+
+    <!-- Right Section -->
+<div class="right-section">
+  <div class="card">
+    <h5 class="ms-3 mt-3">Personal-Information</h5>
+    <div class="card-body">
+      
+      <form #form="ngForm">
+        <div class="d-flex gap-3">
+          <div class="flex-fill">
+            <input type="text" 
+            name="mailingAddress"
+            placeholder="Mailing Address*" 
+            class="form-control" required
+            ngModel
+            #mailingAddress="ngModel">
+            <div *ngIf="isInvalid(mailingAddress)" class="text-danger small">
+                Mailing Address is Required
+            </div>
+          </div>
+
+          <div class="flex-fill">
+            <input type="text" 
+            name="address"
+            placeholder="Address*" 
+            class="form-control"
+            required
+            ngModel
+            #address="ngModel"
+            >
+            <div *ngIf="isInvalid(address)" class="text-danger small">
+                Address is Required
+            </div>
+          </div>
+
+          <div class="flex-fill">
+            <input type="email" 
+            placeholder="Personal Email Id*" 
+            class="form-control"
+            name="email"
+            required
+            ngModel #email="ngModel">
+             <div *ngIf="isInvalid(email)" class="text-danger small">
+            E-mail is Required
+          </div>
+          </div>
+         
+        </div>
+
+        <div class="form-floating mt-3">
+          <textarea class="form-control" 
+          placeholder="Leave a comment here" 
+          id="commentTextarea" style="height: 100px"></textarea>
+          <label for="commentTextarea" class="ms-2">Comments</label>
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label" for="customFile">Attachment File</label>
+          <input type="file" class="form-control" id="customFile">
+        </div>
+
+        <div class="form-floating mt-3">
+          <textarea class="form-control" 
+          placeholder="Leave a comment here" 
+          id="pullbackTextarea" 
+          name="pullbackTextarea"
+          style="height: 100px" required
+          ngModel #pullbackTextarea="ngModel"></textarea>
+          <label for="pullbackTextarea" class="ms-2">Pullback Comment*</label>
+        </div>
+        <div *ngIf="isInvalid(pullbackTextarea)" class="text-danger small">
+            Pullback Comment is Required
+        </div>
+
+        <!-- Buttons Centered -->
+        <div class="d-flex justify-content-center gap-3 mt-4">
+          <button type="button" class="btn btn-danger" (click)="onCancel(form)">Cancel</button>
+          <button type="submit" class="btn btn-primary" (click)="onSubmit(form)">Submit</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>

@@ -14,4 +14,9 @@ constructor(private router: Router) {}
   goToResignation() {
     this.router.navigate(['/resignation']);
   }
+
+  goToPersonalInfo() {
+    this.router.navigate(['/personal-info']);
+
+  }
 }

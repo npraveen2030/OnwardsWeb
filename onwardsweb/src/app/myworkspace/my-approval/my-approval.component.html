@@ -5,10 +5,14 @@
     <thead>
       <tr>
         <th>
-          <input type="checkbox" [(ngModel)]="masterSelected" (change)="toggleAllSelection()" />
+          <input
+            type="checkbox"
+            [(ngModel)]="masterSelected"
+            (change)="toggleAllSelection()"
+            [disabled]="resignations.length === 0"
+          />
         </th>
-        <th>Employee Name</th>
-        <!-- <th>Created Date</th> -->
+        <th>Employee Name</th> 
         <th>Status</th>
       </tr>
     </thead>
@@ -19,23 +23,32 @@
             type="checkbox"
             [(ngModel)]="r.selected"
             (change)="updateMasterCheckbox()"
-            [disabled]="r.status !== 'Pending'"
+            [disabled]="resignations.length === 0"
           />
         </td>
-        <td>{{ r.fullName }}</td>
-        <!-- <td>{{ r.createdDate | date:'short' }}</td> -->
+        <td>{{ r.fullName }}</td> 
         <td>
           <span [ngClass]="{ pending: r.status === 'Pending', approved: r.status === 'Approved' }">
             {{ r.status }}
           </span>
         </td>
+      </tr> 
+      <tr *ngIf="resignations.length === 0">
+        <td colspan="3" style="text-align: center">No records exist(s)</td>
       </tr>
     </tbody>
   </table>
 
-  <button type="button" class="btn-approve" data-bs-toggle="modal" data-bs-target="#ApproveModal">
+  <button
+    type="button"
+    class="btn-approve"
+    data-bs-toggle="modal"
+    data-bs-target="#ApproveModal"
+    [disabled]="resignations.length === 0"
+  >
     Approve
   </button>
+ 
 </div>
 
 <!-- --------------------------------------------Approval Modal--------------------------------------- -->

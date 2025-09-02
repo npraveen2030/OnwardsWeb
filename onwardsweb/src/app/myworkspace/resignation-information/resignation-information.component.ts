@@ -27,7 +27,8 @@ export class ResignationInformationComponent implements OnInit {
 
   reasons: ResignationReason[] = [];
   types: ResignationType[] = [];
-  resignationDetails: Resignation | undefined;
+  // resignationDetails: Resignation | undefined;
+  resignationDetails: Resignation | { error: any } | undefined;
 
   selectedReasonId: number | null = null;
   selectedTypeId: number | null = null;
@@ -167,12 +168,12 @@ export class ResignationInformationComponent implements OnInit {
         this.types = result.types; // Safe: it's ResignationType[]
       }
 
-      if ('error' in result.resignationDetails) {
+      if (result?.resignationDetails && 'error' in result.resignationDetails) {
         console.error('ResignationType failed', result.resignationDetails.error);
         this.showPullback = false;
       } else {
         this.showPullback = true;
-        this.resignationDetails = result.resignationDetails;
+        this.resignationDetails = result.resignationDetails || {};
       }
     });
   }

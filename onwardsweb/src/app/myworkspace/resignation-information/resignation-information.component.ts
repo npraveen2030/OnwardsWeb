@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ResignationReasonService } from '../../services/resignation-reason.service';
 import { ResignationTypeService } from '../../services/resignation-type.service';
@@ -34,7 +34,7 @@ export class ResignationInformationComponent implements OnInit {
   selectedTypeId: number | null = null;
   errorMessage: string | undefined;
 
-  showPullback: boolean = false;
+  showPullback: boolean = true;
 
   resignationForm!: FormGroup;
   isPdf: boolean | null = null;
@@ -148,12 +148,15 @@ export class ResignationInformationComponent implements OnInit {
       } else {
         this.types = result.types; // Safe: it's ResignationType[]
       }
-      if (result?.resignationDetails || result?.resignationDetails == null) {
+
+      if (result?.resignationDetails === undefined || result?.resignationDetails === null) {
         // console.error('ResignationType failed', result.resignationDetails.error);
         this.showPullback = false;
       } else {
         this.showPullback = true;
         this.resignationDetails = result.resignationDetails || {};
+        this.resignationForm.disable();
+        this.resignationForm.get('pullbackComment')?.enable();
       }
     });
   }

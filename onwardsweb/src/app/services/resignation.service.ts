@@ -45,10 +45,6 @@ export class ResignationService {
       formData.append('AttachmentFile', resignationForm.get('attachmentFile')?.value);
     }
 
-    formData.forEach((value, key) => {
-      console.log(key, value);
-    });
-
     return this.http.post<{ message: string }>(
       `${this.apiService}/Resignation/insertorupdate`,
       formData

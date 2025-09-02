@@ -1,0 +1,44 @@
+.info-wrapper {
+  display: flex;          /* puts left and right next to each other */
+  gap: 1rem;              /* spacing between them */
+  align-items: flex-start; /* align top */
+}
+
+.left-section {
+  width: 25%;
+  padding: 0.3rem;
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh; /* take full screen height */
+  background: white; /* force white only for this component */
+}
+
+.right-section {
+  width: 75%;
+  // background-color: #ffffff;
+  padding: 0.3rem;
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  gap: 1rem; /* spacing between inputs */
+}
+
+.column {
+  flex: 1;              /* each takes equal space */
+}
+
+.column input {
+  width: 100%;          /* input fills column */
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.btn-danger {
+  width: 120px;
+}

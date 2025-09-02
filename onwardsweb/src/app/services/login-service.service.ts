@@ -14,7 +14,7 @@ export class LoginService {
 
   login(
     username: string,
-    password: string
+    password: string,
   ): Observable<{ userDetails: LoginResponse }> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ export class LoginService {
     };
 
     return this.http.post<{ userDetails: LoginResponse }>(
-      `${this.apiService}/auth/ValidateLogin`,
+      `${this.apiService}/Auth/ValidateLogin`,
       payload,
       { headers, withCredentials: true }
     );

@@ -15,9 +15,8 @@ import { SharedModule } from '../../modules/shared/shared-module';
     BasicInformationComponent,
     ExitInterviewComponent,
     MyApprovalComponent,
-    SharedModule,
-    RouterOutlet, // 👈 must import your routes
-  ],
+    SharedModule
+],
   templateUrl: './resignation.component.html',
   styleUrl: './resignation.component.scss',
 })

@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
 import { BasicInformationComponent } from "../basic-information/basic-information.component";
 import { CommonModule } from '@angular/common';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BasicDetailsComponent } from '../basic-details/basic-details.component';
+import { PersonalComponent } from '../personal/personal.component';
 
 @Component({
   selector: 'app-personal-information',
   standalone: true,
-  imports: [BasicInformationComponent, CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [BasicInformationComponent, CommonModule, FormsModule, 
+    ReactiveFormsModule, BasicDetailsComponent, PersonalComponent],
   templateUrl: './personal-information.component.html',
   styleUrl: './personal-information.component.scss'
 })

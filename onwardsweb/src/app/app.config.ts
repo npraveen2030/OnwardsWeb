@@ -15,6 +15,7 @@ import { LeavemanagementComponent } from './shared/leavemanagement/leavemanageme
 import { ExitInterviewComponent } from './myworkspace/exit-interview/exit-interview.component';
 import { MyApprovalComponent } from './myworkspace/my-approval/my-approval.component';
 import { PersonalInformationComponent } from './myworkspace/personal-information/personal-information.component';
+import { BasicDetailsComponent } from './myworkspace/basic-details/basic-details.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -31,7 +32,8 @@ const routes: Route[] = [
       { path: 'myworkspace', component: WorkspaceComponent },
       { path: 'my-approvals', component: MyApprovalComponent },
       { path: 'exit-interview', component: ExitInterviewComponent },
-      { path: 'personal-info', component: PersonalInformationComponent}
+      { path: 'personal-info', component: PersonalInformationComponent},
+      { path: 'basic-details', component: BasicDetailsComponent}
     ],
   },
 ];

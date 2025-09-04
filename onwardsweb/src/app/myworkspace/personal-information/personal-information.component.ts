@@ -12,6 +12,8 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 })
 export class PersonalInformationComponent {
 
+  activeTab: string = 'personal-info'; 
+
 // Method to check if a field is invalid and touched
   isInvalid(control: any): boolean {
     return control?.invalid && (control?.dirty || control?.touched);
@@ -19,6 +21,10 @@ export class PersonalInformationComponent {
 
   onCancel(form:any) {
     form.resetForm();
+  }
+
+  setActiveTab(tab: string) {
+    this.activeTab = tab;
   }
 
   onSubmit(form: any) {

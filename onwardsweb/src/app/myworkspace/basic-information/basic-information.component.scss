@@ -1,52 +1,53 @@
-
 .info-card {
   border: 1px solid #0a7ea4;
-  //   border-radius: 6px;
-//   background: rgba(255, 255, 255, 0.9);//White
-  padding: 20px;
-  //   width: 280px;
-  //   margin: 30px auto;
-  min-height: 500px;
+  padding: 12px; /* Reduced from 20px */
+  min-height: 400px; /* Reduced from 500px */
+  max-height: 85vh; /* Slightly smaller to fit better */
+  overflow: auto;
 }
 
 .info-card h6 {
   font-weight: 600;
-  margin-bottom: 15px;
+  margin-bottom: 10px; /* Reduced from 15px */
+  font-size: 14px; /* Slightly smaller heading */
   color: #333;
 }
 
 .profile-pic {
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px; /* Reduced from 15px */
 }
 
 .profile-pic img {
-  width: 80px;
-  height: 80px;
+  width: 60px; /* Reduced from 80px */
+  height: 60px;
   border-radius: 50%;
   background: #f1f1f1;
 }
 
 .profile-pic p {
-  margin: 8px 0 0;
+  margin: 5px 0 0; /* Reduced spacing */
   font-weight: 600;
+  font-size: 13px; /* Smaller text */
 }
 
 .profile-pic small {
   color: #666;
+  font-size: 12px;
 }
 
 .info-item {
-  margin-bottom: 8px;
+  margin-bottom: 6px; /* Reduced from 8px */
 }
 
 .info-item strong {
   display: block;
-  font-size: 13px;
+  font-size: 12px; /* Reduced from 13px */
   color: #444;
+  margin-bottom: 2px; /* Add small gap between label and value */
 }
 
 .info-item span {
-  font-size: 13px;
+  font-size: 12px; /* Reduced from 13px */
   color: #000;
 }

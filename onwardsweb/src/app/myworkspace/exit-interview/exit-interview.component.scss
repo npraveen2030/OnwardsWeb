@@ -2,4 +2,15 @@
   padding: 0.6rem;
   border-radius: 0px;
   border: 1px solid #0a7ea4;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.label-custom {
+  font-size: 0.9rem;
+  padding-left: 6px;
+}
+
+.input-custom {
+  font-size: 0.9rem;
 }

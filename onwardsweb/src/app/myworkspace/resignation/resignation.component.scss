@@ -1,4 +1,3 @@
- 
 .top-section {
   // display: flex;
   // justify-content: flex-start;
@@ -55,7 +54,7 @@
 /* Container for left & right sections */
 .container {
   display: flex;
-  height: calc(100vh - 80px); /* full height minus top (optional) */
+  height: 85vh;
 }
 
 .left-section {
@@ -63,7 +62,6 @@
   // background-color: #f4f4f4;
   padding: 0.3rem;
   box-sizing: border-box;
-  // overflow: auto;
 }
 
 .right-section {

@@ -1,546 +1,590 @@
 <div class="info-wrapper mt-4">
-
-    <!-- Right Section -->
-<div class="right-section">
-  <div class="card">
-    <h5 class="ms-3 mt-3">Basic Details</h5>
-    <div class="card-body">
-      
-      <form #form="ngForm">
-        <div class="d-flex gap-3 mb-3">
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="firstName"
-            id="firstName"
-            placeholder="enter first name"
-            class="form-control form-control-sm" required
-            ngModel
-            #firstName="ngModel">
-            <label for="firstName">First Name</label>
-            <div *ngIf="isInvalid(firstName)" class="text-danger small">
+  <!-- Right Section -->
+  <div class="right-section">
+    <div class="card">
+      <h5 class="ms-3 mt-3">Basic Details</h5>
+      <div class="card-body">
+        <form [formGroup]="PersonalInformationForm" (ngSubmit)="onSubmit()">
+          <!-- Basic Info -->
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="firstName"
+                placeholder="Enter First Name"
+                class="form-control form-control-sm"
+                formControlName="firstName"
+              />
+              <label for="firstName">First Name</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('firstName'))"
+                class="text-danger small"
+              >
                 First Name is Required
+              </div>
             </div>
-          </div>
 
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="middleName"
-            id="middleName"
-            placeholder="Middle Name*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #middleName="ngModel">
-            <label for="middleName">Midlle Name</label>
-            <div *ngIf="isInvalid(middleName)" class="text-danger small">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="middleName"
+                placeholder="Enter Middle Name"
+                class="form-control form-control-sm"
+                formControlName="middleName"
+              />
+              <label for="middleName">Middle Name</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('middleName'))"
+                class="text-danger small"
+              >
                 Middle Name is Required
+              </div>
             </div>
-          </div>
 
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="lastName"
-            id="lastName"
-            placeholder="Last Name*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #lastName="ngModel">
-            <label for="lastName">Last Name</label>
-            <div *ngIf="isInvalid(lastName)" class="text-danger small">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="lastName"
+                placeholder="Enter Last Name"
+                class="form-control form-control-sm"
+                formControlName="lastName"
+              />
+              <label for="lastName">Last Name</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('lastName'))"
+                class="text-danger small"
+              >
                 Last Name is Required
+              </div>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="email"
+                id="personalEmailId"
+                placeholder="Enter Personal Email"
+                class="form-control form-control-sm"
+                formControlName="personalEmailId"
+              />
+              <label for="personalEmailId">Personal Email Id</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('personalEmailId'))"
+                class="text-danger small"
+              >
+                Valid Email is Required
+              </div>
             </div>
           </div>
 
-          <div class="form-floating flex-fill">
-            <input type="email" 
-            name="personalEmailId"
-            id="personalEmailId"
-            placeholder="Personal Email Id*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #personalEmailId="ngModel">
-            <label for="personalEmailId">Personal Email Id</label>
-            <div *ngIf="isInvalid(personalEmailId)" class="text-danger small">
-                Personal Email Id is Required
+          <!-- Additional Details -->
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating flex-fill">
+              <select
+                id="nationality"
+                class="form-select form-select-sm"
+                formControlName="nationality"
+              >
+                <option value="" disabled>Select Nationality</option>
+                <option value="Indian">Indian</option>
+                <option value="Other">Other</option>
+              </select>
+              <label for="nationality">Nationality*</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('nationality'))"
+                class="text-danger small"
+              >
+                Nationality is Required
+              </div>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <select
+                id="differentlyAbled"
+                class="form-select form-select-sm"
+                formControlName="differentlyAbled"
+              >
+                <option value="" disabled>Select One</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+              <label for="differentlyAbled">Differently Abled</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('differentlyAbled'))"
+                class="text-danger small"
+              >
+                Differently Abled status is Required
+              </div>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <select
+                id="vaccinationStatus"
+                class="form-select form-select-sm"
+                formControlName="vaccinationStatus"
+              >
+                <option value="" disabled>Select One</option>
+                <option value="Dosage1">Dosage 1</option>
+                <option value="Dosage2">Dosage 2</option>
+                <option value="Dosage3">Dosage 3</option>
+              </select>
+              <label for="vaccinationStatus">Vaccination Status</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('vaccinationStatus'))"
+                class="text-danger small"
+              >
+                Vaccination Status is Required
+              </div>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <select
+                id="bloodGroup"
+                class="form-select form-select-sm"
+                formControlName="bloodGroup"
+              >
+                <option value="" disabled>Select One</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+              <label for="bloodGroup">Blood Group</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('bloodGroup'))"
+                class="text-danger small"
+              >
+                Blood Group is Required
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Existing fields above -->
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating flex-fill">
+              <select
+                id="bloodDonor"
+                class="form-select form-select-sm"
+                formControlName="bloodDonor"
+              >
+                <option value="" disabled>Select One</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+              <label for="bloodDonor">Blood Donor</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('bloodDonor'))"
+                class="text-danger small"
+              >
+                Blood Donor status is Required
+              </div>
+            </div>
 
-<div class="d-flex gap-3 mb-3">
-  <!-- Nationality Dropdown -->
-  <div class="form-floating flex-fill">
-    <select 
-      name="nationality"
-      id="nationality"
-      class="form-select form-select-sm" 
-      required
-      ngModel
-      #nationality="ngModel">
-      <option value="" disabled selected>Select Nationality</option>
-      <option value="Indian">Indian</option>
-      <option value="Other">Other</option>
-    </select>
-    <label for="nationality">Nationality*</label>
-    <div *ngIf="isInvalid(nationality)" class="text-danger small">
-      Nationality is Required
-    </div>
-  </div>
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="panNo"
+                placeholder="Enter PAN"
+                class="form-control form-control-sm"
+                formControlName="panNo"
+              />
+              <label for="panNo">PAN No.</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('panNo'))"
+                class="text-danger small"
+              >
+                PAN Number is Required
+              </div>
+            </div>
 
-  <!-- Differently Abled Dropdown -->
-  <div class="form-floating flex-fill">
-    <select 
-      name="differentlyAbled"
-      id="differentlyAbled"
-      class="form-select form-select-sm" 
-      required
-      ngModel
-      #differentlyAbled="ngModel">
-      <option value="" disabled selected>Select One</option>
-      <option value="Yes">Yes</option>
-      <option value="No">No</option>
-    </select>
-      <label for="differentlyAbled">Differently Abled</label>
-    <div *ngIf="isInvalid(differentlyAbled)" class="text-danger small">
-      Differently Abled status is Required
-    </div>
-  </div>
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="aadharNo"
+                placeholder="Enter Aadhar"
+                class="form-control form-control-sm"
+                formControlName="aadharNo"
+              />
+              <label for="aadharNo">Aadhar No.</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('aadharNo'))"
+                class="text-danger small"
+              >
+                Aadhar Number is Required
+              </div>
+            </div>
+          </div>
 
-  <!-- Vaccination Status Dropdown -->
-  <div class="form-floating flex-fill">
-    <select 
-      name="vaccinationStatus"
-      id="vaccinationStatus"
-      class="form-select form-select-sm" 
-      required
-      ngModel
-      #vaccinationStatus="ngModel">
-      <option value="" disabled selected>Select One</option>
-      <option value="Dosage1">Dosage 1</option>
-      <option value="Dosage2">Dosage 2</option>
-      <option value="Dosage3">Dosage 3</option>
-    </select>
-      <label for="vaccinationStatus">Vaccination Status</label>
-    <div *ngIf="isInvalid(vaccinationStatus)" class="text-danger small">
-      Vaccination Status is Required
-    </div>
-  </div>
-
-  <!-- Blood Group Dropdown -->
-  <div class="form-floating flex-fill">
-    <select 
-      name="bloodGroup"
-      id="bloodGroup"
-      class="form-select form-select-sm" 
-      required
-      ngModel
-      #bloodGroup="ngModel">
-      <option value="" disabled selected>Select One</option>
-      <option value="A+">A+</option>
-      <option value="A-">A-</option>
-      <option value="B+">B+</option>
-      <option value="B-">B-</option>
-      <option value="AB+">AB+</option>
-      <option value="AB-">AB-</option>
-      <option value="O+">O+</option>
-      <option value="O-">O-</option>
-    </select>
-      <label for="bloodDonor">Blood Group</label>
-    <div *ngIf="isInvalid(bloodGroup)" class="text-danger small">
-      Blood Group is Required
-    </div>
-  </div>
-</div>
-
-<div class="d-flex gap-3 mb-3">
-  <!-- Blood Donor Dropdown -->
-  <div class="form-floating flex-fill">
-    <select 
-      name="bloodDonor"
-      id="bloodDonor"
-      class="form-select form-select-sm"
-      required
-      ngModel
-      #bloodDonor="ngModel">
-      <option value="" disabled selected>Select One</option>
-      <option value="Yes">Yes</option>
-      <option value="No">No</option>
-    </select>
-      <label for="bloodDonor">Blood Donor</label>
-    <div *ngIf="isInvalid(bloodDonor)" class="text-danger small">
-      Blood Donor status is Required
-    </div>
-  </div>
-
-  <!-- PAN Number -->
-  <div class="form-floating flex-fill">
-    <input 
-      type="text"
-      name="panNo"
-      id="panNo"
-      placeholder="ABCDI1277s"
-      class="form-control form-control-sm"
-      required
-      ngModel
-      #panNo="ngModel">
-      <label for="panNo">PAN No.</label>
-    <div *ngIf="isInvalid(panNo)" class="text-danger small">
-      PAN Number is Required
-    </div>
-  </div>
-
-  <!-- Aadhar Number -->
-  <div class="form-floating flex-fill">
-    <input 
-      type="text"
-      name="aadharNo"
-      id="aadharNo"
-      placeholder="1234 5678 XXXX"
-      class="form-control form-control-sm"
-      required
-      ngModel
-      #aadharNo="ngModel">
-      <label for="aadharNo">Aadhar No.</label>
-    <div *ngIf="isInvalid(aadharNo)" class="text-danger small">
-      Aadhar Number is Required
-    </div>
-  </div>
-</div>
-<hr>
-<hr>
-<h5>Address Details</h5>
-<hr>
-<h5>Present Address</h5>
-        <div class="d-flex gap-3">
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="doorNo"
-            id="doorNo"
-            placeholder="dno 7 srinivasa towers*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #doorNo="ngModel">
-            <label for="doorNo">Door No</label>
-            <div *ngIf="isInvalid(doorNo)" class="text-danger small">
+          <hr />
+          <h5>Address Details</h5>
+          <hr />
+          <h6>Present Address</h6>
+          <div class="d-flex gap-3">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="presentDoorNo"
+                placeholder="Door No"
+                class="form-control form-control-sm"
+                formControlName="presentDoorNo"
+              />
+              <label for="presentDoorNo">Door No</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('presentDoorNo'))"
+                class="text-danger small"
+              >
                 Door Number is Required
+              </div>
             </div>
-          </div>
 
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="addressLine"
-            id="addressLine"
-            placeholder="Address*" 
-            class="form-control form-control-sm"
-            required
-            ngModel
-            #addressLine="ngModel"
-            >
-            <label for="address">Address Line</label>
-            <div *ngIf="isInvalid(addressLine)" class="text-danger small">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="presentAddressLine"
+                placeholder="Address"
+                class="form-control form-control-sm"
+                formControlName="presentAddressLine"
+              />
+              <label for="presentAddressLine">Address Line</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('presentAddressLine'))"
+                class="text-danger small"
+              >
                 Address Line is Required
+              </div>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="presentState"
+                placeholder="State"
+                class="form-control form-control-sm"
+                formControlName="presentState"
+              />
+              <label for="presentState">State</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('presentState'))"
+                class="text-danger small"
+              >
+                State is Required
+              </div>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="presentPinCode"
+                placeholder="Pin Code"
+                class="form-control form-control-sm"
+                formControlName="presentPinCode"
+              />
+              <label for="presentPinCode">Pin Code</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('presentPinCode'))"
+                class="text-danger small"
+              >
+                Pin Code is Required
+              </div>
             </div>
           </div>
 
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            id="state"
-            placeholder="State*" 
-            class="form-control form-control-sm"
-            name="state"
-            required
-            ngModel #state="ngModel">
-            <label for="email">State</label>
-             <div *ngIf="isInvalid(state)" class="text-danger small">
-              State is Required
-          </div>
+          <!-- Same Address Checkbox -->
+          <div class="form-check my-3">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="sameAddress"
+              formControlName="sameAddress"
+            />
+            <label class="form-check-label" for="sameAddress">
+              Click if Present Address and Permanent Address are Same
+            </label>
           </div>
 
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            id="pinCode"
-            placeholder="State*" 
-            class="form-control form-control-sm"
-            name="pinCode"
-            required
-            ngModel #pinCode="ngModel">
-            <label for="pinCode">Pincode</label>
-             <div *ngIf="isInvalid(pinCode)" class="text-danger small">
-              PinCode is Required
-          </div>
-          </div>
-          
-        </div>
-          <hr>
-
-        <div class="form-check mb-3">
-  <input 
-    class="form-check-input" 
-    type="checkbox" 
-    id="sameAddress" 
-    name="sameAddress"
-    ngModel
-    #sameAddress="ngModel">
-  <label class="form-check-label" for="sameAddress">
-    Click if Present Address and Permanent Address are Same
-  </label>
-</div>
-<hr>
-<h5>Permanent Address</h5>
-<div class="d-flex gap-3">
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="doorNo"
-            id="doorNo"
-            placeholder="dno 7 srinivasa towers*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #doorNo="ngModel">
-            <label for="doorNo">Door No</label>
-            <div *ngIf="isInvalid(doorNo)" class="text-danger small">
+          <h6>Permanent Address</h6>
+          <div class="d-flex gap-3">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="permanentDoorNo"
+                placeholder="Door No"
+                class="form-control form-control-sm"
+                formControlName="permanentDoorNo"
+              />
+              <label for="permanentDoorNo">Door No</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('permanentDoorNo'))"
+                class="text-danger small"
+              >
                 Door Number is Required
+              </div>
             </div>
-          </div>
 
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="addressLine"
-            id="addressLine"
-            placeholder="Address*" 
-            class="form-control form-control-sm"
-            required
-            ngModel
-            #addressLine="ngModel"
-            >
-            <label for="address">Address Line</label>
-            <div *ngIf="isInvalid(addressLine)" class="text-danger small">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="permanentAddressLine"
+                placeholder="Address"
+                class="form-control form-control-sm"
+                formControlName="permanentAddressLine"
+              />
+              <label for="permanentAddressLine">Address Line</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('permanentAddressLine'))"
+                class="text-danger small"
+              >
                 Address Line is Required
+              </div>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="permanentState"
+                placeholder="State"
+                class="form-control form-control-sm"
+                formControlName="permanentState"
+              />
+              <label for="permanentState">State</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('permanentState'))"
+                class="text-danger small"
+              >
+                State is Required
+              </div>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="permanentPinCode"
+                placeholder="Pin Code"
+                class="form-control form-control-sm"
+                formControlName="permanentPinCode"
+              />
+              <label for="permanentPinCode">Pin Code</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('permanentPinCode'))"
+                class="text-danger small"
+              >
+                Pin Code is Required
+              </div>
             </div>
           </div>
 
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            id="state"
-            placeholder="State*" 
-            class="form-control form-control-sm"
-            name="state"
-            required
-            ngModel #state="ngModel">
-            <label for="email">State</label>
-             <div *ngIf="isInvalid(state)" class="text-danger small">
-              State is Required
-          </div>
-          </div>
+          <hr />
+          <h5>Compliance</h5>
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="pfNo"
+                placeholder="PF Number"
+                class="form-control form-control-sm"
+                formControlName="pfNo"
+              />
+              <label for="pfNo">PF No.</label>
+              <div *ngIf="isInvalid(PersonalInformationForm.get('pfNo'))" class="text-danger small">
+                PF Number is Required
+              </div>
+            </div>
 
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            id="pinCode"
-            placeholder="State*" 
-            class="form-control form-control-sm"
-            name="pinCode"
-            required
-            ngModel #pinCode="ngModel">
-            <label for="pinCode">Pincode</label>
-             <div *ngIf="isInvalid(pinCode)" class="text-danger small">
-              PinCode is Required
-          </div>
-          </div>
-          
-        </div>
-        <hr><hr>
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="uanNo"
+                placeholder="UAN Number"
+                class="form-control form-control-sm"
+                formControlName="uanNo"
+              />
+              <label for="uanNo">UAN No.</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('uanNo'))"
+                class="text-danger small"
+              >
+                UAN Number is Required
+              </div>
+            </div>
 
-        <h5>Compliance</h5>
-        <div class="d-flex gap-3 mb-3">
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="pfNo"
-            id="pfNo"
-            placeholder="enter first name"
-            class="form-control form-control-sm" required
-            ngModel
-            #pfNo="ngModel">
-            <label for="pfNo">PF.No.</label>
-            <div *ngIf="isInvalid(pfNo)" class="text-danger small">
-                PF.No. is Required
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="esicNo"
+                placeholder="ESIC Number"
+                class="form-control form-control-sm"
+                formControlName="esicNo"
+              />
+              <label for="esicNo">ESIC No.</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('esicNo'))"
+                class="text-danger small"
+              >
+                ESIC Number is Required
+              </div>
             </div>
           </div>
 
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="uanNo"
-            id="uanNo"
-            placeholder="UAN No.*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #uanNo="ngModel">
-            <label for="uanNo">Midlle Name</label>
-            <div *ngIf="isInvalid(uanNo)" class="text-danger small">
-                UAN No. is Required
+          <hr />
+          <h5>Bank Details</h5>
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="bankAccountNumber"
+                placeholder="Account Number"
+                class="form-control form-control-sm"
+                formControlName="bankAccountNumber"
+              />
+              <label for="bankAccountNumber">Bank Account Number</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('bankAccountNumber'))"
+                class="text-danger small"
+              >
+                Account Number is Required
+              </div>
             </div>
-          </div>
 
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="esicNo"
-            id="esicNo"
-            placeholder="ESIC No.*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #esicNo="ngModel">
-            <label for="esicNo">ESIC No.</label>
-            <div *ngIf="isInvalid(lastName)" class="text-danger small">
-                ESIC No is Required
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="accountHolderName"
+                placeholder="Account Holder Name"
+                class="form-control form-control-sm"
+                formControlName="accountHolderName"
+              />
+              <label for="accountHolderName">Account Holder Name</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('accountHolderName'))"
+                class="text-danger small"
+              >
+                Account Holder Name is Required
+              </div>
             </div>
-          </div>
 
-        </div>
-        <hr><hr>
-
-        <h5>Bank Details</h5>
-        <div class="d-flex gap-3 mb-3">
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="bankAccountNumber"
-            id="bankAccountNumber"
-            placeholder="Enter Bank A/C Number"
-            class="form-control form-control-sm" required
-            ngModel
-            #bankAccountNumber="ngModel">
-            <label for="bankAccountNumber">Bank Account Number</label>
-            <div *ngIf="isInvalid(bankAccountNumber)" class="text-danger small">
-                Bank Account Number is Required
-            </div>
-          </div>
-
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="accountHolderName"
-            id="accountHolderName"
-            placeholder="Enter Name As Per Bank*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #accountHolderName="ngModel">
-            <label for="accountHolderName">Your Name As Per Bank Record</label>
-            <div *ngIf="isInvalid(accountHolderName)" class="text-danger small">
-                Name is Required
-            </div>
-          </div>
-
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="ifsc"
-            id="ifsc"
-            placeholder="IFSC Code*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #ifsc="ngModel">
-            <label for="ifsc">IFSC Code</label>
-            <div *ngIf="isInvalid(ifsc)" class="text-danger small">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="ifsc"
+                placeholder="IFSC Code"
+                class="form-control form-control-sm"
+                formControlName="ifsc"
+              />
+              <label for="ifsc">IFSC Code</label>
+              <div *ngIf="isInvalid(PersonalInformationForm.get('ifsc'))" class="text-danger small">
                 IFSC Code is Required
+              </div>
             </div>
-          </div>
 
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="bankName"
-            id="bankName"
-            placeholder="Enter Bank Name*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #bankName="ngModel">
-            <label for="bankName">Bank Name</label>
-            <div *ngIf="isInvalid(bankName)" class="text-danger small">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="bankName"
+                placeholder="Bank Name"
+                class="form-control form-control-sm"
+                formControlName="bankName"
+              />
+              <label for="bankName">Bank Name</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('bankName'))"
+                class="text-danger small"
+              >
                 Bank Name is Required
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="d-flex gap-3 mb-3">
           <div class="form-floating flex-fill">
-            <input type="text" 
-            name="branchName"
-            id="branchName"
-            placeholder="Enter Branch Name*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #branchName="ngModel">
+            <input
+              type="text"
+              id="branchName"
+              placeholder="Branch Name"
+              class="form-control form-control-sm"
+              formControlName="branchName"
+            />
             <label for="branchName">Branch Name</label>
-            <div *ngIf="isInvalid(branchName)" class="text-danger small">
-                Branch Name is Required
+            <div
+              *ngIf="isInvalid(PersonalInformationForm.get('branchName'))"
+              class="text-danger small"
+            >
+              Branch Name is Required
             </div>
           </div>
-        </div>
-        <hr><hr>
 
-        <h5>Emergency Contact Details</h5>
-        <div class="d-flex gap-3 mb-3">
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="contactName"
-            id="contactName"
-            placeholder="Enter Contact lastName"
-            class="form-control form-control-sm" required
-            ngModel
-            #contactName="ngModel">
-            <label for="contactName">Contact Name</label>
-            <div *ngIf="isInvalid(contactName)" class="text-danger small">
+          <hr />
+          <h5>Emergency Contact Details</h5>
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="contactName"
+                placeholder="Contact Name"
+                class="form-control form-control-sm"
+                formControlName="contactName"
+              />
+              <label for="contactName">Contact Name</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('contactName'))"
+                class="text-danger small"
+              >
                 Contact Name is Required
+              </div>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="contactRelationship"
+                placeholder="Relationship"
+                class="form-control form-control-sm"
+                formControlName="contactRelationship"
+              />
+              <label for="contactRelationship">Relationship</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('contactRelationship'))"
+                class="text-danger small"
+              >
+                Relationship is Required
+              </div>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="primaryContactNumber"
+                placeholder="Primary Number"
+                class="form-control form-control-sm"
+                formControlName="primaryContactNumber"
+              />
+              <label for="primaryContactNumber">Primary Contact</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('primaryContactNumber'))"
+                class="text-danger small"
+              >
+                Primary Contact is Required
+              </div>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="secondaryContactNumber"
+                placeholder="Secondary Number"
+                class="form-control form-control-sm"
+                formControlName="secondaryContactNumber"
+              />
+              <label for="secondaryContactNumber">Secondary Contact</label>
             </div>
           </div>
 
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="contactRelationship"
-            id="contactRelationship"
-            placeholder="Enter Contact Relationship*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #contactRelationship="ngModel">
-            <label for="contactRelationship">Contact Relationship</label>
-            <div *ngIf="isInvalid(contactRelationship)" class="text-danger small">
-                Contact Relationship is Required
-            </div>
+          <div class="d-flex justify-content-center gap-3 mt-4">
+            <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
           </div>
-
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="primaryContactNumber"
-            id="primaryContactNumber"
-            placeholder="Enter Primary Contact Number*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #primaryContactNumber="ngModel">
-            <label for="primaryContactNumber">Primary Contact Number</label>
-            <div *ngIf="isInvalid(primaryContactNumber)" class="text-danger small">
-                Primary Contact Number is Required
-            </div>
-          </div>
-
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="secondaryContactNumber"
-            id="secondaryContactNumber"
-            placeholder="Enter Secondary Contact Number*" 
-            class="form-control form-control-sm"
-            ngModel
-            #secondaryContactNumber="ngModel">
-            <label for="secondaryContactNumber">Secondary Contact Number</label>
-          </div>
-        </div>
-        <hr>
-
-        <p class="mt-3">BASIC DOCUMENTS (Documents to be attached and the file size should not exceed 500KB)</p>
-
-        <!-- Buttons Centered -->
-        <div class="d-flex justify-content-center gap-3 mt-4">
-          <button type="button" class="btn btn-danger" (click)="onCancel(form)">Cancel</button>
-          <button type="submit" class="btn btn-primary" (click)="onSubmit(form)">Submit</button>
-        </div>
-      </form>
-
+        </form>
+      </div>
     </div>
   </div>
 </div>
-
-  </div>
-

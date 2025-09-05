@@ -1,17 +1,25 @@
+.card {
+  padding: 0.6rem;
+  border-radius: 0px;
+  border: 1px solid #0a7ea4;
+  height: 85vh;
+  overflow: auto;
+}
+
 .top-section {
-  padding: 0.3rem;   /* remove extra padding */
+  padding: 0.3rem; /* remove extra padding */
   background-color: #fdfdfd;
 }
 
 .info-wrapper {
-  display: flex;          /* puts left and right next to each other */
-  gap: 1rem;              /* spacing between them */
+  display: flex; /* puts left and right next to each other */
+  gap: 1rem; /* spacing between them */
   align-items: flex-start; /* align top */
 }
 
 .left-section {
   margin-left: 30px;
-  margin-top: 30px;
+  margin-top: 15px;
   width: 25%;
   padding: 0.3rem;
   box-sizing: border-box;
@@ -28,6 +36,7 @@
   width: 75%;
   padding: 0.3rem;
   box-sizing: border-box;
+  margin-top: -13px;
 }
 
 .row {
@@ -36,11 +45,11 @@
 }
 
 .column {
-  flex: 1;              /* each takes equal space */
+  flex: 1; /* each takes equal space */
 }
 
 .column input {
-  width: 100%;          /* input fills column */
+  width: 100%; /* input fills column */
   padding: 0.5rem;
   box-sizing: border-box;
 }
@@ -49,11 +58,10 @@
   width: 120px;
 }
 
-.custom-tabs{
+.custom-tabs {
   margin: 10px auto 0px 0px;
   // padding-left: 3%;
   padding-left: 3%;
- 
 }
 
 .custom-tabs a {
@@ -84,7 +92,6 @@
 }
 
 label:after {
-  content: " *";
+  content: ' *';
   color: red;
 }
-

@@ -128,3 +128,11 @@ label:after {
   margin-left: -1px; /* overlap border so no gap */
 }
 
+.btn-primary {
+  border-radius: 20px;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+

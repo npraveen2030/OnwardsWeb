@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh; /* take full screen height */
+  background: white; /* force white only for this component */
+}
+
+.card {
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;
+}
+
+button {
+  min-width: 100px;
+}

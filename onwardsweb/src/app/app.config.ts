@@ -16,6 +16,8 @@ import { ExitInterviewComponent } from './myworkspace/exit-interview/exit-interv
 import { MyApprovalComponent } from './myworkspace/my-approval/my-approval.component';
 import { PersonalInformationComponent } from './myworkspace/personal-information/personal-information.component';
 import { BasicDetailsComponent } from './myworkspace/basic-details/basic-details.component';
+import { ReimbursementsComponent } from './myworkspace/reimbursements/reimbursements.component';
+import { ReimbursementDetailsComponent } from './reimbursements/reimbursement-details/reimbursement-details.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -33,7 +35,9 @@ const routes: Route[] = [
       { path: 'my-approvals', component: MyApprovalComponent },
       { path: 'exit-interview', component: ExitInterviewComponent },
       { path: 'personal-info', component: PersonalInformationComponent},
-      { path: 'basic-details', component: BasicDetailsComponent}
+      { path: 'basic-details', component: BasicDetailsComponent},
+      { path: 'reimbursements', component: ReimbursementsComponent},
+      { path: 'reimbursement-details', component: ReimbursementDetailsComponent}
     ],
   },
 ];

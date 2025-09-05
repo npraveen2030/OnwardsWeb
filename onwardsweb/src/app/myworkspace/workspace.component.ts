@@ -9,6 +9,9 @@ import { Router } from '@angular/router';
   styleUrl: './workspace.component.scss'
 })
 export class WorkspaceComponent {
+goToReimbursements() {
+  this.router.navigate(['/reimbursements']);
+}
 constructor(private router: Router) {}
 
   goToResignation() {

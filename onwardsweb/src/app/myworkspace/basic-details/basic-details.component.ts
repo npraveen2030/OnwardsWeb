@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-basic-details',
@@ -19,6 +20,8 @@ people: any[] = [
   ];
 
   selectedFileName: string[] = ['upload file...','upload file...', 'upload file...'];
+
+  constructor(private router:Router){}
 
 onFileSelected(event: Event, index: number) {
   const input = event.target as HTMLInputElement;
@@ -90,4 +93,28 @@ calculateAge() {
   }
 }
 
-}
+ saveDraft(form: any) {
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+      return;
+    }
+    const formData = form.value;
+    const blob = new Blob([JSON.stringify(formData, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'draft.json';
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  }
+    sendToApproval(form: any) {
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+      return;
+    }
+
+    this.router.navigate(['/my-approvals']);
+  }
+  }

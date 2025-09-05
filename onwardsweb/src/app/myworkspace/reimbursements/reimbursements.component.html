@@ -1,0 +1,73 @@
+<div class="card p-4 shadow-lg mt-5">
+  <h4 class="text-center mb-4">Reimbursement Form</h4>
+
+  <form [formGroup]="reimbursementForm">
+    <!-- Amount -->
+    <div class="mb-3">
+      <label for="amount" class="form-label">Amount</label>
+      <input type="number" id="amount" formControlName="amount" class="form-control" placeholder="Enter amount">
+      <div *ngIf="isInvalid('amount')" class="text-danger small">
+        Amount is required
+      </div>
+    </div>
+
+    <!-- Date -->
+    <div class="mb-3">
+      <label for="date" class="form-label">Reimbursement Date</label>
+      <input type="date" id="date" formControlName="date" class="form-control">
+      <div *ngIf="isInvalid('date')" class="text-danger small">
+        Date is required
+      </div>
+    </div>
+
+    <!-- Purpose -->
+    <div class="mb-3">
+      <label for="purpose" class="form-label">Purpose</label>
+      <select id="purpose" formControlName="purpose" class="form-select">
+        <option value="" disabled>Select Purpose</option>
+        <option value="Travel">Travel</option>
+        <option value="Food">Food</option>
+        <option value="Supplies">Supplies</option>
+      </select>
+      <div *ngIf="isInvalid('purpose')" class="text-danger small">
+        Purpose is required
+      </div>
+    </div>
+
+    <!-- Action -->
+    <div class="mb-3">
+      <label for="action" class="form-label">Action</label>
+      <textarea id="action" formControlName="action" rows="2" class="form-control" placeholder="Enter action details"></textarea>
+      <div *ngIf="isInvalid('action')" class="text-danger small">
+        Action is required
+      </div>
+    </div>
+
+    <!-- Upload Bills -->
+    <div class="mb-3">
+      <label for="bills" class="form-label">Upload Bills</label>
+      <input type="file" id="bills" (change)="onFileSelected($event)" class="form-control">
+      <div class="small text-muted">File size should not exceed 500KB</div>
+    </div>
+
+    <!-- Status -->
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select id="status" formControlName="status" class="form-select">
+        <option value="" disabled>Select Status</option>
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approved</option>
+        <option value="Rejected">Rejected</option>
+      </select>
+      <div *ngIf="isInvalid('status')" class="text-danger small">
+        Status is required
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="d-flex justify-content-end gap-2">
+      <button type="button" class="btn btn-success" (click)="saveForm()">Save</button>
+      <button type="button" class="btn btn-danger" (click)="cancelForm()">Cancel</button>
+    </div>
+  </form>
+</div>

@@ -1,5 +1,4 @@
-<div class="top-section mt-2">
-
+<div class="top-section">
   <div class="custom-tabs">
     <a (click)="setActiveTab('personal-info')" [class.active]="activeTab === 'personal-info'"
       >Personal Information</a
@@ -8,7 +7,6 @@
     <a (click)="setActiveTab('basic-details')" [class.active]="activeTab === 'basic-details'"
       >Basic Details</a
     >
-    
   </div>
 
   <div class="info-wrapper">
@@ -17,15 +15,9 @@
     </div>
 
     <div class="right-section">
-      <app-personal
-    *ngIf="activeTab === 'personal-info'">
-  </app-personal>
+      <app-personal *ngIf="activeTab === 'personal-info'"> </app-personal>
 
-      <app-basic-details
-        *ngIf="activeTab === 'basic-details'"
-      ></app-basic-details>
+      <app-basic-details *ngIf="activeTab === 'basic-details'"></app-basic-details>
     </div>
-
   </div>
-  
 </div>

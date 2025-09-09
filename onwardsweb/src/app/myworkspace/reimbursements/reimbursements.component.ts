@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
   styleUrl: './reimbursements.component.scss'
 })
 export class ReimbursementsComponent {
+  activeTab: string = 'personal-info';
   reimbursementForm: FormGroup;
   selectedFile: File | null = null;
 
@@ -26,6 +27,10 @@ export class ReimbursementsComponent {
       action: ['', Validators.required],
       status: ['', Validators.required]
     });
+  }
+
+  setActiveTab(tab: string) {
+    this.activeTab = tab;
   }
 
   isInvalid(controlName: string): boolean {

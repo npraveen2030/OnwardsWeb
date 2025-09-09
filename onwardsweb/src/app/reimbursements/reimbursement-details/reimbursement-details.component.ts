@@ -24,4 +24,12 @@ setActiveTab(tab: string) {
     this.reimbursements = this.reimbursementService.getReimbursements();
   }
 
+  showHistoryColumn(): boolean {
+    return (
+      this.activeTab === 'pending' ||
+      this.activeTab === 'send-back' ||
+      this.activeTab === 'completed'
+    );
+  }
+
 }

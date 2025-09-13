@@ -17,7 +17,8 @@ import { BasicDetailsComponent } from './myworkspace/basic-details/basic-details
 import { ReimbursementsComponent } from './myworkspace/reimbursements/reimbursements.component';
 import { ReimbursementDetailsComponent } from './reimbursements/reimbursement-details/reimbursement-details.component';
 import { JobPostComponent } from './carreropportunities/carreroppourtinities/jobpost.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import { CareerdashboardComponent } from './carreropportunities/careerdashboard.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -38,6 +39,7 @@ const routes: Route[] = [
       { path: 'basic-details', component: BasicDetailsComponent },
       { path: 'reimbursements', component: ReimbursementsComponent },
       { path: 'reimbursement-details', component: ReimbursementDetailsComponent },
+      { path: 'career', component: CareerdashboardComponent },
       { path: 'jobpost', component: JobPostComponent },
     ],
   },

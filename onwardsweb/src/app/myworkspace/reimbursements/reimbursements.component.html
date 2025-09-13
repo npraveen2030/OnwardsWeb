@@ -1,73 +1,178 @@
-<div class="card p-4 shadow-lg mt-5">
-  <h4 class="text-center mb-4">Reimbursement Form</h4>
-
-  <form [formGroup]="reimbursementForm">
-    <!-- Amount -->
-    <div class="mb-3">
-      <label for="amount" class="form-label">Amount</label>
-      <input type="number" id="amount" formControlName="amount" class="form-control" placeholder="Enter amount">
-      <div *ngIf="isInvalid('amount')" class="text-danger small">
-        Amount is required
+<!-- POPUP -->
+<div
+  class="modal fade"
+  id="Reimbursementmodal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 w-100 text-center" id="ReimbursementmodalLabel">
+          Reimbursement Form
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    </div>
+      <form [formGroup]="reimbursementForm">
+        <div class="modal-body">
+          <!-- Amount -->
+          <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input
+              type="number"
+              id="amount"
+              formControlName="amount"
+              class="form-control"
+              placeholder="Enter amount"
+            />
+            <div *ngIf="isInvalid('amount')" class="text-danger small">Amount is required</div>
+          </div>
 
-    <!-- Date -->
-    <div class="mb-3">
-      <label for="date" class="form-label">Reimbursement Date</label>
-      <input type="date" id="date" formControlName="date" class="form-control">
-      <div *ngIf="isInvalid('date')" class="text-danger small">
-        Date is required
-      </div>
-    </div>
+          <!-- Date -->
+          <div class="mb-3">
+            <label for="date" class="form-label">Reimbursement Date</label>
+            <input type="date" id="date" formControlName="date" class="form-control" />
+            <div *ngIf="isInvalid('date')" class="text-danger small">Date is required</div>
+          </div>
 
-    <!-- Purpose -->
-    <div class="mb-3">
-      <label for="purpose" class="form-label">Purpose</label>
-      <select id="purpose" formControlName="purpose" class="form-select">
-        <option value="" disabled>Select Purpose</option>
-        <option value="Travel">Travel</option>
-        <option value="Food">Food</option>
-        <option value="Supplies">Supplies</option>
-      </select>
-      <div *ngIf="isInvalid('purpose')" class="text-danger small">
-        Purpose is required
-      </div>
-    </div>
+          <!-- Purpose -->
+          <div class="mb-3">
+            <label for="purpose" class="form-label">Purpose</label>
+            <select id="purpose" formControlName="purpose" class="form-select">
+              <option value="" disabled>Select Purpose</option>
+              <option value="Travel">Travel</option>
+              <option value="Food">Food</option>
+              <option value="Supplies">Supplies</option>
+            </select>
+            <div *ngIf="isInvalid('purpose')" class="text-danger small">Purpose is required</div>
+          </div>
 
-    <!-- Action -->
-    <div class="mb-3">
-      <label for="action" class="form-label">Action</label>
-      <textarea id="action" formControlName="action" rows="2" class="form-control" placeholder="Enter action details"></textarea>
-      <div *ngIf="isInvalid('action')" class="text-danger small">
-        Action is required
-      </div>
-    </div>
+          <!-- Action -->
+          <div class="mb-3">
+            <label for="action" class="form-label">Action</label>
+            <textarea
+              id="action"
+              formControlName="action"
+              rows="2"
+              class="form-control"
+              placeholder="Enter action details"
+            ></textarea>
+            <div *ngIf="isInvalid('action')" class="text-danger small">Action is required</div>
+          </div>
 
-    <!-- Upload Bills -->
-    <div class="mb-3">
-      <label for="bills" class="form-label">Upload Bills</label>
-      <input type="file" id="bills" (change)="onFileSelected($event)" class="form-control">
-      <div class="small text-muted">File size should not exceed 500KB</div>
-    </div>
+          <!-- Upload Bills -->
+          <div class="mb-3 d-flex flex-column">
+            <label for="bills" class="form-label">Upload Bills</label>
+            <input
+              type="file"
+              id="bills"
+              (change)="onFileSelected($event)"
+              class="form-control d-none"
+              multiple
+              #fileInput
+            />
 
-    <!-- Status -->
-    <div class="mb-3">
-      <label for="status" class="form-label">Status</label>
-      <select id="status" formControlName="status" class="form-select">
-        <option value="" disabled>Select Status</option>
-        <option value="Pending">Pending</option>
-        <option value="Approved">Approved</option>
-        <option value="Rejected">Rejected</option>
-      </select>
-      <div *ngIf="isInvalid('status')" class="text-danger small">
-        Status is required
-      </div>
-    </div>
+            <div
+              class="btn btn-drag-drop d-flex justify-content-center align-items-center"
+              (click)="fileInput.click()"
+              (dragover)="onDragOver($event)"
+              (drop)="onDrop($event)"
+            >
+              Select or Drop Files Here
+            </div>
+            <!-- <div class="small text-muted">File size should not exceed 500KB</div> -->
 
-    <!-- Buttons -->
-    <div class="d-flex justify-content-end gap-2">
-      <button type="button" class="btn btn-success" (click)="saveForm()">Save</button>
-      <button type="button" class="btn btn-danger" (click)="cancelForm()">Cancel</button>
+            <ul class="list-group mt-3" *ngIf="selectedFiles !== null">
+              <li
+                *ngFor="let file of selectedFiles; let i = index"
+                class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                {{ file.name }}
+                <button type="button" class="btn btn-sm btn-danger" (click)="removeFile(i)">
+                  Remove
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button type="button" class="btn btn-primary" (click)="saveForm()">Draft</button>
+          <button type="button" class="btn btn-secondary" (click)="saveForm()">Submit</button>
+          <button type="button" class="btn btn-danger" (click)="resetForm()">Reset</button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
+</div>
+
+<div class="d-flex justify-content-between">
+  <div class="d-flex gap-3 ms-4 mt-3">
+    <div class="btn-group" role="group" aria-label="Status Tabs">
+      <button type="button" class="btn btn-custom active">Draft</button>
+      <button type="button" class="btn btn-custom">Pending</button>
+      <button type="button" class="btn btn-custom">Send Back</button>
+      <button type="button" class="btn btn-custom">My Approvals</button>
+      <button type="button" class="btn btn-custom">Completed</button>
+    </div>
+    <button type="button" class="btn btn-generate" (click)="this.Reimbursementmodal?.show()">
+      <i class="bi bi-plus-circle"></i> Add
+    </button>
+  </div>
+
+  <button type="button" class="btn btn-generate mt-3 me-4">
+    <i class="bi bi-plus-circle"></i> Generate ERP Code
+  </button>
+</div>
+<div class="ms-4 me-4 mt-5">
+  <div class="container mt-4">
+    <p-table
+      #dt
+      [value]="products"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [globalFilterFields]="['name', 'category']"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+      sortMode="multiple"
+      class="custom-table shadow-sm"
+    >
+      <!-- Table Header with Search -->
+      <ng-template pTemplate="caption">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="m-0">Products</h5>
+          <input
+            type="text"
+            pInputText
+            placeholder="Global Search"
+            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+            class="form-control form-control-sm w-auto"
+          />
+        </div>
+      </ng-template>
+
+      <!-- Column Headers -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+          <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+          <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+          <th pSortableColumn="category">Category <p-sortIcon field="category"></p-sortIcon></th>
+        </tr>
+      </ng-template>
+
+      <!-- Table Body -->
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.price | currency }}</td>
+          <td>{{ product.category }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>

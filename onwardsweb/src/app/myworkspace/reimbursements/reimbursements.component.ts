@@ -1,31 +1,68 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, ElementRef, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ReimbursementService } from '../../services/reimbursement.service';
 import { Router } from '@angular/router';
+import { TableModule } from 'primeng/table';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+}
 
 @Component({
   selector: 'app-reimbursements',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TableModule, InputTextModule, ButtonModule],
   templateUrl: './reimbursements.component.html',
-  styleUrl: './reimbursements.component.scss'
+  styleUrl: './reimbursements.component.scss',
 })
 export class ReimbursementsComponent {
-  reimbursementForm: FormGroup;
-  selectedFile: File | null = null;
+  Reimbursementmodal: any;
+  reimbursementForm!: FormGroup;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  selectedFiles: File[] = [];
 
-  constructor(private fb: FormBuilder,
-    private reimbursementService:ReimbursementService,
+  products: Product[] = [];
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private fb: FormBuilder,
+    private reimbursementService: ReimbursementService,
     private router: Router
   ) {
+    for (let i = 1; i <= 50; i++) {
+      this.products.push({
+        id: i,
+        name: `Product ${i}`,
+        price: Math.floor(Math.random() * 1000),
+        category: ['Electronics', 'Clothing', 'Books'][i % 3],
+      });
+    }
+  }
+
+  ngOnInit(): void {
     this.reimbursementForm = this.fb.group({
       amount: ['', Validators.required],
       date: ['', Validators.required],
       purpose: ['', Validators.required],
       action: ['', Validators.required],
-      status: ['', Validators.required]
     });
+  }
+
+  ngAfterViewInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const bootstrap = (window as any).bootstrap;
+      const ReimbursementmodalEl = document.getElementById('Reimbursementmodal');
+
+      if (ReimbursementmodalEl && bootstrap?.Modal) {
+        this.Reimbursementmodal = new bootstrap.Modal(ReimbursementmodalEl);
+      }
+    }
   }
 
   isInvalid(controlName: string): boolean {
@@ -35,32 +72,47 @@ export class ReimbursementsComponent {
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
+    if (input.files) {
+      this.selectedFiles = [...this.selectedFiles, ...Array.from(input.files)];
+      this.fileInput.nativeElement.value = '';
     }
   }
 
-  // ✅ Save form to local computer
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  // Handle file drop
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+
+    if (event.dataTransfer?.files) {
+      this.selectedFiles.push(...Array.from(event.dataTransfer.files));
+    }
+  }
+
+  removeFile(index: number) {
+    this.selectedFiles.splice(index, 1);
+  }
+
   saveForm() {
-  if (this.reimbursementForm.invalid) {
-    this.reimbursementForm.markAllAsTouched();
-    return;
+    if (this.reimbursementForm.invalid) {
+      this.reimbursementForm.markAllAsTouched();
+      return;
+    }
+
+    const formData = this.reimbursementForm.value;
+
+    // send data to service
+    // this.reimbursementService.addReimbursement(formData);
+
+    // redirect to details page
+    this.router.navigate(['/reimbursement-details']);
   }
 
-  const formData = this.reimbursementForm.value;
-
-  // send data to service
-  this.reimbursementService.addReimbursement(formData);
-
-  // redirect to details page
-  this.router.navigate(['/reimbursement-details']);
-}
-
-
-  // ✅ Reset form
-  cancelForm() {
+  resetForm() {
     this.reimbursementForm.reset();
-    this.selectedFile = null;
+    this.selectedFiles = [];
+    this.fileInput.nativeElement.value = '';
   }
-
 }

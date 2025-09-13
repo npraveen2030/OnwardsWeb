@@ -1,0 +1,17 @@
+export interface ReimbursementModel {
+  id?: number; // Nullable int
+  claimCode: string; // string (default empty string in C#)
+  amount: number; // decimal -> number
+  purpose: string; // string
+  reimbursementDate: Date; // DateTime -> Date
+  statusId?: number; // Nullable int
+  action: string; // string
+  documents: ReimbursementDocumentModel[]; // List of documents
+}
+
+export interface ReimbursementDocumentModel {
+  id?: number; // Nullable int
+  reimbursementId?: number; // Nullable int
+  fileName?: string; // Nullable string
+  fileContent?: File; // IFormFile -> File (Angular standard)
+}

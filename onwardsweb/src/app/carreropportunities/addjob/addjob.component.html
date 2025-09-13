@@ -1,0 +1,153 @@
+<div
+  class="modal fade"
+  id="NewJobmodal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 w-100 text-center" id="NewJobmodalLabel">Job Details</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form [formGroup]="NewJobForm">
+        <div class="modal-body">
+          <!-- RoleId -->
+          <div class="form-group mb-3">
+            <label for="roleId" class="form-label">Role</label>
+            <select id="roleId" class="form-select" formControlName="RoleId">
+              <option value="" disabled selected>Select Role</option>
+              <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+            </select>
+            <div *ngIf="isInvalid('RoleId')" class="text-danger small">Role is required</div>
+          </div>
+
+          <!-- ProjectId -->
+          <div class="form-group mb-3">
+            <label for="projectId" class="form-label">Project</label>
+            <select id="projectId" class="form-select" formControlName="ProjectId">
+              <option value="" disabled selected>Select Project</option>
+              <option *ngFor="let project of projects" [value]="project.id">
+                {{ project.name }}
+              </option>
+            </select>
+            <div *ngIf="isInvalid('ProjectId')" class="text-danger small">Project is required</div>
+          </div>
+
+          <!-- SlkDescription -->
+          <div class="mb-3">
+            <label for="slkDescription" class="form-label">SLK Description</label>
+            <input
+              id="slkDescription"
+              type="text"
+              class="form-control"
+              formControlName="SlkDescription"
+              placeholder="Enter SLK description"
+            />
+            <div *ngIf="isInvalid('SlkDescription')" class="text-danger small">
+              SLK Description is required
+            </div>
+          </div>
+
+          <!-- Skills -->
+          <div class="mb-3">
+            <label for="skills" class="form-label">Skills</label>
+            <input
+              id="skills"
+              type="text"
+              class="form-control"
+              formControlName="Skills"
+              placeholder="Enter skills"
+            />
+            <div *ngIf="isInvalid('Skills')" class="text-danger small">Skills are required</div>
+          </div>
+
+          <!-- RoleDescription -->
+          <div class="mb-3">
+            <label for="roleDescription" class="form-label">Role Description</label>
+            <input
+              id="roleDescription"
+              type="text"
+              class="form-control"
+              formControlName="RoleDescription"
+              placeholder="Enter role description"
+            />
+            <div *ngIf="isInvalid('RoleDescription')" class="text-danger small">
+              Role Description is required
+            </div>
+          </div>
+
+          <!-- Responsibilities -->
+          <div class="mb-3">
+            <label for="responsibilities" class="form-label">Responsibilities</label>
+            <input
+              id="responsibilities"
+              type="text"
+              class="form-control"
+              formControlName="Responsibilities"
+              placeholder="Enter responsibilities"
+            />
+            <div *ngIf="isInvalid('Responsibilities')" class="text-danger small">
+              Responsibilities are required
+            </div>
+          </div>
+
+          <!-- EducationQualification -->
+          <div class="mb-3">
+            <label for="educationQualification" class="form-label">Education Qualification</label>
+            <input
+              id="educationQualification"
+              type="text"
+              class="form-control"
+              formControlName="EducationQualification"
+              placeholder="Enter education qualification"
+            />
+            <div *ngIf="isInvalid('EducationQualification')" class="text-danger small">
+              Education Qualification is required
+            </div>
+          </div>
+
+          <!-- ExperienceRequired -->
+          <div class="mb-3">
+            <label for="experienceRequired" class="form-label">Experience Required</label>
+            <input
+              id="experienceRequired"
+              type="number"
+              class="form-control"
+              formControlName="ExperienceRequired"
+              placeholder="Enter experience in years"
+            />
+            <div *ngIf="isInvalid('ExperienceRequired')" class="text-danger small">
+              Experience Required is required
+            </div>
+          </div>
+
+          <!-- DomainSkills -->
+          <div class="mb-3">
+            <label for="domainSkills" class="form-label">Domain Skills</label>
+            <input
+              id="domainSkills"
+              type="text"
+              class="form-control"
+              formControlName="DomainSkills"
+              placeholder="Enter domain skills"
+            />
+            <div *ngIf="isInvalid('DomainSkills')" class="text-danger small">
+              Domain Skills are required
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer Buttons -->
+        <div class="modal-footer d-flex justify-content-center">
+          <button type="button" class="btn btn-primary" (click)="saveForm()">Draft</button>
+          <button type="button" class="btn btn-secondary" (click)="saveForm()">Submit</button>
+          <button type="button" class="btn btn-danger" (click)="resetForm()">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -7,21 +7,20 @@ import { ReimbursementService } from '../../services/reimbursement.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './reimbursement-details.component.html',
-  styleUrl: './reimbursement-details.component.scss'
+  styleUrl: './reimbursement-details.component.scss',
 })
 export class ReimbursementDetailsComponent implements OnInit {
-activeTab: string = 'personal-info';
+  activeTab: string = 'personal-info';
 
-setActiveTab(tab: string) {
+  setActiveTab(tab: string) {
     this.activeTab = tab;
   }
-  
+
   reimbursements: any[] = [];
 
   constructor(private reimbursementService: ReimbursementService) {}
 
   ngOnInit() {
-    this.reimbursements = this.reimbursementService.getReimbursements();
+    // this.reimbursements = this.reimbursementService.getReimbursements();
   }
-
 }

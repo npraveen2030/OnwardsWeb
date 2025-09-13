@@ -8,7 +8,6 @@ import { DashboardComponent } from './shared/dashboard.component';
 import { ReportComponent } from './report/report.component';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { SessionGuard } from './gaurds/session.gaurd';
-//import { LeaveManagementComponent } from './shared/leavemanagement/leavemanagement.component';
 import { ResignationComponent } from './myworkspace/resignation/resignation.component';
 import { WorkspaceComponent } from './myworkspace/workspace.component';
 import { LeavemanagementComponent } from './shared/leavemanagement/leavemanagement.component';
@@ -18,6 +17,7 @@ import { PersonalInformationComponent } from './myworkspace/personal-information
 import { BasicDetailsComponent } from './myworkspace/basic-details/basic-details.component';
 import { ReimbursementsComponent } from './myworkspace/reimbursements/reimbursements.component';
 import { ReimbursementDetailsComponent } from './reimbursements/reimbursement-details/reimbursement-details.component';
+import { AddjobComponent } from './carreropportunities/addjob/addjob.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -34,10 +34,11 @@ const routes: Route[] = [
       { path: 'myworkspace', component: WorkspaceComponent },
       { path: 'my-approvals', component: MyApprovalComponent },
       { path: 'exit-interview', component: ExitInterviewComponent },
-      { path: 'personal-info', component: PersonalInformationComponent},
-      { path: 'basic-details', component: BasicDetailsComponent},
-      { path: 'reimbursements', component: ReimbursementsComponent},
-      { path: 'reimbursement-details', component: ReimbursementDetailsComponent}
+      { path: 'personal-info', component: PersonalInformationComponent },
+      { path: 'basic-details', component: BasicDetailsComponent },
+      { path: 'reimbursements', component: ReimbursementsComponent },
+      { path: 'reimbursement-details', component: ReimbursementDetailsComponent },
+      { path: 'addjob', component: AddjobComponent },
     ],
   },
 ];
@@ -48,6 +49,6 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection(),
     provideHttpClient(withFetch()),
     // provideRouter(routes),
-    provideRouter(routes, withComponentInputBinding()) // 👈 enable router
+    provideRouter(routes, withComponentInputBinding()), // 👈 enable router
   ],
 };

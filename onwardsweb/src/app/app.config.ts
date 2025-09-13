@@ -19,6 +19,10 @@ import { ReimbursementDetailsComponent } from './reimbursements/reimbursement-de
 import { JobPostComponent } from './carreropportunities/carreroppourtinities/jobpost.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CareerdashboardComponent } from './carreropportunities/careerdashboard.component';
+import { JobApplicationComponent } from './carreropportunities/jobapplication/jobapplication.component';
+import { SavedJobComponent } from './carreropportunities/saved-job/saved-job.component';
+import { SavedApplicationComponent } from './carreropportunities/saved-application/saved-application.component';
+import { ReferralTrackingComponent } from './carreropportunities/referral-tracking/referral-tracking.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeng/themes/lara';
@@ -44,6 +48,10 @@ const routes: Route[] = [
       { path: 'reimbursement-details', component: ReimbursementDetailsComponent },
       { path: 'career', component: CareerdashboardComponent },
       { path: 'jobpost', component: JobPostComponent },
+      { path: 'jobapplication', component: JobApplicationComponent },
+      { path: 'savedjobs', component: SavedJobComponent },
+      { path: 'savedapplications', component: SavedApplicationComponent },
+      { path: 'referraltracking', component: ReferralTrackingComponent },
     ],
   },
 ];

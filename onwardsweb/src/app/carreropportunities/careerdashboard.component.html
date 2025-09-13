@@ -1,6 +1,5 @@
-<!-- <div class="bg-white right"><i class="bi bi-arrow-left-circle bg-white"></i></div> -->
 <div class="bg-light d-flex justify-content-end pe-3">
-  <i class="bi bi-arrow-left-circle fs-4 text-primary"></i>
+   <a href="dashboard"><i class="bi bi-arrow-left-circle fs-4 text-primary" ></i></a>
 </div>
 
 <div class="bg-light vh-100">
@@ -83,7 +82,7 @@
           class="nav-link"
           id="contact-tab2"
           data-bs-toggle="tab"
-          data-bs-target="#contact2"
+          data-bs-target="#referraltrack"
           type="button"
           role="tab"
         >
@@ -96,15 +95,16 @@
         <!-- <h4>jobsearch Home Content</h4>
         <p>This is the home tab content with underline style.</p> -->
         <app-jobpost></app-jobpost>
-       
       </div>
       <div class="tab-pane fade" id="jobapplications" role="tabpanel">
-        <h4>jobapplications Profile Content</h4>
-        <p>This is the profile tab content with underline style.</p>
+        <!-- <h4>jobapplications Profile Content</h4>
+        <p>This is the profile tab content with underline style.</p> -->
+        <app-jobapplication></app-jobapplication>
       </div>
       <div class="tab-pane fade" id="savedjobs" role="tabpanel">
-        <h4>savedjobs</h4>
-        <p>This is the contact tab content with underline style.</p>
+        <!-- <h4>savedjobs</h4>
+        <p>This is the contact tab content with underline style.</p> -->
+        <app-saved-job></app-saved-job>
       </div>
       <div class="tab-pane fade" id="savedsearchesalerts" role="tabpanel">
         <h4>savedsearchesalerts Contact Content</h4>
@@ -115,21 +115,21 @@
         <p>This is the contact tab content with underline style.</p>
       </div>
       <div class="tab-pane fade" id="savedapplications" role="tabpanel">
-        <h4>savedapplications savedapplicationsContact Content</h4>
-        <p>This is the contact tab content with underline style.</p>
+        <app-saved-application></app-saved-application>
       </div>
-      <!-- <div class="tab-pane fade" id="contact2" role="tabpanel">
+      <div class="tab-pane fade" id="referraltrack" role="tabpanel">
+        <!-- <h4>Contact Content</h4>
+      <p>This is the contact tab content with underline style.</p> -->
+        <app-referral-tracking></app-referral-tracking>
+      </div>
+      <!--    <div class="tab-pane fade" id="contact2" role="tabpanel">
       <h4>Contact Content</h4>
       <p>This is the contact tab content with underline style.</p>
     </div>
     <div class="tab-pane fade" id="contact2" role="tabpanel">
       <h4>Contact Content</h4>
       <p>This is the contact tab content with underline style.</p>
-    </div>
-    <div class="tab-pane fade" id="contact2" role="tabpanel">
-      <h4>Contact Content</h4>
-      <p>This is the contact tab content with underline style.</p>
-    </div> --> 
+    </div> -->
     </div>
   </div>
 </div>

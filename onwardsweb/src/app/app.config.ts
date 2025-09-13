@@ -17,8 +17,11 @@ import { BasicDetailsComponent } from './myworkspace/basic-details/basic-details
 import { ReimbursementsComponent } from './myworkspace/reimbursements/reimbursements.component';
 import { ReimbursementDetailsComponent } from './reimbursements/reimbursement-details/reimbursement-details.component';
 import { JobPostComponent } from './carreropportunities/carreroppourtinities/jobpost.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CareerdashboardComponent } from './carreropportunities/careerdashboard.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { providePrimeNG } from 'primeng/config';
+import Lara from '@primeng/themes/lara';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -53,5 +56,14 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(BrowserAnimationsModule),
     // provideRouter(routes),
     provideRouter(routes, withComponentInputBinding()),
+    provideAnimationsAsync(),
+    providePrimeNG({
+      theme: {
+        preset: Lara,
+        options: {
+          darkModeSelector: false || 'none',
+        },
+      },
+    }),
   ],
 };

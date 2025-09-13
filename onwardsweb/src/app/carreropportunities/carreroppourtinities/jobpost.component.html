@@ -140,16 +140,14 @@
           <!-- Skills -->
           <div class="mb-3">
             <label for="skills" class="form-label">Skills</label>
-            <div>
-              <p-autoComplete
-                class="form-control"
-                formControlName="Skills"
-                [suggestions]="skills"
-                (completeMethod)="search($event)"
-                placeholder="Enter Skills"
-              >
-              </p-autoComplete>
-            </div>
+
+            <p-autoComplete
+              class="ac-custom"
+              formControlName="Skills"
+              [suggestions]="skills"
+              (completeMethod)="search($event)"
+              placeholder="Enter Skills"
+            />
             <!-- <div *ngIf="isInvalid('Skills')" class="text-danger small">Skills are required</div> -->
           </div>
 

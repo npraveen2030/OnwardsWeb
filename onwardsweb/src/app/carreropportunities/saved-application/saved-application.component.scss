@@ -1,0 +1,29 @@
+.card {
+  border: 1px solid #ced4da;
+}
+
+.card-header {
+  font-weight: bold;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table th {
+  cursor: pointer;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+select.form-select {
+  display: inline-block;
+  width: auto;
+}

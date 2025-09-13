@@ -17,8 +17,11 @@ import { BasicDetailsComponent } from './myworkspace/basic-details/basic-details
 import { ReimbursementsComponent } from './myworkspace/reimbursements/reimbursements.component';
 import { ReimbursementDetailsComponent } from './reimbursements/reimbursement-details/reimbursement-details.component';
 import { JobPostComponent } from './carreropportunities/carreroppourtinities/jobpost.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CareerdashboardComponent } from './carreropportunities/careerdashboard.component';
+import { JobApplicationComponent } from './carreropportunities/jobapplication/jobapplication.component';
+import { SavedJobComponent } from './carreropportunities/saved-job/saved-job.component';
+import { SavedApplicationComponent } from './carreropportunities/saved-application/saved-application.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -41,6 +44,9 @@ const routes: Route[] = [
       { path: 'reimbursement-details', component: ReimbursementDetailsComponent },
       { path: 'career', component: CareerdashboardComponent },
       { path: 'jobpost', component: JobPostComponent },
+      { path: 'jobapplication', component: JobApplicationComponent },
+      { path: 'savedjobs', component: SavedJobComponent },
+      { path: 'savedapplications', component: SavedApplicationComponent },
     ],
   },
 ];

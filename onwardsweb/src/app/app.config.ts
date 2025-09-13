@@ -22,6 +22,7 @@ import { CareerdashboardComponent } from './carreropportunities/careerdashboard.
 import { JobApplicationComponent } from './carreropportunities/jobapplication/jobapplication.component';
 import { SavedJobComponent } from './carreropportunities/saved-job/saved-job.component';
 import { SavedApplicationComponent } from './carreropportunities/saved-application/saved-application.component';
+import { ReferralTrackingComponent } from './carreropportunities/referral-tracking/referral-tracking.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -47,6 +48,7 @@ const routes: Route[] = [
       { path: 'jobapplication', component: JobApplicationComponent },
       { path: 'savedjobs', component: SavedJobComponent },
       { path: 'savedapplications', component: SavedApplicationComponent },
+      { path: 'referraltracking', component: ReferralTrackingComponent },
     ],
   },
 ];

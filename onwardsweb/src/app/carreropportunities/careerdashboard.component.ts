@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { JobApplicationComponent } from './jobapplication/jobapplication.component';
 import { SavedJobComponent } from './saved-job/saved-job.component';
 import { SavedApplicationComponent } from './saved-application/saved-application.component';
+import { ReferralTrackingComponent } from './referral-tracking/referral-tracking.component';
 
 @Component({
   selector: 'app-careerdashboard',
@@ -14,6 +15,7 @@ import { SavedApplicationComponent } from './saved-application/saved-application
     JobApplicationComponent,
     SavedJobComponent,
     SavedApplicationComponent,
+    ReferralTrackingComponent,
   ],
   templateUrl: './careerdashboard.component.html',
   styleUrl: './careerdashboard.component.scss',

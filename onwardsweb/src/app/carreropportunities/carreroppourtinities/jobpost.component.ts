@@ -2,13 +2,14 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AutoComplete } from 'primeng/autocomplete';
+import { JobPostService } from '../../services/jobpost.service';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -18,7 +19,7 @@ interface AutoCompleteCompleteEvent {
 @Component({
   selector: 'app-jobpost',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, AutoComplete],
+  imports: [CommonModule, ReactiveFormsModule, AutoComplete],
   templateUrl: './jobpost.component.html',
   styleUrl: './jobpost.component.scss',
 })
@@ -26,12 +27,17 @@ export class JobPostComponent {
   NewJobForm!: FormGroup;
   NewJobmodal!: any;
 
-  items: any[] = ['sameer', 'praveen'];
+  skills: any[] = [];
 
   value: any;
 
   search(event: AutoCompleteCompleteEvent) {
-    this.items = [...Array(10).keys()].map((item) => event.query + '-' + item);
+    const query = event.query.toLowerCase();
+    this.skills = this.skills.filter((skill) => skill.toLowerCase().includes(query));
+  }
+
+  get skillsControl(): FormControl {
+    return (this.NewJobForm?.get('Skills') as FormControl) ?? new FormControl('');
   }
 
   roles = [
@@ -49,7 +55,7 @@ export class JobPostComponent {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private fb: FormBuilder,
-    // private reimbursementService: ReimbursementService,
+    private jobPostService: JobPostService,
     private router: Router
   ) {}
 
@@ -65,6 +71,14 @@ export class JobPostComponent {
       ExperienceRequired: ['', Validators.required],
       DomainSkills: ['', Validators.required],
     });
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.jobPostService.GetSkills().subscribe({
+        next: (res) => {
+          this.skills = res.map((item: any) => item.skillName);
+        },
+      });
+    }
   }
 
   ngAfterViewInit() {
@@ -84,14 +98,6 @@ export class JobPostComponent {
       this.NewJobForm.markAllAsTouched();
       return;
     }
-
-    const formData = this.NewJobForm.value;
-
-    // send data to service
-    // this.reimbursementService.addReimbursement(formData);
-
-    // redirect to details page
-    // this.router.navigate(['/reimbursement-details']);
   }
 
   resetForm() {

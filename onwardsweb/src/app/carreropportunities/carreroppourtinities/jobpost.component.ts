@@ -103,7 +103,9 @@ export class JobPostComponent {
   resetForm() {
     this.NewJobForm.reset();
   }
-
+  onCancel() {
+    // this.jobForm.reset();
+  }
   isInvalid(controlName: string): boolean {
     const control = this.NewJobForm.get(controlName);
     return !!(control && control.invalid && (control.dirty || control.touched));

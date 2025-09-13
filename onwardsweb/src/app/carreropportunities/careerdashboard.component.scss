@@ -1,0 +1,46 @@
+
+
+.underline-tabs .nav-tabs {
+    border-bottom: 2px solid #e9ecef;
+}
+
+.underline-tabs .nav-link {
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 1rem 1.5rem;
+    margin-bottom: -2px;
+    font-weight: 500;
+    color: #6c757d;
+    transition: all 0.3s ease;
+}
+
+.underline-tabs .nav-link:hover {
+    border-bottom-color: #0d6efd50;
+    color: #0d6efd;
+}
+
+.underline-tabs .nav-link.active {
+    border-bottom-color: #0d6efd;
+    color: #0d6efd;
+}
+
+/* Content Animation */
+.tab-pane.fade {
+    transition: all 0.2s ease-out;
+}
+
+.tab-pane.fade.show {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

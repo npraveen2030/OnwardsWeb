@@ -1,3 +1,88 @@
+<div class="bg-light">
+  <div class="mx-2 my-2">
+    <div class="row g-2">
+      <!-- Left Section: Job Search Form -->
+      <div class="col-md-4">
+        <div class="card p-4 h-100">
+          <h4 class="mb-4">Search Job</h4>
+
+          <form class="d-flex flex-column gap-3">
+            <div>
+              <label for="keyword" class="form-label">Keyword</label>
+              <input
+                type="text"
+                class="form-control"
+                id="keyword"
+                placeholder="Job Title or Keywords"
+              />
+            </div>
+
+            <div>
+              <label for="language" class="form-label">Job Language</label>
+              <input
+                type="text"
+                class="form-control"
+                id="language"
+                placeholder="English, Hindi..."
+              />
+            </div>
+
+            <div>
+              <label for="reqId" class="form-label">Requisition ID</label>
+              <input type="text" class="form-control" id="reqId" placeholder="Req ID" />
+            </div>
+
+            <div>
+              <label for="location" class="form-label">Job Location</label>
+              <input type="text" class="form-control" id="location" placeholder="City, State" />
+            </div>
+
+            <div class="d-flex justify-content-start gap-2 mt-3">
+              <button type="submit" class="btn btn-primary">Search</button>
+              <button type="reset" class="btn btn-secondary">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Section: Post Job & Job Table -->
+      <div class="col-md-8">
+        <div class="card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4>Post Job</h4>
+            <button class="btn btn-success"><i class="bi bi-plus-circle"></i> Post Job</button>
+          </div>
+
+          <table class="table table-bordered table-striped">
+            <thead class="table-light">
+              <tr>
+                <th>Job Title</th>
+                <th>Location</th>
+                <th>Requisition ID</th>
+                <th>Created Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Software Engineer</td>
+                <td>Bangalore</td>
+                <td>REQ12345</td>
+                <td>2025-09-13</td>
+              </tr>
+              <tr>
+                <td>Project Manager</td>
+                <td>Delhi</td>
+                <td>REQ67890</td>
+                <td>2025-09-10</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div
   class="modal fade"
   id="NewJobmodal"

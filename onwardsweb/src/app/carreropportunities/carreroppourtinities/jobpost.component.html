@@ -140,14 +140,17 @@
           <!-- Skills -->
           <div class="mb-3">
             <label for="skills" class="form-label">Skills</label>
-            <input
-              id="skills"
-              type="text"
-              class="form-control"
-              formControlName="Skills"
-              placeholder="Enter skills"
-            />
-            <div *ngIf="isInvalid('Skills')" class="text-danger small">Skills are required</div>
+            <div>
+              <p-autoComplete
+                class="form-control"
+                formControlName="Skills"
+                [suggestions]="skills"
+                (completeMethod)="search($event)"
+                placeholder="Enter Skills"
+              >
+              </p-autoComplete>
+            </div>
+            <!-- <div *ngIf="isInvalid('Skills')" class="text-danger small">Skills are required</div> -->
           </div>
 
           <!-- RoleDescription -->
@@ -235,8 +238,4 @@
       </form>
     </div>
   </div>
-</div>
-
-<div class="card flex justify-center">
-  <p-autocomplete [(ngModel)]="value" [suggestions]="items" (completeMethod)="search($event)" />
 </div>

@@ -41,7 +41,10 @@
         <th>No. of Bills</th>
         <th>Requested Amount</th>
         <th>Status</th>
+        <!-- Show extra column for Pending, Send Back, Completed -->
+        <th *ngIf="showHistoryColumn()">History</th>
         <th>Action</th>
+        
       </tr>
     </thead>
     <tbody>

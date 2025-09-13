@@ -1,33 +1,25 @@
 <div class="tabs-header mt-4">
-
-<div class="custom-tabs">
+  <div class="custom-tabs">
     <a (click)="setActiveTab('personal-info')" [class.active]="activeTab === 'personal-info'"
       >Draft</a
     >
 
-    <a (click)="setActiveTab('pending')" [class.active]="activeTab === 'pending'"
-      >Pending</a
-    >
+    <a (click)="setActiveTab('pending')" [class.active]="activeTab === 'pending'">Pending</a>
 
-    <a (click)="setActiveTab('send-back')" [class.active]="activeTab === 'send-back'"
-      >Send Back</a
-    >
+    <a (click)="setActiveTab('send-back')" [class.active]="activeTab === 'send-back'">Send Back</a>
 
     <a (click)="setActiveTab('my-approvals')" [class.active]="activeTab === 'my-approvals'"
       >My Approvals</a
     >
 
-    <a (click)="setActiveTab('completed')" [class.active]="activeTab === 'completed'"
-      >Completed</a
-    >
-    </div>
-    <!-- Button on right -->
+    <a (click)="setActiveTab('completed')" [class.active]="activeTab === 'completed'">Completed</a>
+  </div>
+  <!-- Button on right -->
   <button class="generate-btn">
     <span class="icon-circle">+</span>
     Generate ERP Code
   </button>
-  
-  </div>
+</div>
 
 <div class="p-3 shadow-sm">
   <table class="table table-hover text-center">
@@ -42,9 +34,8 @@
         <th>Requested Amount</th>
         <th>Status</th>
         <!-- Show extra column for Pending, Send Back, Completed -->
-        <th *ngIf="showHistoryColumn()">History</th>
+        <th>History</th>
         <th>Action</th>
-        
       </tr>
     </thead>
     <tbody>
@@ -58,7 +49,7 @@
         <td>{{ claim.amount }}</td>
         <td>{{ claim.status }}</td>
         <td>
-            {{claim.action}}
+          {{ claim.action }}
         </td>
       </tr>
       <tr *ngIf="reimbursements.length === 0">

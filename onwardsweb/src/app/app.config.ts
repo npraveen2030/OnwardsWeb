@@ -1,7 +1,6 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, Route, withComponentInputBinding } from '@angular/router';
 
-import { provideClientHydration } from '@angular/platform-browser';
 import { LoginComponent } from './shared/login.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { DashboardComponent } from './shared/dashboard.component';
@@ -17,7 +16,8 @@ import { PersonalInformationComponent } from './myworkspace/personal-information
 import { BasicDetailsComponent } from './myworkspace/basic-details/basic-details.component';
 import { ReimbursementsComponent } from './myworkspace/reimbursements/reimbursements.component';
 import { ReimbursementDetailsComponent } from './reimbursements/reimbursement-details/reimbursement-details.component';
-import { AddjobComponent } from './carreropportunities/addjob/addjob.component';
+import { JobPostComponent } from './carreropportunities/carreroppourtinities/jobpost.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -38,7 +38,7 @@ const routes: Route[] = [
       { path: 'basic-details', component: BasicDetailsComponent },
       { path: 'reimbursements', component: ReimbursementsComponent },
       { path: 'reimbursement-details', component: ReimbursementDetailsComponent },
-      { path: 'addjob', component: AddjobComponent },
+      { path: 'jobpost', component: JobPostComponent },
     ],
   },
 ];
@@ -48,7 +48,8 @@ export const appConfig: ApplicationConfig = {
     // provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection(),
     provideHttpClient(withFetch()),
+    importProvidersFrom(BrowserAnimationsModule),
     // provideRouter(routes),
-    provideRouter(routes, withComponentInputBinding()), // 👈 enable router
+    provideRouter(routes, withComponentInputBinding()),
   ],
 };

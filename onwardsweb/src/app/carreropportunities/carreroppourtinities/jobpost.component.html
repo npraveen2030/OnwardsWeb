@@ -151,3 +151,7 @@
     </div>
   </div>
 </div>
+
+<div class="card flex justify-center">
+  <p-autocomplete [(ngModel)]="value" [suggestions]="items" (completeMethod)="search($event)" />
+</div>

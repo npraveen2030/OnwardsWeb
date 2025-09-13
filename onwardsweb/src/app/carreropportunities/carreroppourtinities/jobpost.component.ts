@@ -1,18 +1,38 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
+import { AutoComplete } from 'primeng/autocomplete';
+
+interface AutoCompleteCompleteEvent {
+  originalEvent: Event;
+  query: string;
+}
 
 @Component({
-  selector: 'app-addjob',
+  selector: 'app-jobpost',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './addjob.component.html',
-  styleUrl: './addjob.component.scss',
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, AutoComplete],
+  templateUrl: './jobpost.component.html',
+  styleUrl: './jobpost.component.scss',
 })
-export class AddjobComponent {
+export class JobPostComponent {
   NewJobForm!: FormGroup;
   NewJobmodal!: any;
+
+  items: any[] = ['sameer', 'praveen'];
+
+  value: any;
+
+  search(event: AutoCompleteCompleteEvent) {
+    this.items = [...Array(10).keys()].map((item) => event.query + '-' + item);
+  }
 
   roles = [
     { id: 1, name: 'Developer' },

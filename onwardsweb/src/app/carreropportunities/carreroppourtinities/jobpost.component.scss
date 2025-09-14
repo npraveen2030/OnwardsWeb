@@ -1,3 +1,19 @@
-.ac-custom {
-  display: block;
+.modal-dialog-custom {
+  max-width: 50vw !important;
+  width: 50vw !important;
+}
+
+.custom-autocomplete {
+  --p-autocomplete-invalid-placeholder-color: #334155;
+  --p-autocomplete-invalid-border-color: #cbd5e1;
+}
+
+.form-select-custom {
+  width: 22vw;
+}
+
+::ng-deep .editor-custom .ql-editor {
+  min-height: 200px; /* Adjust this value as needed */
+  padding: 10px; /* Better spacing inside editor */
+  // font-size: 14px;   /* Optional: Adjust font size */
 }

@@ -28,9 +28,11 @@
     "bootstrap": "5.3",
     "date-fns": "^4.1.0",
     "jquery": "^3.7.1",
+    "ngx-quill": "^26.0.0",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",
     "primeng": "^18.0.2",
+    "quill": "^2.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

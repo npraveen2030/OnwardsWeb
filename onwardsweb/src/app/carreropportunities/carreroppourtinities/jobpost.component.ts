@@ -1,15 +1,10 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AutoComplete } from 'primeng/autocomplete';
 import { JobPostService } from '../../services/jobpost.service';
+import { QuillModule } from 'ngx-quill';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -19,7 +14,7 @@ interface AutoCompleteCompleteEvent {
 @Component({
   selector: 'app-jobpost',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AutoComplete],
+  imports: [CommonModule, ReactiveFormsModule, AutoComplete, QuillModule],
   templateUrl: './jobpost.component.html',
   styleUrl: './jobpost.component.scss',
 })
@@ -28,12 +23,7 @@ export class JobPostComponent {
   NewJobmodal!: any;
 
   skillsuggestions: any[] = [];
-  skills: any[] = [];
-
-  search(event: AutoCompleteCompleteEvent) {
-    const query = event.query.toLowerCase();
-    this.skillsuggestions = this.skills.filter((skill) => skill.toLowerCase().includes(query));
-  }
+  AllSkills: any[] = [];
 
   roles = [
     { id: 1, name: 'Developer' },
@@ -59,7 +49,9 @@ export class JobPostComponent {
       RoleId: ['', Validators.required],
       ProjectId: ['', Validators.required],
       SlkDescription: ['', Validators.required],
-      Skills: ['', Validators.required],
+      Skillholder: [''],
+      Skills: this.fb.array([], Validators.required),
+      NonDbSkills: this.fb.array([]),
       RoleDescription: ['', Validators.required],
       Responsibilities: ['', Validators.required],
       EducationQualification: ['', Validators.required],
@@ -70,7 +62,7 @@ export class JobPostComponent {
     if (isPlatformBrowser(this.platformId)) {
       this.jobPostService.GetSkills().subscribe({
         next: (res) => {
-          this.skills = res.map((item: any) => item.skillName);
+          this.AllSkills = res.map((item: any) => item.skillName);
         },
       });
     }
@@ -87,8 +79,56 @@ export class JobPostComponent {
     }
   }
 
+  // Auto-Complete
+  search(event: AutoCompleteCompleteEvent) {
+    const query = event.query.toLowerCase();
+    this.skillsuggestions = this.AllSkills.filter((skill) => skill.toLowerCase().includes(query));
+  }
+
+  get skills(): FormArray {
+    return this.NewJobForm.get('Skills') as FormArray;
+  }
+
+  get NonDbSkills(): FormArray {
+    return this.NewJobForm.get('NonDbSkills') as FormArray;
+  }
+
+  addSkillFromHolder() {
+    const skill = this.NewJobForm.get('Skillholder')?.value;
+
+    if (skill && skill.trim()) {
+      // Avoid duplicates
+      const exists = this.skills.controls.some(
+        (ctrl) => ctrl.value.toLowerCase() === skill.toLowerCase()
+      );
+      if (!exists) {
+        this.skills.push(this.fb.control(skill.trim(), Validators.required));
+      }
+
+      this.NewJobForm.get('Skillholder')?.reset();
+    }
+  }
+
+  removeSkill(index: number) {
+    this.skills.removeAt(index);
+  }
+
+  // Form Handling
+
   saveForm() {
-    if (this.NewJobForm.invalid) {
+    if (this.NewJobForm.valid) {
+      // Checking for new skills
+      for (let userskill of this.skills.value) {
+        const exists = this.AllSkills.some(
+          (skill) => skill.toLowerCase() === userskill.toLowerCase()
+        );
+        if (!exists) {
+          this.NonDbSkills.push(this.fb.control(userskill.trim()));
+        }
+      }
+
+      console.log(this.NewJobForm.value);
+    } else {
       this.NewJobForm.markAllAsTouched();
       return;
     }

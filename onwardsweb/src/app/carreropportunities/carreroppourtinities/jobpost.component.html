@@ -94,7 +94,7 @@
   aria-labelledby="staticBackdropLabel"
   aria-hidden="true"
 >
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-custom">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5 w-100 text-center" id="NewJobmodalLabel">Job Details</h1>
@@ -102,69 +102,117 @@
       </div>
       <form [formGroup]="NewJobForm">
         <div class="modal-body">
-          <!-- RoleId -->
-          <div class="form-group mb-3">
-            <label for="roleId" class="form-label">Role</label>
-            <select id="roleId" class="form-select" formControlName="RoleId">
-              <option value="" disabled selected>Select Role</option>
-              <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
-            </select>
-            <div *ngIf="isInvalid('RoleId')" class="text-danger small">Role is required</div>
-          </div>
+          <div class="d-flex justify-content-between">
+            <!-- RoleId -->
+            <div class="form-group mb-3">
+              <label for="roleId" class="form-label">Role</label>
+              <select id="roleId" class="form-select form-select-custom" formControlName="RoleId">
+                <option value="" disabled selected>Select Role</option>
+                <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+              </select>
+              <div *ngIf="isInvalid('RoleId')" class="text-danger small">Role is required</div>
+            </div>
 
-          <!-- ProjectId -->
-          <div class="form-group mb-3">
-            <label for="projectId" class="form-label">Project</label>
-            <select id="projectId" class="form-select" formControlName="ProjectId">
-              <option value="" disabled selected>Select Project</option>
-              <option *ngFor="let project of projects" [value]="project.id">
-                {{ project.name }}
-              </option>
-            </select>
-            <div *ngIf="isInvalid('ProjectId')" class="text-danger small">Project is required</div>
+            <!-- ProjectId -->
+            <div class="form-group mb-3">
+              <label for="projectId" class="form-label">Project</label>
+              <select
+                id="projectId"
+                class="form-select form-select-custom"
+                formControlName="ProjectId"
+              >
+                <option value="" disabled selected>Select Project</option>
+                <option *ngFor="let project of projects" [value]="project.id">
+                  {{ project.name }}
+                </option>
+              </select>
+              <div *ngIf="isInvalid('ProjectId')" class="text-danger small">
+                Project is required
+              </div>
+            </div>
           </div>
 
           <!-- SlkDescription -->
           <div class="mb-3">
             <label for="slkDescription" class="form-label">SLK Description</label>
-            <input
-              id="slkDescription"
-              type="text"
-              class="form-control"
+            <quill-editor
+              id="description"
+              class="w-100 editor-custom"
               formControlName="SlkDescription"
-              placeholder="Enter SLK description"
-            />
+              [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }]
+                ]
+              }"
+              [placeholder]="'Enter Company description'"
+            ></quill-editor>
             <div *ngIf="isInvalid('SlkDescription')" class="text-danger small">
               SLK Description is required
             </div>
           </div>
 
-          <!-- Skills -->
+          <!-- Skills Section -->
           <div class="mb-3">
             <label for="skills" class="form-label">Skills</label>
+            <div class="d-flex gap-1">
+              <div class="custom-autocomplete">
+                <p-autoComplete
+                  formControlName="Skillholder"
+                  [suggestions]="skillsuggestions"
+                  (completeMethod)="search($event)"
+                  placeholder="Enter Skills"
+                ></p-autoComplete>
+              </div>
 
-            <p-autoComplete
-              class="ac-custom"
-              formControlName="Skills"
-              [suggestions]="skillsuggestions"
-              (completeMethod)="search($event)"
-              placeholder="Enter Skills"
-            />
-            <div>
-              <ul></ul>
+              <!-- Add button -->
+              <button
+                type="button"
+                class="btn btn-success"
+                (click)="addSkillFromHolder()"
+                [disabled]="!NewJobForm.get('Skillholder')?.value"
+              >
+                <i class="bi bi-plus-circle"></i>
+              </button>
+            </div>
+
+            <!-- Display added skills -->
+            <ul class="list-group mt-3">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+                *ngFor="let skill of skills.controls; let i = index"
+              >
+                {{ skill.value }}
+                <button type="button" class="btn btn-sm btn-danger" (click)="removeSkill(i)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </li>
+            </ul>
+
+            <!-- Validation error -->
+            <div
+              *ngIf="skills.invalid && (skills.dirty || skills.touched)"
+              class="text-danger small mt-2"
+            >
+              At least one skill is required.
             </div>
           </div>
 
           <!-- RoleDescription -->
           <div class="mb-3">
             <label for="roleDescription" class="form-label">Role Description</label>
-            <input
-              id="roleDescription"
-              type="text"
-              class="form-control"
+            <quill-editor
+              id="description"
+              class="w-100 editor-custom"
               formControlName="RoleDescription"
-              placeholder="Enter role description"
-            />
+              [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }]
+                ]
+              }"
+              [placeholder]="'Enter Role description'"
+            ></quill-editor>
             <div *ngIf="isInvalid('RoleDescription')" class="text-danger small">
               Role Description is required
             </div>
@@ -173,13 +221,18 @@
           <!-- Responsibilities -->
           <div class="mb-3">
             <label for="responsibilities" class="form-label">Responsibilities</label>
-            <input
-              id="responsibilities"
-              type="text"
-              class="form-control"
+            <quill-editor
+              id="description"
+              class="w-100 editor-custom"
               formControlName="Responsibilities"
-              placeholder="Enter responsibilities"
-            />
+              [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }]
+                ]
+              }"
+              [placeholder]="'Enter Role description'"
+            ></quill-editor>
             <div *ngIf="isInvalid('Responsibilities')" class="text-danger small">
               Responsibilities are required
             </div>
@@ -188,13 +241,18 @@
           <!-- EducationQualification -->
           <div class="mb-3">
             <label for="educationQualification" class="form-label">Education Qualification</label>
-            <input
-              id="educationQualification"
-              type="text"
-              class="form-control"
+            <quill-editor
+              id="description"
+              class="w-100 editor-custom"
               formControlName="EducationQualification"
-              placeholder="Enter education qualification"
-            />
+              [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }]
+                ]
+              }"
+              [placeholder]="'Enter Role description'"
+            ></quill-editor>
             <div *ngIf="isInvalid('EducationQualification')" class="text-danger small">
               Education Qualification is required
             </div>
@@ -203,13 +261,18 @@
           <!-- ExperienceRequired -->
           <div class="mb-3">
             <label for="experienceRequired" class="form-label">Experience Required</label>
-            <input
-              id="experienceRequired"
-              type="number"
-              class="form-control"
+            <quill-editor
+              id="description"
+              class="w-100 editor-custom"
               formControlName="ExperienceRequired"
-              placeholder="Enter experience in years"
-            />
+              [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }]
+                ]
+              }"
+              [placeholder]="'Enter Role description'"
+            ></quill-editor>
             <div *ngIf="isInvalid('ExperienceRequired')" class="text-danger small">
               Experience Required is required
             </div>
@@ -218,13 +281,18 @@
           <!-- DomainSkills -->
           <div class="mb-3">
             <label for="domainSkills" class="form-label">Domain Skills</label>
-            <input
-              id="domainSkills"
-              type="text"
-              class="form-control"
+            <quill-editor
+              id="description"
+              class="w-100 editor-custom"
               formControlName="DomainSkills"
-              placeholder="Enter domain skills"
-            />
+              [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }]
+                ]
+              }"
+              [placeholder]="'Enter Role description'"
+            ></quill-editor>
             <div *ngIf="isInvalid('DomainSkills')" class="text-danger small">
               Domain Skills are required
             </div>

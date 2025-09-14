@@ -50,7 +50,9 @@
         <div class="card p-4">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Post Job</h4>
-            <button class="btn btn-success"><i class="bi bi-plus-circle"></i> Post Job</button>
+            <button class="btn btn-success" (click)="this.NewJobmodal?.show()">
+              <i class="bi bi-plus-circle"></i> Post Job
+            </button>
           </div>
 
           <table class="table table-bordered table-striped">
@@ -144,11 +146,13 @@
             <p-autoComplete
               class="ac-custom"
               formControlName="Skills"
-              [suggestions]="skills"
+              [suggestions]="skillsuggestions"
               (completeMethod)="search($event)"
               placeholder="Enter Skills"
             />
-            <!-- <div *ngIf="isInvalid('Skills')" class="text-danger small">Skills are required</div> -->
+            <div>
+              <ul></ul>
+            </div>
           </div>
 
           <!-- RoleDescription -->

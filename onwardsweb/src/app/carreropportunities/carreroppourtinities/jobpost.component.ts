@@ -27,17 +27,12 @@ export class JobPostComponent {
   NewJobForm!: FormGroup;
   NewJobmodal!: any;
 
+  skillsuggestions: any[] = [];
   skills: any[] = [];
-
-  value: any;
 
   search(event: AutoCompleteCompleteEvent) {
     const query = event.query.toLowerCase();
-    this.skills = this.skills.filter((skill) => skill.toLowerCase().includes(query));
-  }
-
-  get skillsControl(): FormControl {
-    return (this.NewJobForm?.get('Skills') as FormControl) ?? new FormControl('');
+    this.skillsuggestions = this.skills.filter((skill) => skill.toLowerCase().includes(query));
   }
 
   roles = [
@@ -88,7 +83,6 @@ export class JobPostComponent {
 
       if (NewJobmodalEl && bootstrap?.Modal) {
         this.NewJobmodal = new bootstrap.Modal(NewJobmodalEl);
-        this.NewJobmodal?.show();
       }
     }
   }

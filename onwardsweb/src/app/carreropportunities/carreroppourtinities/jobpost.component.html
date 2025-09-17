@@ -101,14 +101,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form [formGroup]="NewJobForm">
-        <div class="modal-body">
+        <div class="modal-body modal-body-custom">
           <div class="d-flex justify-content-between">
             <!-- RoleId -->
             <div class="form-group mb-3">
               <label for="roleId" class="form-label">Role</label>
               <select id="roleId" class="form-select form-select-custom" formControlName="RoleId">
                 <option value="" disabled selected>Select Role</option>
-                <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+                @if(Allroles.length !== 0){
+                <option *ngFor="let role of Allroles" [value]="role.id">{{ role.roleName }}</option>
+                }
               </select>
               <div *ngIf="isInvalid('RoleId')" class="text-danger small">Role is required</div>
             </div>
@@ -122,9 +124,11 @@
                 formControlName="ProjectId"
               >
                 <option value="" disabled selected>Select Project</option>
-                <option *ngFor="let project of projects" [value]="project.id">
-                  {{ project.name }}
+                @if(Allprojects.length !== 0){
+                <option *ngFor="let project of Allprojects" [value]="project.id">
+                  {{ project.projectName }}
                 </option>
+                }
               </select>
               <div *ngIf="isInvalid('ProjectId')" class="text-danger small">
                 Project is required
@@ -132,13 +136,33 @@
             </div>
           </div>
 
-          <!-- SlkDescription -->
+          <!-- LocationId -->
+          <div class="form-group mb-3">
+            <label for="locationId" class="form-label">Location</label>
+            <select
+              id="locationId"
+              class="form-select form-select-custom"
+              formControlName="LocationId"
+            >
+              <option value="" disabled selected>Select Location</option>
+              @if(Alllocations.length !== 0){
+              <option *ngFor="let location of Alllocations" [value]="location.id">
+                {{ location.name }}
+              </option>
+              }
+            </select>
+            <div *ngIf="isInvalid('LocationId')" class="text-danger small">
+              Location is required
+            </div>
+          </div>
+
+          <!-- ProjectDescription -->
           <div class="mb-3">
-            <label for="slkDescription" class="form-label">SLK Description</label>
+            <label for="slkDescription" class="form-label">Project Description</label>
             <quill-editor
               id="description"
               class="w-100 editor-custom"
-              formControlName="SlkDescription"
+              formControlName="ProjectDescription"
               [modules]="{
                 toolbar: [
                   ['bold', 'italic', 'underline'],
@@ -147,8 +171,8 @@
               }"
               [placeholder]="'Enter Company description'"
             ></quill-editor>
-            <div *ngIf="isInvalid('SlkDescription')" class="text-danger small">
-              SLK Description is required
+            <div *ngIf="isInvalid('ProjectDescription')" class="text-danger small">
+              Project Description is required
             </div>
           </div>
 
@@ -299,10 +323,23 @@
           </div>
         </div>
 
+        <!-- Requsition By -->
+        <div class="mb-3">
+          <label for="skills" class="form-label">Skills</label>
+          <div class="">
+            <p-autoComplete
+              formControlName="RequesitionBy"
+              [suggestions]="usersuggestions"
+              (completeMethod)="searchuser($event)"
+              placeholder="Enter UserName"
+              [forceSelection]="true"
+            ></p-autoComplete>
+          </div>
+        </div>
+
         <!-- Modal Footer Buttons -->
         <div class="modal-footer d-flex justify-content-center">
-          <button type="button" class="btn btn-primary" (click)="saveForm()">Draft</button>
-          <button type="button" class="btn btn-secondary" (click)="saveForm()">Submit</button>
+          <button type="button" class="btn btn-success" (click)="submit()">Submit</button>
           <button type="button" class="btn btn-danger" (click)="resetForm()">Reset</button>
         </div>
       </form>

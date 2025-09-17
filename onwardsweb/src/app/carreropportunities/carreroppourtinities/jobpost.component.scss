@@ -8,12 +8,22 @@
   --p-autocomplete-invalid-border-color: #cbd5e1;
 }
 
+::ng-deep .custom-autocomplete .p-inputtext {
+  width: 22vw;
+  max-width: 100%;
+}
+
 .form-select-custom {
   width: 22vw;
 }
 
 ::ng-deep .editor-custom .ql-editor {
-  min-height: 200px; /* Adjust this value as needed */
-  padding: 10px; /* Better spacing inside editor */
-  // font-size: 14px;   /* Optional: Adjust font size */
+  min-height: 200px;
+  padding: 10px;
+  // font-size: 14px;
+}
+
+.modal-body-custom label {
+  margin-left: 7px;
+  font-weight: 500;
 }

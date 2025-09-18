@@ -1,6 +1,32 @@
+.vh-custom {
+  height: 83vh;
+  overflow-y: auto;
+}
+
 .modal-dialog-custom {
   max-width: 50vw !important;
   width: 50vw !important;
+  height: 80vh; /* Full modal height */
+}
+
+.modal-body {
+  height: 70vh;
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-right: 15px; /* prevent scrollbar overlapping content */
+}
+
+/* Scrollbar styling */
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .custom-autocomplete {
@@ -18,12 +44,87 @@
 }
 
 ::ng-deep .editor-custom .ql-editor {
-  min-height: 200px;
+  min-height: 180px;
   padding: 10px;
-  // font-size: 14px;
 }
 
 .modal-body-custom label {
   margin-left: 7px;
   font-weight: 500;
+}
+
+input[type='date'] {
+  width: 10vw;
+  height: 43px;
+  max-width: 100%;
+}
+
+.RequesitionName-custom {
+  width: 25vw !important;
+}
+
+::ng-deep .RequesitionName-custom input {
+  width: 25vw !important;
+}
+
+.job-card {
+  border-bottom: 1px solid #e5e5e5;
+  padding: 15px 0;
+}
+
+.job-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.job-title:hover {
+  text-decoration: underline;
+}
+
+.job-meta {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.select-action {
+  min-width: 120px;
+}
+
+.collapse-custom {
+  background-color: #6c757d;
+  border-radius: 20px 20px 0 0;
+}
+
+.collapse-content-custom {
+  border: 1px solid #6c757d;
+  padding: 2%;
+  border-radius: 0 0 20px 20px;
+}
+
+.header-custom {
+  min-height: 40px; /* Reduced from 48px */
+  padding: 2px 8px; /* Tighter padding */
+}
+
+.header-custom label,
+.header-custom span {
+  line-height: 1.2;
+  font-size: 0.85rem;
+}
+
+.compact-select {
+  font-size: 0.85rem;
+  height: 28px;
+}
+
+.compact-pagination .page-link {
+  padding: 2px 8px;
+  font-size: 0.85rem;
+  min-width: 28px;
+}
+
+.pagination {
+  margin-bottom: 0;
 }

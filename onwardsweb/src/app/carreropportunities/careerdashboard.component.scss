@@ -1,46 +1,66 @@
-
+.underline-tabs {
+  width: 100%; /* Full width for the tab container */
+  max-width: 100%;
+  margin: 0 auto;
+}
 
 .underline-tabs .nav-tabs {
-    border-bottom: 2px solid #e9ecef;
+  border-bottom: 2px solid #e9ecef;
+  width: 100%;
+  display: flex;
+  gap: 1%;
 }
 
 .underline-tabs .nav-link {
-    border: none;
-    border-bottom: 2px solid transparent;
-    padding: 1rem 1.5rem;
-    margin-bottom: -2px;
-    font-weight: 500;
-    color: #6c757d;
-    transition: all 0.3s ease;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.5rem 1rem; /* Reduced padding */
+  margin-bottom: -2px;
+  font-weight: 500;
+  font-size: 0.9rem; /* Slightly smaller text */
+  color: #6c757d;
+  transition: all 0.3s ease;
+  min-width: max-content; /* Prevent squishing text */
 }
 
 .underline-tabs .nav-link:hover {
-    border-bottom-color: #0d6efd50;
-    color: #0d6efd;
+  border-bottom-color: #0d6efd50;
+  color: #0d6efd;
 }
 
 .underline-tabs .nav-link.active {
-    border-bottom-color: #0d6efd;
-    color: #0d6efd;
+  border-bottom-color: #0d6efd;
+  color: #0d6efd;
+}
+
+/* Tab content area */
+.tab-content {
+  width: 100%;
+  padding: 0.75rem; /* Reduced padding for tighter layout */
 }
 
 /* Content Animation */
 .tab-pane.fade {
-    transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .tab-pane.fade.show {
-    animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.4s ease-out;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
+.vh-custom {
+  height: 93vh;
+  overflow-y: hidden;
+}
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

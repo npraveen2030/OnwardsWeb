@@ -17,15 +17,16 @@ import { BasicDetailsComponent } from './myworkspace/basic-details/basic-details
 import { ReimbursementsComponent } from './myworkspace/reimbursements/reimbursements.component';
 import { ReimbursementDetailsComponent } from './reimbursements/reimbursement-details/reimbursement-details.component';
 import { JobPostComponent } from './carreropportunities/carreroppourtinities/jobpost.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { CareerdashboardComponent } from './carreropportunities/careerdashboard.component';
 import { JobApplicationComponent } from './carreropportunities/jobapplication/jobapplication.component';
 import { SavedJobComponent } from './carreropportunities/saved-job/saved-job.component';
 import { SavedApplicationComponent } from './carreropportunities/saved-application/saved-application.component';
 import { ReferralTrackingComponent } from './carreropportunities/referral-tracking/referral-tracking.component';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeng/themes/lara';
+import { ToastrModule } from 'ngx-toastr';
+import { JobdescriptionComponent } from './carreropportunities/carreroppourtinities/jobdescription.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -52,17 +53,22 @@ const routes: Route[] = [
       { path: 'savedjobs', component: SavedJobComponent },
       { path: 'savedapplications', component: SavedApplicationComponent },
       { path: 'referraltracking', component: ReferralTrackingComponent },
+      { path: 'jobdescription/:id', component: JobdescriptionComponent },
     ],
   },
 ];
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    // provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection(),
     provideHttpClient(withFetch()),
-    importProvidersFrom(BrowserAnimationsModule),
-    // provideRouter(routes),
+    importProvidersFrom(
+      ToastrModule.forRoot({
+        timeOut: 3000,
+        positionClass: 'toast-top-right',
+        preventDuplicates: true,
+      })
+    ),
     provideRouter(routes, withComponentInputBinding()),
     provideAnimationsAsync(),
     providePrimeNG({

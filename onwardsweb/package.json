@@ -29,6 +29,7 @@
     "date-fns": "^4.1.0",
     "jquery": "^3.7.1",
     "ngx-quill": "^26.0.0",
+    "ngx-toastr": "^19.1.0",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",
     "primeng": "^18.0.2",

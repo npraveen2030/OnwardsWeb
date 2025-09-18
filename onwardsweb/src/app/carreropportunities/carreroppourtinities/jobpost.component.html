@@ -1,86 +1,77 @@
-<div class="bg-light">
-  <div class="mx-2 my-2">
-    <div class="row g-2">
-      <!-- Left Section: Job Search Form -->
-      <div class="col-md-4">
-        <div class="card p-4 h-100">
-          <h4 class="mb-4">Search Job</h4>
+<div class="d-flex justify-content-between align-items-center p-2 collapse-custom">
+  <h4 class="ms-3">Post Job</h4>
+  <button
+    class="btn btn-secondary me-3"
+    data-bs-toggle="collapse"
+    data-bs-target="#CollapsePost"
+    aria-expanded="true"
+    aria-controls="CollapsePost"
+  >
+    &#8595;
+  </button>
+</div>
+<div id="CollapsePost" class="collapse show collapse-content-custom">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Admin Posted Jobs</h4>
+    <button class="btn btn-success" (click)="this.NewJobmodal?.show()">
+      <i class="bi bi-plus-circle"></i> Post Job
+    </button>
+  </div>
 
-          <form class="d-flex flex-column gap-3">
-            <div>
-              <label for="keyword" class="form-label">Keyword</label>
-              <input
-                type="text"
-                class="form-control"
-                id="keyword"
-                placeholder="Job Title or Keywords"
-              />
-            </div>
-
-            <div>
-              <label for="language" class="form-label">Job Language</label>
-              <input
-                type="text"
-                class="form-control"
-                id="language"
-                placeholder="English, Hindi..."
-              />
-            </div>
-
-            <div>
-              <label for="reqId" class="form-label">Requisition ID</label>
-              <input type="text" class="form-control" id="reqId" placeholder="Req ID" />
-            </div>
-
-            <div>
-              <label for="location" class="form-label">Job Location</label>
-              <input type="text" class="form-control" id="location" placeholder="City, State" />
-            </div>
-
-            <div class="d-flex justify-content-start gap-2 mt-3">
-              <button type="submit" class="btn btn-primary">Search</button>
-              <button type="reset" class="btn btn-secondary">Cancel</button>
-            </div>
-          </form>
-        </div>
+  <div class="container mt-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-start align-items-center gap-5 mb-2 header-custom">
+      <!-- Left Section (Items per page) -->
+      <div class="d-flex align-items-center gap-2">
+        <label for="itemsPerPage" class="me-1 mb-0 small">Items per page</label>
+        <select id="itemsPerPage" class="form-select form-select-sm w-auto compact-select">
+          <option>10</option>
+          <option>20</option>
+          <option>30</option>
+          <option>50</option>
+        </select>
       </div>
 
-      <!-- Right Section: Post Job & Job Table -->
-      <div class="col-md-8">
-        <div class="card p-4">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4>Post Job</h4>
-            <button class="btn btn-success" (click)="this.NewJobmodal?.show()">
-              <i class="bi bi-plus-circle"></i> Post Job
-            </button>
+      <!-- Center Section (Pagination) -->
+      <nav aria-label="Page navigation" class="d-flex align-items-center">
+        <ul class="pagination pagination-sm mb-0 compact-pagination">
+          <li class="page-item disabled">
+            <a class="page-link">Prev</a>
+          </li>
+          <li class="page-item active">
+            <a class="page-link" href="#">1</a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Job List -->
+    <div id="jobList">
+      @for (job of AllUserJobDetilas;track $index) {
+      <div class="row align-items-center job-card">
+        <div class="col-md-9">
+          <a [routerLink]="['/jobdescription', job.id]" class="job-title">
+            {{ job.roleName }}
+          </a>
+          <div class="job-meta">
+            Requisition ID: {{ job.requesitionId }} - Posted on {{ job.createdDate }} -
+            {{ job.locationName }}
           </div>
+        </div>
+        <div class="col-md-3 d-flex justify-content-end">
+          <button class="btn btn-primary btn-sm me-2" (click)="EditJobDetials(job.id)">
+            <i class="bi bi-pencil-square"></i>
+          </button>
 
-          <table class="table table-bordered table-striped">
-            <thead class="table-light">
-              <tr>
-                <th>Job Title</th>
-                <th>Location</th>
-                <th>Requisition ID</th>
-                <th>Created Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Software Engineer</td>
-                <td>Bangalore</td>
-                <td>REQ12345</td>
-                <td>2025-09-13</td>
-              </tr>
-              <tr>
-                <td>Project Manager</td>
-                <td>Delhi</td>
-                <td>REQ67890</td>
-                <td>2025-09-10</td>
-              </tr>
-            </tbody>
-          </table>
+          <button class="btn btn-danger btn-sm me-5"><i class="bi bi-trash"></i></button>
         </div>
       </div>
+      }
     </div>
   </div>
 </div>
@@ -101,7 +92,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form [formGroup]="NewJobForm">
-        <div class="modal-body modal-body-custom">
+        <div class="modal-body flex-grow-1 overflow-auto modal-body-custom">
           <div class="d-flex justify-content-between">
             <!-- RoleId -->
             <div class="form-group mb-3">
@@ -135,44 +126,45 @@
               </div>
             </div>
           </div>
-
-          <!-- LocationId -->
-          <div class="form-group mb-3">
-            <label for="locationId" class="form-label">Location</label>
-            <select
-              id="locationId"
-              class="form-select form-select-custom"
-              formControlName="LocationId"
-            >
-              <option value="" disabled selected>Select Location</option>
-              @if(Alllocations.length !== 0){
-              <option *ngFor="let location of Alllocations" [value]="location.id">
-                {{ location.name }}
-              </option>
-              }
-            </select>
-            <div *ngIf="isInvalid('LocationId')" class="text-danger small">
-              Location is required
+          <div class="d-flex justify-content-between">
+            <!-- LocationId -->
+            <div class="form-group mb-3">
+              <label for="locationId" class="form-label">Location</label>
+              <select
+                id="locationId"
+                class="form-select form-select-custom"
+                formControlName="LocationId"
+              >
+                <option value="" disabled selected>Select Location</option>
+                @if(Alllocations.length !== 0){
+                <option *ngFor="let location of Alllocations" [value]="location.id">
+                  {{ location.name }}
+                </option>
+                }
+              </select>
+              <div *ngIf="isInvalid('LocationId')" class="text-danger small">
+                Location is required
+              </div>
             </div>
-          </div>
 
-          <!-- ProjectDescription -->
-          <div class="mb-3">
-            <label for="slkDescription" class="form-label">Project Description</label>
-            <quill-editor
-              id="description"
-              class="w-100 editor-custom"
-              formControlName="ProjectDescription"
-              [modules]="{
-                toolbar: [
-                  ['bold', 'italic', 'underline'],
-                  [{ list: 'ordered' }, { list: 'bullet' }]
-                ]
-              }"
-              [placeholder]="'Enter Company description'"
-            ></quill-editor>
-            <div *ngIf="isInvalid('ProjectDescription')" class="text-danger small">
-              Project Description is required
+            <!-- CompanyId -->
+            <div class="form-group mb-3">
+              <label for="companyId" class="form-label">Company</label>
+              <select
+                id="companyId"
+                class="form-select form-select-custom"
+                formControlName="CompanyId"
+              >
+                <option value="" disabled selected>Select Company</option>
+                @if(AllComapnies.length !== 0){
+                <option *ngFor="let company of AllComapnies" [value]="company.id">
+                  {{ company.companyName }}
+                </option>
+                }
+              </select>
+              <div *ngIf="isInvalid('LocationId')" class="text-danger small">
+                Location is required
+              </div>
             </div>
           </div>
 
@@ -321,19 +313,35 @@
               Domain Skills are required
             </div>
           </div>
-        </div>
 
-        <!-- Requsition By -->
-        <div class="mb-3">
-          <label for="skills" class="form-label">Skills</label>
-          <div class="">
-            <p-autoComplete
-              formControlName="RequesitionBy"
-              [suggestions]="usersuggestions"
-              (completeMethod)="searchuser($event)"
-              placeholder="Enter UserName"
-              [forceSelection]="true"
-            ></p-autoComplete>
+          <div class="d-flex gap-3 justify-content-between requsition-custom">
+            <!-- Requsition By -->
+            <div class="mb-3">
+              <label for="RequesitionName" class="form-label">Requsition By</label>
+              <p-autoComplete
+                id="RequesitionName"
+                class="d-block RequesitionName-custom"
+                formControlName="RequesitionBy"
+                [suggestions]="usersuggestions"
+                (completeMethod)="searchuser($event)"
+                optionLabel="userName"
+                placeholder="Enter UserName"
+                [forceSelection]="true"
+              ></p-autoComplete>
+            </div>
+
+            <div class="mb-3">
+              <label for="startDate" class="form-label">Requsition Date</label>
+              <input
+                type="date"
+                id="startDate"
+                class="form-control"
+                formControlName="RequesitionDate"
+              />
+              <div *ngIf="isInvalid('RequesitionDate')" class="text-danger small">
+                RequesitionDate is required
+              </div>
+            </div>
           </div>
         </div>
 

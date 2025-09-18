@@ -5,10 +5,19 @@ import { Router } from '@angular/router';
 import { AutoComplete } from 'primeng/autocomplete';
 import { JobPostService } from '../../services/jobpost.service';
 import { QuillModule } from 'ngx-quill';
-import { project, role, location, user } from '../../models/jobpostresponse';
+import {
+  project,
+  role,
+  location,
+  user,
+  company,
+  AllJobDetails,
+} from '../../models/jobpostresponse';
 import { forkJoin } from 'rxjs';
 import { jobdetails } from '../../models/jobpostrequest';
 import { LoginResponse } from '../../models/loginResponseModel';
+import { ToastrService } from 'ngx-toastr';
+import { RouterModule } from '@angular/router';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -18,7 +27,7 @@ interface AutoCompleteCompleteEvent {
 @Component({
   selector: 'app-jobpost',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AutoComplete, QuillModule],
+  imports: [CommonModule, ReactiveFormsModule, AutoComplete, QuillModule, RouterModule],
   templateUrl: './jobpost.component.html',
   styleUrl: './jobpost.component.scss',
 })
@@ -32,13 +41,16 @@ export class JobPostComponent {
   Allprojects: project[] = [];
   Alllocations: location[] = [];
   AllUsers: user[] = [];
+  AllComapnies: company[] = [];
   userDetails!: LoginResponse;
+  AllUserJobDetilas: AllJobDetails[] = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private fb: FormBuilder,
     private jobPostService: JobPostService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -46,9 +58,9 @@ export class JobPostComponent {
       RoleId: ['', Validators.required],
       ProjectId: ['', Validators.required],
       LocationId: ['', Validators.required],
-      ProjectDescription: ['', Validators.required],
+      CompanyId: ['', Validators.required],
       Skillholder: [''],
-      Skills: this.fb.array([], Validators.required),
+      Skills: this.fb.array([]),
       NonDbSkills: this.fb.array([]),
       RoleDescription: ['', Validators.required],
       Responsibilities: ['', Validators.required],
@@ -65,12 +77,16 @@ export class JobPostComponent {
         roles: this.jobPostService.GetRoles(),
         projects: this.jobPostService.GetProjects(),
         locations: this.jobPostService.Getlocations(),
+        users: this.jobPostService.Getusers(),
+        companies: this.jobPostService.Getcompanies(),
       }).subscribe({
         next: (result) => {
           this.AllSkills = result.skills.map((item: any) => item.skillName);
           this.Allroles = result.roles;
           this.Allprojects = result.projects;
           this.Alllocations = result.locations;
+          this.AllUsers = result.users;
+          this.AllComapnies = result.companies;
         },
         error: (err) => {
           console.error('Error loading data:', err);
@@ -82,6 +98,15 @@ export class JobPostComponent {
       if (userDetailsJson !== null) {
         this.userDetails = JSON.parse(userDetailsJson);
       }
+
+      this.jobPostService.GetAllJobDetails(this.userDetails.id).subscribe({
+        next: (res) => {
+          this.AllUserJobDetilas = res.map((job) => ({
+            ...job,
+            createdDate: new Date(job.createdDate).toLocaleDateString('en-GB'),
+          }));
+        },
+      });
     }
   }
 
@@ -94,6 +119,38 @@ export class JobPostComponent {
         this.NewJobmodal = new bootstrap.Modal(NewJobmodalEl);
       }
     }
+  }
+
+  EditJobDetials(id: number) {
+    this.jobPostService.GetJobDetilsById(id).subscribe({
+      next: (job) => {
+        (this.NewJobForm.get('Skills') as FormArray).clear();
+        (this.NewJobForm.get('NonDbSkills') as FormArray).clear();
+
+        const skillsArray = job.skills ? job.skills.split(',').map((s) => s.trim()) : [];
+
+        skillsArray.forEach((skill) => {
+          (this.NewJobForm.get('Skills') as FormArray).push(this.fb.control(skill));
+        });
+
+        this.NewJobForm.patchValue({
+          RoleId: job.roleId,
+          ProjectId: job.projectId,
+          LocationId: job.locationId,
+          CompanyId: job.companyId,
+          Skillholder: job.skills,
+          RoleDescription: job.rolePurpose,
+          Responsibilities: job.responsibilities,
+          EducationQualification: job.educationDetails,
+          ExperienceRequired: job.experienceRequired,
+          DomainSkills: job.domainFunctionalSkills,
+          RequesitionBy: job.requesitionBy,
+          RequesitionDate: job.requesitionDate,
+        });
+
+        this.NewJobmodal.show();
+      },
+    });
   }
 
   // Auto-Complete
@@ -130,16 +187,21 @@ export class JobPostComponent {
     this.skills.removeAt(index);
   }
 
-  // Requsition By AutoComplete
+  // Requsition By -- AutoComplete
   searchuser(event: AutoCompleteCompleteEvent) {
-    const terms = event.query
-      .toLowerCase()
-      .split(' ')
-      .filter((t) => t.trim() !== '');
+    if (event.query.replace(/\s/g, '').length >= 3) {
+      const terms = event.query.toLowerCase().split(/\s+/).filter(Boolean);
 
-    this.usersuggestions = this.AllUsers.filter((user) =>
-      terms.some((term) => user.username.toLowerCase().includes(term))
-    );
+      this.usersuggestions = this.AllUsers.filter((user) => {
+        const names = user.userName.toLowerCase().split(/\s+/).filter(Boolean);
+
+        return terms.every((term, index) => {
+          return !names[index] || names[index].includes(term);
+        });
+      });
+    } else {
+      this.usersuggestions = [];
+    }
   }
 
   // Form Handling
@@ -160,27 +222,33 @@ export class JobPostComponent {
         roleId: this.NewJobForm.get('RoleId')?.value,
         projectId: this.NewJobForm.get('ProjectId')?.value,
         locationId: this.NewJobForm.get('LocationId')?.value,
-        projectDescription: this.NewJobForm.get('ProjectDescription')?.value,
+        companyId: this.NewJobForm.get('CompanyId')?.value,
         skills: this.NewJobForm.get('Skills')?.value || [],
         nonDbSkills: this.NewJobForm.get('NonDbSkills')?.value || [],
-        roleDescription: this.NewJobForm.get('RoleDescription')?.value,
+        RolePurpose: this.NewJobForm.get('RoleDescription')?.value,
         responsibilities: this.NewJobForm.get('Responsibilities')?.value,
-        educationQualification: this.NewJobForm.get('EducationQualification')?.value,
+        educationDetails: this.NewJobForm.get('EducationQualification')?.value,
         experienceRequired: this.NewJobForm.get('ExperienceRequired')?.value,
-        domainSkills: this.NewJobForm.get('DomainSkills')?.value,
+        domainFunctionalSkills: this.NewJobForm.get('DomainSkills')?.value,
         loginId: this.userDetails.id,
         userId: this.userDetails.id,
-        requesitionBy: 1,
-        requesitionDate: '',
+        requesitionBy: this.NewJobForm.get('RequesitionBy')?.value.id,
+        requesitionDate: this.NewJobForm.get('RequesitionDate')?.value,
       };
 
-      console.log();
+      this.jobPostService.InsertJobDetails(insertform).subscribe({
+        next: (res) => {
+          this.resetForm();
+          this.NewJobmodal.hide();
+          this.toastr.success('Job posted successfully!', 'Success');
+        },
+      });
 
-      // this.jobPostService.InsertJobDetails(insertform).subscribe({
-      //   next: (res) => {
-      //     console.log(res);
-      //   },
-      // });
+      this.jobPostService.GetSkills().subscribe({
+        next: (res) => {
+          this.AllSkills = res.map((item: any) => item.skillName);
+        },
+      });
     } else {
       this.NewJobForm.markAllAsTouched();
       return;
@@ -189,10 +257,11 @@ export class JobPostComponent {
 
   resetForm() {
     this.NewJobForm.reset();
+    while (this.skills.length !== 0) {
+      this.skills.removeAt(0);
+    }
   }
-  onCancel() {
-    // this.jobForm.reset();
-  }
+
   isInvalid(controlName: string): boolean {
     const control = this.NewJobForm.get(controlName);
     return !!(control && control.invalid && (control.dirty || control.touched));

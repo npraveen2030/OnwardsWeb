@@ -1,7 +1,16 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { location, project, role, skill, user } from '../models/jobpostresponse';
+import {
+  AllJobDetails,
+  company,
+  JobDetailsresponse,
+  location,
+  project,
+  role,
+  skill,
+  user,
+} from '../models/jobpostresponse';
 import { jobdetails } from '../models/jobpostrequest';
 
 @Injectable({
@@ -61,7 +70,18 @@ export class JobPostService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.get<user[]>(`${this.apiService}/User`, {
+    return this.http.get<user[]>(`${this.apiService}/JobPost/getusers`, {
+      headers,
+      withCredentials: true,
+    });
+  }
+
+  Getcompanies(): Observable<company[]> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get<company[]>(`${this.apiService}/JobPost/getcompanies`, {
       headers,
       withCredentials: true,
     });
@@ -72,7 +92,30 @@ export class JobPostService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.post<{ message: string }>(`${this.apiService}/JobDetails`, details, {
+    return this.http.post<{ message: string }>(`${this.apiService}/JobDetails/insert`, details, {
+      headers,
+      withCredentials: true,
+    });
+  }
+
+  GetAllJobDetails(userId?: number): Observable<AllJobDetails[]> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get<AllJobDetails[]>(`${this.apiService}/JobDetails/getall`, {
+      headers,
+      withCredentials: true,
+      params: userId ? { userId: userId.toString() } : {},
+    });
+  }
+
+  GetJobDetilsById(id: number): Observable<JobDetailsresponse> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get<JobDetailsresponse>(`${this.apiService}/JobDetails/${id}`, {
       headers,
       withCredentials: true,
     });

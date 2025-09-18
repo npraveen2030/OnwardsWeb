@@ -5,14 +5,14 @@ export interface jobdetails extends BaseEntity {
   roleId: number;
   projectId: number;
   locationId: number;
-  projectDescription: string;
+  companyId: number;
   skills: string[];
   nonDbSkills: string[];
-  roleDescription: string;
+  RolePurpose: string;
   responsibilities: string;
-  educationQualification: string;
+  educationDetails: string;
   experienceRequired: string;
-  domainSkills: string;
+  domainFunctionalSkills: string;
   requesitionBy: number;
   requesitionDate: string;
 }

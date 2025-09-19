@@ -91,9 +91,27 @@ export class JobPostService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-
+    debugger;
     return this.http.post<{ message: string }>(`${this.apiService}/JobDetails/insert`, details, {
       headers,
+      withCredentials: true,
+    });
+  }
+
+  UpdateJobDetails(details: jobdetails): Observable<{ message: string }> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.put<{ message: string }>(`${this.apiService}/JobDetails/update`, details, {
+      headers,
+      withCredentials: true,
+    });
+  }
+
+  DeleteJobDetails(id: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiService}/JobDetails/delete/${id}`, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       withCredentials: true,
     });
   }

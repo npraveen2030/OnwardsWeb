@@ -34,6 +34,8 @@ interface AutoCompleteCompleteEvent {
 export class JobPostComponent {
   NewJobForm!: FormGroup;
   NewJobmodal!: any;
+  DeleteJobmodal!: any;
+  tempDelId!: number;
   skillsuggestions: string[] = [];
   usersuggestions: user[] = [];
   AllSkills: string[] = [];
@@ -44,6 +46,7 @@ export class JobPostComponent {
   AllComapnies: company[] = [];
   userDetails!: LoginResponse;
   AllUserJobDetilas: AllJobDetails[] = [];
+  isSubmitButton: boolean = true;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -55,6 +58,7 @@ export class JobPostComponent {
 
   ngOnInit(): void {
     this.NewJobForm = this.fb.group({
+      Id: [''],
       RoleId: ['', Validators.required],
       ProjectId: ['', Validators.required],
       LocationId: ['', Validators.required],
@@ -99,14 +103,7 @@ export class JobPostComponent {
         this.userDetails = JSON.parse(userDetailsJson);
       }
 
-      this.jobPostService.GetAllJobDetails(this.userDetails.id).subscribe({
-        next: (res) => {
-          this.AllUserJobDetilas = res.map((job) => ({
-            ...job,
-            createdDate: new Date(job.createdDate).toLocaleDateString('en-GB'),
-          }));
-        },
-      });
+      this.GetJobDetails();
     }
   }
 
@@ -114,11 +111,27 @@ export class JobPostComponent {
     if (isPlatformBrowser(this.platformId)) {
       const bootstrap = (window as any).bootstrap;
       const NewJobmodalEl = document.getElementById('NewJobmodal');
+      const DeleteJobmodalEl = document.getElementById('deletejobdetails');
 
       if (NewJobmodalEl && bootstrap?.Modal) {
         this.NewJobmodal = new bootstrap.Modal(NewJobmodalEl);
       }
+
+      if (DeleteJobmodalEl && bootstrap?.Modal) {
+        this.DeleteJobmodal = new bootstrap.Modal(DeleteJobmodalEl);
+      }
     }
+  }
+
+  GetJobDetails() {
+    this.jobPostService.GetAllJobDetails(this.userDetails.id).subscribe({
+      next: (res) => {
+        this.AllUserJobDetilas = res.map((job) => ({
+          ...job,
+          createdDate: new Date(job.createdDate).toLocaleDateString('en-GB'),
+        }));
+      },
+    });
   }
 
   EditJobDetials(id: number) {
@@ -127,28 +140,51 @@ export class JobPostComponent {
         (this.NewJobForm.get('Skills') as FormArray).clear();
         (this.NewJobForm.get('NonDbSkills') as FormArray).clear();
 
-        const skillsArray = job.skills ? job.skills.split(',').map((s) => s.trim()) : [];
+        const skillsArray = job.skills
+          ? job.skills
+              .split(',')
+              .map((s) => s.trim())
+              .filter(Boolean)
+          : [];
 
         skillsArray.forEach((skill) => {
           (this.NewJobForm.get('Skills') as FormArray).push(this.fb.control(skill));
         });
 
         this.NewJobForm.patchValue({
+          Id: job.id,
           RoleId: job.roleId,
           ProjectId: job.projectId,
           LocationId: job.locationId,
           CompanyId: job.companyId,
-          Skillholder: job.skills,
           RoleDescription: job.rolePurpose,
           Responsibilities: job.responsibilities,
           EducationQualification: job.educationDetails,
           ExperienceRequired: job.experienceRequired,
           DomainSkills: job.domainFunctionalSkills,
-          RequesitionBy: job.requesitionBy,
-          RequesitionDate: job.requesitionDate,
+          RequesitionBy: {
+            id: job.requesitionBy,
+            userName: job.requesitionUserName,
+          },
+          RequesitionDate: job.requesitionDate.split('T')[0],
         });
 
         this.NewJobmodal.show();
+      },
+    });
+  }
+
+  ConfirmDeleteJobDetails(id: number) {
+    this.tempDelId = id;
+    this.DeleteJobmodal?.show();
+  }
+
+  DeleteJobDetails() {
+    this.jobPostService.DeleteJobDetails(this.tempDelId).subscribe({
+      next: (res) => {
+        this.GetJobDetails();
+        this.DeleteJobmodal?.hide();
+        this.toastr.success('Job Deleted successfully!', 'Success');
       },
     });
   }
@@ -217,8 +253,8 @@ export class JobPostComponent {
         }
       }
 
-      const insertform: jobdetails = {
-        id: 0,
+      const submitform: jobdetails = {
+        id: this.NewJobForm.get('Id')?.value === '' ? null : this.NewJobForm.get('Id')?.value,
         roleId: this.NewJobForm.get('RoleId')?.value,
         projectId: this.NewJobForm.get('ProjectId')?.value,
         locationId: this.NewJobForm.get('LocationId')?.value,
@@ -236,13 +272,25 @@ export class JobPostComponent {
         requesitionDate: this.NewJobForm.get('RequesitionDate')?.value,
       };
 
-      this.jobPostService.InsertJobDetails(insertform).subscribe({
-        next: (res) => {
-          this.resetForm();
-          this.NewJobmodal.hide();
-          this.toastr.success('Job posted successfully!', 'Success');
-        },
-      });
+      if (submitform.id === null) {
+        this.jobPostService.InsertJobDetails(submitform).subscribe({
+          next: (res) => {
+            this.GetJobDetails();
+            this.resetForm();
+            this.NewJobmodal.hide();
+            this.toastr.success('Job posted successfully!', 'Success');
+          },
+        });
+      } else {
+        this.jobPostService.UpdateJobDetails(submitform).subscribe({
+          next: (res) => {
+            this.GetJobDetails();
+            this.resetForm();
+            this.NewJobmodal.hide();
+            this.toastr.success('Job Updated successfully!', 'Success');
+          },
+        });
+      }
 
       this.jobPostService.GetSkills().subscribe({
         next: (res) => {

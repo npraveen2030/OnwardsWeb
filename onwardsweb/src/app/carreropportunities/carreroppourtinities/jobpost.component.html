@@ -1,24 +1,22 @@
 <div class="d-flex justify-content-between align-items-center p-2 collapse-custom">
   <h4 class="ms-3">Post Job</h4>
-  <button
-    class="btn btn-secondary me-3"
-    data-bs-toggle="collapse"
-    data-bs-target="#CollapsePost"
-    aria-expanded="true"
-    aria-controls="CollapsePost"
-  >
-    &#8595;
-  </button>
-</div>
-<div id="CollapsePost" class="collapse show collapse-content-custom">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4>Admin Posted Jobs</h4>
+  <div class="d-flex gap-3">
     <button class="btn btn-success" (click)="this.NewJobmodal?.show()">
       <i class="bi bi-plus-circle"></i> Post Job
     </button>
+    <button
+      class="btn btn-secondary me-3"
+      data-bs-toggle="collapse"
+      data-bs-target="#CollapsePost"
+      aria-expanded="true"
+      aria-controls="CollapsePost"
+    >
+      &#8595;
+    </button>
   </div>
-
-  <div class="container mt-4">
+</div>
+<div id="CollapsePost" class="collapse show collapse-content-custom">
+  <div class="container mt-1">
     <!-- Header Section -->
     <div class="d-flex justify-content-start align-items-center gap-5 mb-2 header-custom">
       <!-- Left Section (Items per page) -->
@@ -68,7 +66,9 @@
             <i class="bi bi-pencil-square"></i>
           </button>
 
-          <button class="btn btn-danger btn-sm me-5"><i class="bi bi-trash"></i></button>
+          <button class="btn btn-danger btn-sm me-5" (click)="ConfirmDeleteJobDetails(job.id)">
+            <i class="bi bi-trash"></i>
+          </button>
         </div>
       </div>
       }
@@ -76,6 +76,7 @@
   </div>
 </div>
 
+<!------------------------------- New Job Form ----------------------------------->
 <div
   class="modal fade"
   id="NewJobmodal"
@@ -314,7 +315,7 @@
             </div>
           </div>
 
-          <div class="d-flex gap-3 justify-content-between requsition-custom">
+          <div class="d-flex gap-3 justify-content-between requsition-custom mb-5">
             <!-- Requsition By -->
             <div class="mb-3">
               <label for="RequesitionName" class="form-label">Requsition By</label>
@@ -351,6 +352,31 @@
           <button type="button" class="btn btn-danger" (click)="resetForm()">Reset</button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<!------------------------------- Delete confirmation ----------------------------------->
+<div
+  class="modal fade"
+  id="deletejobdetails"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deletejobdetailsLabel">Delete Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">Do you want to delete ?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="DeleteJobDetails()">Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>

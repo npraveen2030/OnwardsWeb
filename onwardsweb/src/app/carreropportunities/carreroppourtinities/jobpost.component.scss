@@ -9,23 +9,23 @@
   height: 80vh; /* Full modal height */
 }
 
-.modal-body {
+.modal-body-custom {
   height: 70vh;
   overflow-y: auto; /* Enable vertical scrolling */
   padding-right: 15px; /* prevent scrollbar overlapping content */
 }
 
 /* Scrollbar styling */
-.modal-body::-webkit-scrollbar {
+.modal-body-custom::-webkit-scrollbar {
   width: 8px;
 }
 
-.modal-body::-webkit-scrollbar-thumb {
+.modal-body-custom::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 4px;
 }
 
-.modal-body::-webkit-scrollbar-track {
+.modal-body-custom::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0.05);
 }
 

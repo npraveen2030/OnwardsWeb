@@ -37,7 +37,7 @@ export interface AllJobDetails {
 }
 
 export interface JobDetailsresponse {
-  id: number;
+  id?: number;
   projectId: number;
   projectName: string;
   roleId: number;

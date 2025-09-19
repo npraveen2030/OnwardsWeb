@@ -1,7 +1,7 @@
 import { BaseEntity } from './BaseEntity';
 
 export interface jobdetails extends BaseEntity {
-  id: number;
+  id?: number;
   roleId: number;
   projectId: number;
   locationId: number;

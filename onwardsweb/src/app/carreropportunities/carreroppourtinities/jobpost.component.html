@@ -15,34 +15,42 @@
     </button>
   </div>
 </div>
-<div id="CollapsePost" class="collapse show collapse-content-custom">
+<div id="CollapsePost" class="collapse collapse-content-custom">
   <div class="container mt-1">
     <!-- Header Section -->
     <div class="d-flex justify-content-start align-items-center gap-5 mb-2 header-custom">
       <!-- Left Section (Items per page) -->
       <div class="d-flex align-items-center gap-2">
-        <label for="itemsPerPage" class="me-1 mb-0 small">Items per page</label>
-        <select id="itemsPerPage" class="form-select form-select-sm w-auto compact-select">
-          <option>10</option>
-          <option>20</option>
-          <option>30</option>
-          <option>50</option>
+        <label for="itemsPerPage" class="me-1 mb-0 small">Items per page:</label>
+        <select
+          id="itemsPerPage"
+          class="form-select form-select-sm w-auto"
+          [(ngModel)]="pagination.itemsPerPage"
+          (change)="updatePagination()"
+        >
+          <option [value]="5">5</option>
+          <option [value]="10">10</option>
+          <option [value]="20">20</option>
         </select>
       </div>
 
       <!-- Center Section (Pagination) -->
       <nav aria-label="Page navigation" class="d-flex align-items-center">
         <ul class="pagination pagination-sm mb-0 compact-pagination">
-          <li class="page-item disabled">
-            <a class="page-link">Prev</a>
+          <li class="page-item" [class.disabled]="pagination.currentPage === 1">
+            <a class="page-link" (click)="changePage(pagination.currentPage - 1)">Prev</a>
           </li>
-          <li class="page-item active">
-            <a class="page-link" href="#">1</a>
+
+          <li
+            class="page-item"
+            *ngFor="let page of getPageNumbers()"
+            [class.active]="page === pagination.currentPage"
+          >
+            <a class="page-link" (click)="changePage(page)">{{ page }}</a>
           </li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">Next</a>
+
+          <li class="page-item" [class.disabled]="pagination.currentPage === getTotalPages()">
+            <a class="page-link" (click)="changePage(pagination.currentPage + 1)">Next</a>
           </li>
         </ul>
       </nav>
@@ -50,14 +58,14 @@
 
     <!-- Job List -->
     <div id="jobList">
-      @for (job of AllUserJobDetilas;track $index) {
+      @for (job of paginatedUserJobDetails;track $index) {
       <div class="row align-items-center job-card">
         <div class="col-md-9">
-          <a [routerLink]="['/jobdescription', job.id]" class="job-title">
+          <a href="javascript:void(0)" (click)="showJobDetails(job.id)" class="job-title">
             {{ job.roleName }}
           </a>
           <div class="job-meta">
-            Requisition ID: {{ job.requesitionId }} - Posted on {{ job.createdDate }} -
+            Requisition ID: {{ job.id }} - Posted on {{ job.createdDate }} -
             {{ job.locationName }}
           </div>
         </div>
@@ -163,7 +171,7 @@
                 </option>
                 }
               </select>
-              <div *ngIf="isInvalid('LocationId')" class="text-danger small">
+              <div *ngIf="isInvalid('CompanyId')" class="text-danger small">
                 Location is required
               </div>
             </div>
@@ -370,6 +378,31 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="deletejobdetailsLabel">Delete Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">Do you want to delete ?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="DeleteJobDetails()">Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!------------------------------- Job Details ----------------------------------->
+<div
+  class="modal fade"
+  id="showjobdetails"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="showjobdetailsLabel">Delete Confirmation</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">Do you want to delete ?</div>

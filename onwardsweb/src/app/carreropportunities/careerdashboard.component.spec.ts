@@ -8,9 +8,8 @@ describe('CareerdashboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CareerdashboardComponent]
-    })
-    .compileComponents();
+      imports: [CareerdashboardComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CareerdashboardComponent);
     component = fixture.componentInstance;

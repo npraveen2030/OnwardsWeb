@@ -1,3 +1,4 @@
+@if (showlist) {
 <div class="container-fluid mt-4">
   <div class="card">
     <div class="card-header bg-light">
@@ -12,13 +13,13 @@
           <thead class="table-light">
             <tr>
               <th>Job Title ↑</th>
-              <th>Actions</th>
               <th>Req ID</th>
               <th>Date Applied</th>
               <th>Status</th>
               <th>Status Date</th>
               <th>Next Step</th>
               <th>Job Location</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -26,14 +27,20 @@
               <td colspan="8" class="text-center">Displaying 0 records</td>
             </tr>
             <tr *ngFor="let job of jobApplications | slice : 0 : itemsPerPage">
-              <td>{{ job.jobTitle }}</td>
-              <td>{{ job.actions }}</td>
-              <td>{{ job.reqId }}</td>
-              <td>{{ job.dateApplied }}</td>
-              <td>{{ job.status }}</td>
-              <td>{{ job.statusDate }}</td>
-              <td>{{ job.nextStep }}</td>
-              <td>{{ job.jobLocation }}</td>
+              <td>{{ job.roleName }}</td>
+              <td>{{ job.jobId }}</td>
+              <td>{{ job.createdDate | date : 'dd/MM/yyyy' }}</td>
+              <td>{{ job.statusName }}</td>
+              <td>statusDate</td>
+              <td>nextStep</td>
+              <td>{{ job.locationName }}</td>
+              <td>
+                <a href="javascript:void(0)" (click)="showJobdetails(job.jobId)" class="job-title">
+                  view </a
+                >|<a href="javascript:void(0)" (click)="showdeletemodal(job.id)" class="job-title">
+                  withdraw
+                </a>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -50,6 +57,35 @@
         </div>
 
         <button class="btn btn-primary" (click)="findMoreJobs()">Find More Jobs</button>
+      </div>
+    </div>
+  </div>
+</div>
+} @else {
+<app-jobdescription [id]="JobId" [switchToJobList]="switchtolist.bind(this)"></app-jobdescription>
+}
+
+<div
+  class="modal fade custom-high-zindex-modal"
+  id="jobapplicationmodal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Label">WIthdrawal Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">Do you want to delete ?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="withdrawJobApplication()">
+          Delete
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

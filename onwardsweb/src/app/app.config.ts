@@ -26,7 +26,6 @@ import { ReferralTrackingComponent } from './carreropportunities/referral-tracki
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeng/themes/lara';
 import { ToastrModule } from 'ngx-toastr';
-import { JobdescriptionComponent } from './carreropportunities/carreroppourtinities/jobdescription.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -53,7 +52,6 @@ const routes: Route[] = [
       { path: 'savedjobs', component: SavedJobComponent },
       { path: 'savedapplications', component: SavedApplicationComponent },
       { path: 'referraltracking', component: ReferralTrackingComponent },
-      { path: 'jobdescription/:id', component: JobdescriptionComponent },
     ],
   },
 ];

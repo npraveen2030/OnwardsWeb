@@ -55,7 +55,33 @@
 }
 
 .searchbody-custom {
-  border: 1px solid #6c757d;
+  border: 1px solid #d5d6d7;
   padding: 1%; /* Reduced padding */
-  border-radius: 12px; /* Smaller border radius */
+  border-radius: 0 0 12px 12px; /* Smaller border radius */
+}
+
+.multiSelect-custom {
+  width: 100% !important;
+}
+
+.multiSelect-custom .p-multiselect {
+  width: 100% !important;
+}
+
+.multiSelect-custom .p-multiselect-label {
+  width: 100% !important;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-header {
+  background-color: #e5e5e5;
+  border-radius: 12px 12px 0 0;
+}
+
+.search-header p {
+  display: flex;
+  align-items: center;
+  padding-left: 2%;
 }

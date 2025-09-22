@@ -1,0 +1,107 @@
+<div class="container-fluid mt-4">
+  <div class="card">
+    <div class="card-header bg-light">
+      <h5 class="mb-0">My Saved Searches</h5>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="table-light">
+            <tr>
+              <th class="searchname-custom">Search Name</th>
+              <th>Key Word</th>
+              <th>Req ID</th>
+              <th>Locations</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="savedSearches.length === 0">
+              <td colspan="5" class="text-center">Displaying 0 records</td>
+            </tr>
+
+            <tr *ngFor="let search of savedSearches; let i = index">
+              <!-- Inline editable Search Name -->
+              <td (click)="startEdit(i)">
+                <input
+                  *ngIf="editIndex === i"
+                  #editInput
+                  [(ngModel)]="search.searchName"
+                  class="form-control form-control-sm w-100"
+                />
+                <span *ngIf="editIndex !== i">{{ search.searchName }}</span>
+              </td>
+
+              <td>{{ search.keyword }}</td>
+              <td>{{ search.reqId }}</td>
+              <td>{{ search.location }}</td>
+
+              <td>
+                @if(editIndex === i) {
+                <a href="javascript:void(0)" class="job-title" (click)="saveEdit(i)"> Save </a>|<a
+                  href="javascript:void(0)"
+                  (click)="exitEdit()"
+                  class="job-title"
+                >
+                  Cancel
+                </a>
+                } @else {
+                <a
+                  href="javascript:void(0)"
+                  class="job-title"
+                  (click)="viewsavedsearch(search.id, search.search)"
+                >
+                  View </a
+                >|<a href="javascript:void(0)" (click)="startEdit(i)" class="job-title"> Edit </a
+                >|<a
+                  href="javascript:void(0)"
+                  (click)="showdeletemodal(search.id)"
+                  class="job-title"
+                >
+                  Delete
+                </a>
+                }
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <div>
+          Items per page:
+          <select class="form-select d-inline-block w-auto">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade custom-high-zindex-modal"
+  id="savesearchmodal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Label">Delete Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">Do you want to delete ?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteSavedSearch()">Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

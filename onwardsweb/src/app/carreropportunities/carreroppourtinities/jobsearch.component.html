@@ -1,3 +1,4 @@
+@if(showlist) {
 <div class="bg-light">
   <div class="mx-2 my-2">
     <div class="row g-2">
@@ -6,7 +7,12 @@
         <div class="card p-4 h-100">
           <h4 class="mb-4">Search Job</h4>
 
-          <form class="d-flex flex-column gap-3">
+          <form
+            [formGroup]="jobSearchForm"
+            (ngSubmit)="onSubmitfiltersearch()"
+            class="d-flex flex-column gap-3"
+          >
+            <!-- Keyword -->
             <div>
               <label for="keyword" class="form-label">Keyword</label>
               <input
@@ -14,34 +20,51 @@
                 class="form-control"
                 id="keyword"
                 placeholder="Job Title or Keywords"
+                formControlName="keyword"
               />
             </div>
 
+            <!-- Requisition ID -->
             <div>
-              <label for="language" class="form-label">Job Language</label>
+              <label for="reqId" class="form-label">Requisition ID</label>
               <input
                 type="text"
                 class="form-control"
-                id="language"
-                placeholder="English, Hindi..."
+                id="reqId"
+                placeholder="Req ID"
+                formControlName="reqId"
               />
             </div>
 
-            <div>
-              <label for="reqId" class="form-label">Requisition ID</label>
-              <input type="text" class="form-control" id="reqId" placeholder="Req ID" />
-            </div>
-
+            <!-- Job Location -->
             <div>
               <label for="location" class="form-label">Job Location</label>
-              <input type="text" class="form-control" id="location" placeholder="City, State" />
+              <div>
+                <p-multiSelect
+                  [options]="cities"
+                  formControlName="location"
+                  optionLabel="name"
+                  placeholder="Select Cities"
+                  [maxSelectedLabels]="3"
+                  class="multiSelect-custom"
+                >
+                </p-multiSelect>
+              </div>
             </div>
 
+            <!-- Buttons -->
             <div class="d-flex justify-content-start gap-2 mt-3">
-              <button type="submit" class="btn btn-primary">Search</button>
-              <button type="reset" class="btn btn-secondary">Cancel</button>
+              <button type="submit" class="btn btn-primary" [disabled]="jobSearchForm.invalid">
+                Search
+              </button>
+              <button type="button" class="btn btn-secondary" (click)="onResetfiltersearch()">
+                clear
+              </button>
             </div>
           </form>
+          <button type="button" class="btn btn-warning mt-3" (click)="savesearch()">
+            save search
+          </button>
         </div>
       </div>
 
@@ -49,43 +72,51 @@
       <!-- ----------------------------------------------admin Jobs ---------------------------------------------- -->
       <div class="col-md-8">
         <div class="card p-4 vh-custom">
-          <app-jobpost></app-jobpost>
+          <app-jobpost
+            [showJobDetailsParent]="showJobdetails.bind(this)"
+            [RefreshSearchJobs]="getJobDetails.bind(this)"
+          ></app-jobpost>
           <!-- ----------------------------------------------All Jobs ---------------------------------------------- -->
-
-          <div class="searchbody-custom mt-2">
-            <div>
-              <p>54 jobs posted</p>
-            </div>
-
+          <div class="search-header mt-2">
+            <p>{{ AllUserJobDetilas.length }} jobs posted</p>
+          </div>
+          <div class="searchbody-custom">
             <div class="container mt-1">
               <!-- Header Section -->
               <div class="d-flex justify-content-between align-items-center mb-2 header-custom">
                 <!-- Left Section (Items per page) -->
                 <div class="d-flex align-items-center gap-2">
-                  <label for="itemsPerPage" class="me-1 mb-0 small">Items per page</label>
+                  <label for="itemsPerPage" class="me-1 mb-0 small">Items per page:</label>
                   <select
                     id="itemsPerPage"
-                    class="form-select form-select-sm w-auto compact-select"
+                    class="form-select form-select-sm w-auto"
+                    [(ngModel)]="pagination.itemsPerPage"
+                    (change)="updatePagination()"
                   >
-                    <option>10</option>
-                    <option>20</option>
-                    <option>50</option>
+                    <option [value]="5">5</option>
+                    <option [value]="10">10</option>
+                    <option [value]="20">20</option>
                   </select>
                 </div>
 
                 <!-- Center Section (Pagination) -->
                 <nav aria-label="Page navigation" class="d-flex align-items-center">
                   <ul class="pagination pagination-sm mb-0 compact-pagination">
-                    <li class="page-item disabled">
-                      <a class="page-link">Prev</a>
+                    <li class="page-item" [class.disabled]="pagination.currentPage === 1">
+                      <a class="page-link" (click)="changePage(pagination.currentPage - 1)">Prev</a>
                     </li>
-                    <li class="page-item active">
-                      <a class="page-link" href="#">1</a>
+
+                    @for (page of getPageNumbers(); track $index) {
+                    <li class="page-item" [class.active]="page === pagination.currentPage">
+                      <a class="page-link" (click)="changePage(page)">{{ page }}</a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                      <a class="page-link" href="#">Next</a>
+                    }
+
+                    <li
+                      class="page-item"
+                      [class.disabled]="pagination.currentPage === getTotalPages()"
+                    >
+                      <a class="page-link" (click)="changePage(pagination.currentPage + 1)">Next</a>
                     </li>
                   </ul>
                 </nav>
@@ -93,66 +124,44 @@
                 <!-- Right Section (Sort by) -->
                 <div class="d-flex align-items-center gap-1">
                   <span class="mb-0 small">Sort by:</span>
-                  <select class="form-select form-select-sm w-auto compact-select">
-                    <option>Date Posted</option>
-                    <option>Title</option>
+                  <select
+                    class="form-select form-select-sm w-auto compact-select"
+                    (change)="sortjobdetails($event)"
+                  >
+                    <option value="DP" default>Date Posted</option>
+                    <option value="RL">Relevance</option>
+                    <option value="JT">Job Title</option>
+                    <option value="RQ">Requisition ID</option>
+                    <option value="JL">Job Location</option>
                   </select>
                 </div>
               </div>
 
               <!-- Job List -->
               <div id="jobList">
-                <!-- Example Job Item -->
+                @for (job of paginatedUserJobDetails;track $index) {
                 <div class="row align-items-center job-card">
                   <div class="col-md-9">
-                    <a href="#" class="job-title">Technical Leader - Software</a>
+                    <a href="javascript:void(0)" (click)="showJobdetails(job.id)" class="job-title">
+                      {{ job.roleName }}
+                    </a>
                     <div class="job-meta">
-                      Requisition ID: 39026 - Posted on 09/04/2025 - United States
+                      Requisition ID: {{ job.id }} - Posted on
+                      {{ job.createdDate | date : 'dd/MM/yyyy' }} -
+                      {{ job.locationName }}
                     </div>
                   </div>
                   <div class="col-md-3 text-end">
                     <select class="form-select form-select-sm select-action">
                       <option>Select Action</option>
-                      <option>View</option>
-                      <option>Edit</option>
-                      <option>Delete</option>
+                      <option>Apply</option>
+                      <option>Save Job</option>
+                      <option>Email Job to Friend</option>
+                      <option>Refer Friend to Job</option>
                     </select>
                   </div>
                 </div>
-
-                <div class="row align-items-center job-card">
-                  <div class="col-md-9">
-                    <a href="#" class="job-title">Manager - Product</a>
-                    <div class="job-meta">
-                      Requisition ID: 39007 - Posted on 09/03/2025 - United States
-                    </div>
-                  </div>
-                  <div class="col-md-3 text-end">
-                    <select class="form-select form-select-sm select-action">
-                      <option>Select Action</option>
-                      <option>View</option>
-                      <option>Edit</option>
-                      <option>Delete</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="row align-items-center job-card">
-                  <div class="col-md-9">
-                    <a href="#" class="job-title">Team Leader - Testing</a>
-                    <div class="job-meta">
-                      Requisition ID: 38969 - Posted on 09/03/2025 - United States
-                    </div>
-                  </div>
-                  <div class="col-md-3 text-end">
-                    <select class="form-select form-select-sm select-action">
-                      <option>Select Action</option>
-                      <option>View</option>
-                      <option>Edit</option>
-                      <option>Delete</option>
-                    </select>
-                  </div>
-                </div>
+                }
               </div>
             </div>
           </div>
@@ -161,3 +170,6 @@
     </div>
   </div>
 </div>
+} @else {
+<app-jobdescription [id]="JobId" [switchToJobList]="switchtolist.bind(this)"></app-jobdescription>
+}

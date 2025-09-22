@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   AllJobDetails,
   company,
@@ -55,14 +55,14 @@ export class JobPostService {
   }
 
   Getlocations(): Observable<location[]> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    return this.http.get<location[]>(`${this.apiService}/Location`, {
-      headers,
-      withCredentials: true,
-    });
+    return this.http.get<any[]>(`${this.apiService}/Location`, { withCredentials: true }).pipe(
+      map((apiResponse) =>
+        apiResponse.map((item) => ({
+          id: item.id,
+          name: item.name,
+        }))
+      )
+    );
   }
 
   Getusers(): Observable<user[]> {
@@ -109,11 +109,14 @@ export class JobPostService {
     });
   }
 
-  DeleteJobDetails(id: number): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.apiService}/JobDetails/delete/${id}`, {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-      withCredentials: true,
-    });
+  DeleteJobDetails(id: number, loginid: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(
+      `${this.apiService}/JobDetails/delete/${id}/${loginid}`,
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        withCredentials: true,
+      }
+    );
   }
 
   GetAllJobDetails(userId?: number): Observable<AllJobDetails[]> {
@@ -136,6 +139,34 @@ export class JobPostService {
     return this.http.get<JobDetailsresponse>(`${this.apiService}/JobDetails/${id}`, {
       headers,
       withCredentials: true,
+    });
+  }
+
+  getSearchedJobDetails(keyword?: string, reqId?: number, locationIds: number[] = []) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    let params = new HttpParams();
+
+    if (keyword) {
+      params = params.set('keyword', keyword);
+    }
+
+    if (reqId !== undefined && reqId !== null) {
+      params = params.set('reqId', reqId.toString());
+    }
+
+    if (locationIds && locationIds.length > 0) {
+      locationIds.forEach((id) => {
+        params = params.append('locationIds', id.toString());
+      });
+    }
+
+    return this.http.get<AllJobDetails[]>(`${this.apiService}/JobDetails/search`, {
+      headers,
+      withCredentials: true,
+      params,
     });
   }
 }

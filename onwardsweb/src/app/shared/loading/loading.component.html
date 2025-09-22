@@ -1,0 +1,17 @@
+<div
+  *ngIf="loading$ | async"
+  class="app-loading-overlay"
+  role="status"
+  aria-live="polite"
+  aria-busy="true"
+>
+  <div class="app-loading-backdrop" aria-hidden="true"></div>
+
+  <div class="app-loading-panel">
+    <div class="spinner" aria-hidden="true"></div>
+    <div class="loading-text">Loading…</div>
+  </div>
+
+  <!-- hidden text for screen readers (optional) -->
+  <span class="sr-only">Application is loading, please wait.</span>
+</div>

@@ -1,1 +1,70 @@
-<h1>{{ jobId }}</h1>
+@if (JobDetails !== undefined) {
+
+<div class="header-jobrole">
+  <h3>Job Listing: {{ JobDetails.roleName }} ({{ JobDetails.id }})</h3>
+</div>
+
+<div class="job-container">
+  <!-- Job Header -->
+  <div class="job-header d-flex justify-content-between align-items-center">
+    <div>
+      <small class="text-muted"
+        >Requisition ID: {{ JobDetails.id }} • Posted {{ JobDetails.createdDate }} •
+        {{ JobDetails.locationName }}</small
+      >
+    </div>
+    <div class="job-actions">
+      <button class="btn btn-primary" (click)="applyjob()">Apply</button>
+      <button class="btn btn-outline-primary">Refer Friend to Job</button>
+      <button class="btn btn-outline-secondary">Email Job to Friend</button>
+      <button class="btn btn-outline-secondary" (click)="savejob()">Save Job</button>
+      <button class="btn btn-outline-secondary" (click)="PrintDetials()">Print</button>
+      <button class="btn btn-outline-secondary" (click)="returntolist()">Return to List</button>
+    </div>
+  </div>
+
+  <!-- Job Details -->
+  <div class="job-section" id="jobDetailsSection">
+    <h5>Job Listing Detail</h5>
+
+    <div class="job-details">
+      <strong>About Company:</strong><br />
+      {{ JobDetails.companyDescription }}
+      <br /><br />
+
+      <strong>Basic Information on the Position:</strong><br />
+      Position Name: {{ JobDetails.roleName }} <br /><br />
+
+      <strong>Mandatory/Required Skills & Location:</strong><br />
+      {{ JobDetails.skills }} - Location: {{ JobDetails.locationName }} <br /><br />
+
+      <strong>Purpose of the Role:</strong><br />
+      <div [innerHTML]="JobDetails.rolePurpose"></div>
+
+      <!-- Responsibilities -->
+      <strong>Key Responsibilities and Accountabilities:</strong>
+      <div [innerHTML]="JobDetails.responsibilities"></div>
+
+      <!-- Education -->
+      <strong>Education Qualification:</strong><br />
+      <div [innerHTML]="JobDetails.educationDetails"></div>
+
+      <!-- Experience -->
+      <strong>Minimum Experience Required:</strong><br />
+      <div [innerHTML]="JobDetails.experienceRequired"></div>
+
+      <!-- Domain Functional Skills -->
+      <strong>Domain Functional Skills:</strong>
+      <div [innerHTML]="JobDetails.domainFunctionalSkills"></div>
+    </div>
+  </div>
+
+  <!-- Footer Action Buttons -->
+  <div class="footer-actions">
+    <button class="btn btn-primary">Apply</button>
+    <button class="btn btn-outline-primary ms-2">Refer Friend to Job</button>
+    <button class="btn btn-outline-secondary ms-2">Email Job to Friend</button>
+    <button class="btn btn-outline-secondary ms-2">Save Job</button>
+  </div>
+</div>
+}

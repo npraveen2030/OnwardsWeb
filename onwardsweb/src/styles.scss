@@ -7,3 +7,27 @@
   margin: 0;
   padding: 0;
 }
+
+.app-loading-active {
+  overflow: hidden !important;
+  touch-action: none;
+  height: 100vh;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #jobDetailsSection,
+  #jobDetailsSection * {
+    visibility: visible;
+  }
+
+  #jobDetailsSection {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}

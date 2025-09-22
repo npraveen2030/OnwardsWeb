@@ -1,7 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, Input, PLATFORM_ID } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { AutoComplete } from 'primeng/autocomplete';
 import { JobPostService } from '../../services/jobpost.service';
 import { QuillModule } from 'ngx-quill';
@@ -18,6 +17,7 @@ import { jobdetails } from '../../models/jobpostrequest';
 import { LoginResponse } from '../../models/loginResponseModel';
 import { ToastrService } from 'ngx-toastr';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -27,7 +27,14 @@ interface AutoCompleteCompleteEvent {
 @Component({
   selector: 'app-jobpost',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AutoComplete, QuillModule, RouterModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    AutoComplete,
+    QuillModule,
+    RouterModule,
+    FormsModule,
+  ],
   templateUrl: './jobpost.component.html',
   styleUrl: './jobpost.component.scss',
 })
@@ -46,13 +53,19 @@ export class JobPostComponent {
   AllComapnies: company[] = [];
   userDetails!: LoginResponse;
   AllUserJobDetilas: AllJobDetails[] = [];
-  isSubmitButton: boolean = true;
+  paginatedUserJobDetails: AllJobDetails[] = [];
+  pagination = {
+    currentPage: 1,
+    itemsPerPage: 5,
+  };
+
+  @Input() showJobDetailsParent!: (id: number) => void;
+  @Input() RefreshSearchJobs!: () => void;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private fb: FormBuilder,
     private jobPostService: JobPostService,
-    private router: Router,
     private toastr: ToastrService
   ) {}
 
@@ -123,6 +136,28 @@ export class JobPostComponent {
     }
   }
 
+  // Pagination
+  updatePagination() {
+    const start = (this.pagination.currentPage - 1) * this.pagination.itemsPerPage;
+    const end = start + this.pagination.itemsPerPage;
+    this.paginatedUserJobDetails = this.AllUserJobDetilas.slice(start, end);
+  }
+
+  changePage(page: number) {
+    if (page >= 1 && page <= this.getTotalPages()) {
+      this.pagination.currentPage = page;
+      this.updatePagination();
+    }
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.AllUserJobDetilas.length / this.pagination.itemsPerPage);
+  }
+
+  getPageNumbers(): number[] {
+    return Array.from({ length: this.getTotalPages() }, (_, i) => i + 1);
+  }
+
   GetJobDetails() {
     this.jobPostService.GetAllJobDetails(this.userDetails.id).subscribe({
       next: (res) => {
@@ -130,6 +165,8 @@ export class JobPostComponent {
           ...job,
           createdDate: new Date(job.createdDate).toLocaleDateString('en-GB'),
         }));
+
+        this.updatePagination();
       },
     });
   }
@@ -180,13 +217,20 @@ export class JobPostComponent {
   }
 
   DeleteJobDetails() {
-    this.jobPostService.DeleteJobDetails(this.tempDelId).subscribe({
+    this.jobPostService.DeleteJobDetails(this.tempDelId, this.userDetails.id).subscribe({
       next: (res) => {
         this.GetJobDetails();
+        this.RefreshSearchJobs();
         this.DeleteJobmodal?.hide();
         this.toastr.success('Job Deleted successfully!', 'Success');
       },
     });
+  }
+
+  showJobDetails(id: number) {
+    if (this.showJobDetailsParent != null) {
+      this.showJobDetailsParent(id);
+    }
   }
 
   // Auto-Complete
@@ -276,6 +320,7 @@ export class JobPostComponent {
         this.jobPostService.InsertJobDetails(submitform).subscribe({
           next: (res) => {
             this.GetJobDetails();
+            this.RefreshSearchJobs();
             this.resetForm();
             this.NewJobmodal.hide();
             this.toastr.success('Job posted successfully!', 'Success');
@@ -285,6 +330,7 @@ export class JobPostComponent {
         this.jobPostService.UpdateJobDetails(submitform).subscribe({
           next: (res) => {
             this.GetJobDetails();
+            this.RefreshSearchJobs();
             this.resetForm();
             this.NewJobmodal.hide();
             this.toastr.success('Job Updated successfully!', 'Success');

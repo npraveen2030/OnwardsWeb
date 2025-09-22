@@ -1,38 +1,106 @@
-import { Component, OnInit } from '@angular/core';
-import { JobApplication } from '../../models/career/jobapplication';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { AutoComplete } from 'primeng/autocomplete';
-import { CareerService } from '../../services/career/career.service';
-// import { JobApplicationService } from './job-application.service';
-// import { JobApplication } from './job-application.model';
+import { Component, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { SavedJobService } from '../../services/savedjob.service';
+import { savedjobresponse } from '../../models/savedjobmodel';
+import { LoginResponse } from '../../models/loginResponseModel';
+import { JobdescriptionComponent } from '../carreroppourtinities/jobdescription.component';
+import { ToastrService } from 'ngx-toastr';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-saved-job',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, JobdescriptionComponent],
   templateUrl: './saved-job.component.html',
-  styleUrl: './saved-job.component.scss'
+  styleUrl: './saved-job.component.scss',
 })
-export class SavedJobComponent  implements OnInit {
-  jobApplications: JobApplication[] = [];
+export class SavedJobComponent {
+  jobApplications: savedjobresponse[] = [];
   itemsPerPage = 10;
+  userDetails!: LoginResponse;
+  JobId: number = 0;
+  showlist: boolean = true;
+  savejobmodal!: any;
+  tobedeltedid!: number;
+  @Input() switchTo?: (tabName: string) => void;
 
-  constructor(private careerService: CareerService) {}
+  constructor(
+    private savedJobService: SavedJobService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private toastr: ToastrService,
+    private loading: LoadingService
+  ) {}
 
   ngOnInit(): void {
-    this.careerService.getSavedJobs().subscribe((data) => {
-      this.jobApplications = data;
+    if (isPlatformBrowser(this.platformId)) {
+      const userDetailsJson: string | null = sessionStorage.getItem('userDetails');
+
+      if (userDetailsJson !== null) {
+        this.userDetails = JSON.parse(userDetailsJson);
+      }
+
+      this.savedJobs();
+    }
+  }
+
+  ngAfterViewInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const bootstrap = (window as any).bootstrap;
+      const modalElement = document.getElementById('savejobmodal');
+
+      if (modalElement && bootstrap?.Modal) {
+        this.savejobmodal = new bootstrap.Modal(modalElement);
+      }
+    }
+  }
+
+  savedJobs() {
+    this.loading.show();
+    this.savedJobService.getSavedJobs(this.userDetails.id).subscribe({
+      next: (data) => {
+        this.jobApplications = data;
+      },
+      error: (err) => {
+        console.log(err);
+      },
+      complete: () => {
+        this.loading.hide();
+      },
     });
   }
 
   onItemsPerPageChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.itemsPerPage = +select.value;
-    // Pagination logic can be added later
   }
 
   findMoreJobs(): void {
-    alert('Redirecting to job search page...');
+    if (this.switchTo !== undefined) {
+      this.switchTo('jobsearch');
+    }
+  }
+
+  switchtolist() {
+    this.showlist = true;
+  }
+
+  showJobdetails(id: number) {
+    this.JobId = id;
+    this.showlist = false;
+  }
+
+  showmodal(id: number) {
+    this.tobedeltedid = id;
+    this.savejobmodal?.show();
+  }
+
+  deleteSavedJob() {
+    if (this.tobedeltedid !== undefined) {
+      this.savedJobService.deletesavedjob(this.tobedeltedid).subscribe((res) => {
+        this.savedJobs();
+        this.toastr.success('Job unsaved successfully!');
+        this.savejobmodal?.hide();
+      });
+    }
   }
 }

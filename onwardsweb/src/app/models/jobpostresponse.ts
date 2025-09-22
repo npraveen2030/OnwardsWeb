@@ -30,7 +30,6 @@ export interface company {
 
 export interface AllJobDetails {
   id: number;
-  requesitionId: number;
   roleName: string;
   locationName: string;
   createdDate: string;

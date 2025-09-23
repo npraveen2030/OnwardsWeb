@@ -7,11 +7,13 @@ import { DatePipe } from '@angular/common';
 import { JobdescriptionComponent } from '../carreroppourtinities/jobdescription.component';
 import { LoadingService } from '../../services/loading.service';
 import { ToastrService } from 'ngx-toastr';
+import { TableModule } from 'primeng/table';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-jobapplication',
   standalone: true,
-  imports: [CommonModule, DatePipe, JobdescriptionComponent],
+  imports: [CommonModule, DatePipe, JobdescriptionComponent, TableModule, PaginatorModule],
   templateUrl: './jobapplication.component.html',
   styleUrl: './jobapplication.component.scss',
 })

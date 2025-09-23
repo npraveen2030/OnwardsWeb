@@ -6,11 +6,14 @@ import { LoginResponse } from '../../models/loginResponseModel';
 import { JobdescriptionComponent } from '../carreroppourtinities/jobdescription.component';
 import { ToastrService } from 'ngx-toastr';
 import { LoadingService } from '../../services/loading.service';
+import { TableModule } from 'primeng/table';
+import { PaginatorModule } from 'primeng/paginator';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-saved-job',
   standalone: true,
-  imports: [CommonModule, JobdescriptionComponent],
+  imports: [CommonModule, JobdescriptionComponent, TableModule, PaginatorModule, ButtonModule],
   templateUrl: './saved-job.component.html',
   styleUrl: './saved-job.component.scss',
 })
@@ -67,11 +70,6 @@ export class SavedJobComponent {
         this.loading.hide();
       },
     });
-  }
-
-  onItemsPerPageChange(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    this.itemsPerPage = +select.value;
   }
 
   findMoreJobs(): void {

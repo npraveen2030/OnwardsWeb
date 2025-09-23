@@ -1,17 +1,20 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, ElementRef, Inject, Input, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { JobdescriptionComponent } from '../carreroppourtinities/jobdescription.component';
 import { SavedSearchRequest, SavedSearchResponse } from '../../models/savedsearchmodel';
 import { SavedSearchService } from '../../services/savedSearch.service';
 import { LoginResponse } from '../../models/loginResponseModel';
 import { LoadingService } from '../../services/loading.service';
 import { ToastrService } from 'ngx-toastr';
+import { TableModule } from 'primeng/table';
+import { PaginatorModule } from 'primeng/paginator';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-saved-search',
   standalone: true,
-  imports: [CommonModule, FormsModule, JobdescriptionComponent],
+  imports: [CommonModule, FormsModule, ButtonModule, InputTextModule, TableModule, PaginatorModule],
   templateUrl: './saved-search.component.html',
   styleUrl: './saved-search.component.scss',
 })
@@ -99,8 +102,9 @@ export class SavedSearchComponent {
     this.backupSearchName = this.savedSearches[index].searchName;
   }
 
-  exitEdit() {
+  exitEdit(index: number) {
     this.editIndex = null;
+    this.savedSearches[index].searchName = this.backupSearchName;
     this.backupSearchName = '';
   }
 

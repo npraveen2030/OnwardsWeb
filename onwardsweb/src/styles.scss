@@ -1,11 +1,28 @@
 @import '../node_modules/angular-calendar/css/angular-calendar.css';
 
+/* Reset all default margin, padding, and box-sizing */
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+/* Optional: reset default list styles, links, images */
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
 }
 
 .app-loading-active {

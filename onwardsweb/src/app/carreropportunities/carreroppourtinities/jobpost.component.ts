@@ -77,7 +77,7 @@ export class JobPostComponent {
       LocationId: ['', Validators.required],
       CompanyId: ['', Validators.required],
       Skillholder: [''],
-      Skills: this.fb.array([]),
+      Skills: this.fb.array([], Validators.required),
       NonDbSkills: this.fb.array([]),
       RoleDescription: ['', Validators.required],
       Responsibilities: ['', Validators.required],
@@ -156,6 +156,11 @@ export class JobPostComponent {
 
   getPageNumbers(): number[] {
     return Array.from({ length: this.getTotalPages() }, (_, i) => i + 1);
+  }
+
+  updateitemsPerPage() {
+    this.pagination.currentPage = 1;
+    this.updatePagination();
   }
 
   GetJobDetails() {
@@ -350,7 +355,12 @@ export class JobPostComponent {
   }
 
   resetForm() {
-    this.NewJobForm.reset();
+    this.NewJobForm.reset({
+      RoleId: '',
+      ProjectId: '',
+      LocationId: '',
+      CompanyId: '',
+    });
     while (this.skills.length !== 0) {
       this.skills.removeAt(0);
     }

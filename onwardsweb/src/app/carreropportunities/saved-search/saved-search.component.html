@@ -5,79 +5,84 @@
     </div>
 
     <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-          <thead class="table-light">
-            <tr>
-              <th class="searchname-custom">Search Name</th>
-              <th>Key Word</th>
-              <th>Req ID</th>
-              <th>Locations</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="savedSearches.length === 0">
-              <td colspan="5" class="text-center">Displaying 0 records</td>
-            </tr>
+      <p-table
+        [value]="savedSearches"
+        [paginator]="true"
+        [rows]="5"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [responsiveLayout]="'scroll'"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records"
+        class="p-datatable-striped"
+      >
+        <!-- Table Header -->
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="searchname-custom">Search Name</th>
+            <th>Key Word</th>
+            <th>Req ID</th>
+            <th>Locations</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
 
-            <tr *ngFor="let search of savedSearches; let i = index">
-              <!-- Inline editable Search Name -->
-              <td (click)="startEdit(i)">
-                <input
-                  *ngIf="editIndex === i"
-                  #editInput
-                  [(ngModel)]="search.searchName"
-                  class="form-control form-control-sm w-100"
-                />
-                <span *ngIf="editIndex !== i">{{ search.searchName }}</span>
-              </td>
+        <!-- Table Body -->
+        <ng-template pTemplate="body" let-search let-rowIndex="rowIndex">
+          <tr>
+            <!-- Inline Editable Search Name -->
+            <td>
+              <input
+                *ngIf="editIndex === rowIndex"
+                [(ngModel)]="search.searchName"
+                pInputText
+                class="w-100"
+              />
+              <span *ngIf="editIndex !== rowIndex">{{ search.searchName }}</span>
+            </td>
 
-              <td>{{ search.keyword }}</td>
-              <td>{{ search.reqId }}</td>
-              <td>{{ search.location }}</td>
+            <td>{{ search.keyword }}</td>
+            <td>{{ search.reqId }}</td>
+            <td>{{ search.location }}</td>
 
-              <td>
-                @if(editIndex === i) {
-                <a href="javascript:void(0)" class="job-title" (click)="saveEdit(i)"> Save </a>|<a
-                  href="javascript:void(0)"
-                  (click)="exitEdit()"
-                  class="job-title"
+            <td>
+              <!-- Inline Editing Actions -->
+              <ng-container *ngIf="editIndex === rowIndex; else normalActions">
+                <a href="javascript:void(0)" class="job-title" (click)="saveEdit(rowIndex)">Save</a>
+                |
+                <a href="javascript:void(0)" class="job-title" (click)="exitEdit(rowIndex)"
+                  >Cancel</a
                 >
-                  Cancel
-                </a>
-                } @else {
+              </ng-container>
+
+              <!-- Normal Actions -->
+              <ng-template #normalActions>
                 <a
                   href="javascript:void(0)"
                   class="job-title"
                   (click)="viewsavedsearch(search.id, search.search)"
                 >
-                  View </a
-                >|<a href="javascript:void(0)" (click)="startEdit(i)" class="job-title"> Edit </a
-                >|<a
-                  href="javascript:void(0)"
-                  (click)="showdeletemodal(search.id)"
-                  class="job-title"
+                  View
+                </a>
+                |
+                <a href="javascript:void(0)" class="job-title" (click)="startEdit(rowIndex)"
+                  >Edit</a
                 >
+                |
+                <a href="javascript:void(0)" class="job-title" (click)="showdeletemodal(search.id)">
                   Delete
                 </a>
-                }
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+              </ng-template>
+            </td>
+          </tr>
+        </ng-template>
 
-      <div class="d-flex justify-content-between align-items-center mt-3">
-        <div>
-          Items per page:
-          <select class="form-select d-inline-block w-auto">
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-          </select>
-        </div>
-      </div>
+        <!-- Empty State -->
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5" class="text-center">Displaying 0 records</td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
   </div>
 </div>

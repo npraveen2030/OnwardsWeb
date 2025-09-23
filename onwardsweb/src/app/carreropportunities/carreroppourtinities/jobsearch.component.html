@@ -58,13 +58,34 @@
                 Search
               </button>
               <button type="button" class="btn btn-secondary" (click)="onResetfiltersearch()">
-                clear
+                Clear
               </button>
             </div>
           </form>
-          <button type="button" class="btn btn-warning mt-3" (click)="savesearch()">
-            save search
-          </button>
+          <div class="mt-3 d-flex gap-2">
+            <select
+              [(ngModel)]="selectedNameId"
+              class="savesearchselect-custom form-select"
+              placeholder="Select a save"
+              (change)="applyselectedsave()"
+            >
+              <option value="" disabled selected class="selectrequest">Select a search</option>
+              <option *ngFor="let save of savedsearchnames" [value]="save.id">
+                {{ save.searchname }}
+              </option>
+            </select>
+            <div class="savesearchbutton-custom">
+              @if (showsavesearch === true) {
+              <button
+                type="button"
+                class="btn btn-warning w-fill"
+                (click)="this.savesearchnamemodal?.show()"
+              >
+                Save Search
+              </button>
+              }
+            </div>
+          </div>
         </div>
       </div>
 
@@ -77,8 +98,8 @@
             [RefreshSearchJobs]="getJobDetails.bind(this)"
           ></app-jobpost>
           <!-- ----------------------------------------------All Jobs ---------------------------------------------- -->
-          <div class="search-header mt-2">
-            <p>{{ AllUserJobDetilas.length }} jobs posted</p>
+          <div class="search-header mt-2 p-2">
+            <h5>{{ AllUserJobDetilas.length }} jobs posted</h5>
           </div>
           <div class="searchbody-custom">
             <div class="container mt-1">
@@ -91,7 +112,7 @@
                     id="itemsPerPage"
                     class="form-select form-select-sm w-auto"
                     [(ngModel)]="pagination.itemsPerPage"
-                    (change)="updatePagination()"
+                    (change)="updateitemsPerPage()"
                   >
                     <option [value]="5">5</option>
                     <option [value]="10">10</option>
@@ -152,12 +173,15 @@
                     </div>
                   </div>
                   <div class="col-md-3 text-end">
-                    <select class="form-select form-select-sm select-action">
-                      <option>Select Action</option>
-                      <option>Apply</option>
-                      <option>Save Job</option>
-                      <option>Email Job to Friend</option>
-                      <option>Refer Friend to Job</option>
+                    <select
+                      class="form-select form-select-sm select-action"
+                      (change)="actionchanged($event, job.id)"
+                    >
+                      <option value="" selected>Select Action</option>
+                      <option value="apply">Apply</option>
+                      <option value="save">Save Job</option>
+                      <option value="email">Email Job to Friend</option>
+                      <option value="refer">Refer Friend to Job</option>
                     </select>
                   </div>
                 </div>
@@ -173,3 +197,37 @@
 } @else {
 <app-jobdescription [id]="JobId" [switchToJobList]="switchtolist.bind(this)"></app-jobdescription>
 }
+
+<div
+  class="modal fade custom-high-zindex-modal"
+  id="savesearchnamemodal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Label">Save Search Name</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex flex-column gap-2">
+          <label class="ms-2"> Search Name: </label>
+          <input
+            type="text"
+            [(ngModel)]="searchName"
+            class="form-control form-control-sm w-100 searchnameinput-custom"
+            placeholder="please enter a name"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="savesearch()">Save</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

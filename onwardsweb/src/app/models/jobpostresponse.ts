@@ -35,6 +35,12 @@ export interface AllJobDetails {
   createdDate: string;
 }
 
+export interface savesearch {
+  id: number;
+  searchname: string;
+  search: string;
+}
+
 export interface JobDetailsresponse {
   id?: number;
   projectId: number;

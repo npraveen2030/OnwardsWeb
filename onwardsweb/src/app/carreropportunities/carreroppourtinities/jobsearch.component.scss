@@ -80,8 +80,35 @@
   border-radius: 12px 12px 0 0;
 }
 
-.search-header p {
+.search-header h5 {
   display: flex;
   align-items: center;
   padding-left: 2%;
+}
+
+.searchnameinput-custom {
+  height: 6vh;
+  font-size: 1.1rem;
+}
+
+.savesearchbutton-custom {
+  width: 35%;
+}
+
+.savesearchbutton-custom button {
+  font-size: 0.9rem;
+}
+
+.savesearchselect-custom {
+  height: 5vh;
+  color: #6c757d;
+}
+
+.savesearchselect-custom option {
+  color: black; /* text in dropdown */
+  background-color: white; /* dropdown background */
+}
+
+.selectrequest {
+  color: #6c757d !important;
 }

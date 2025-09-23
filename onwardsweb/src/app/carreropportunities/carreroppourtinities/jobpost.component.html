@@ -26,7 +26,7 @@
           id="itemsPerPage"
           class="form-select form-select-sm w-auto"
           [(ngModel)]="pagination.itemsPerPage"
-          (change)="updatePagination()"
+          (change)="updateitemsPerPage()"
         >
           <option [value]="5">5</option>
           <option [value]="10">10</option>
@@ -107,7 +107,7 @@
             <div class="form-group mb-3">
               <label for="roleId" class="form-label">Role</label>
               <select id="roleId" class="form-select form-select-custom" formControlName="RoleId">
-                <option value="" disabled selected>Select Role</option>
+                <option value="" disabled>Select Role</option>
                 @if(Allroles.length !== 0){
                 <option *ngFor="let role of Allroles" [value]="role.id">{{ role.roleName }}</option>
                 }
@@ -123,7 +123,7 @@
                 class="form-select form-select-custom"
                 formControlName="ProjectId"
               >
-                <option value="" disabled selected>Select Project</option>
+                <option value="" disabled>Select Project</option>
                 @if(Allprojects.length !== 0){
                 <option *ngFor="let project of Allprojects" [value]="project.id">
                   {{ project.projectName }}
@@ -144,7 +144,7 @@
                 class="form-select form-select-custom"
                 formControlName="LocationId"
               >
-                <option value="" disabled selected>Select Location</option>
+                <option value="" disabled>Select Location</option>
                 @if(Alllocations.length !== 0){
                 <option *ngFor="let location of Alllocations" [value]="location.id">
                   {{ location.name }}
@@ -164,7 +164,7 @@
                 class="form-select form-select-custom"
                 formControlName="CompanyId"
               >
-                <option value="" disabled selected>Select Company</option>
+                <option value="" disabled>Select Company</option>
                 @if(AllComapnies.length !== 0){
                 <option *ngFor="let company of AllComapnies" [value]="company.id">
                   {{ company.companyName }}
@@ -337,6 +337,9 @@
                 placeholder="Enter UserName"
                 [forceSelection]="true"
               ></p-autoComplete>
+              <div *ngIf="isInvalid('RequesitionBy')" class="text-danger small">
+                RequesitionName is required
+              </div>
             </div>
 
             <div class="mb-3">

@@ -8,6 +8,7 @@ import { LoginResponse } from '../../models/loginResponseModel';
 import { ToastrService } from 'ngx-toastr';
 import { JobApplicationService } from '../../services/job-application.service';
 import { JobApplicationRequest } from '../../models/jobapplication';
+import { ModalService } from '../../services/emailfriendmodal.service';
 
 @Component({
   selector: 'app-jobdescription',
@@ -19,14 +20,17 @@ import { JobApplicationRequest } from '../../models/jobapplication';
 export class JobdescriptionComponent {
   @Input() id!: number;
   @Input() switchToJobList!: () => void;
+  @Input() setjobid?: (id: number) => void;
   JobDetails!: JobDetailsresponse;
   userDetails!: LoginResponse;
+  emailfriendmodal!: any;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private jobPostService: JobPostService,
     private savedJobService: SavedJobService,
     private jobApplicationService: JobApplicationService,
+    private modalService: ModalService,
     private toastr: ToastrService
   ) {}
 
@@ -90,5 +94,11 @@ export class JobdescriptionComponent {
         this.toastr.warning('Job is Previously applied');
       }
     });
+  }
+
+  emailfriend() {
+    if (this.setjobid !== undefined) {
+      this.setjobid(this.JobDetails.id ?? 0);
+    }
   }
 }

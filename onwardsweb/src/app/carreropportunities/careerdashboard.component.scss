@@ -53,6 +53,26 @@
   overflow-y: hidden;
 }
 
+.modal-body-custom {
+  height: 70vh;
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-right: 15px; /* prevent scrollbar overlapping content */
+}
+
+.custom-modal-width {
+  max-width: 800px; /* Adjust width */
+  width: 40%; /* Optional: relative to viewport */
+}
+
+.table-custom {
+  width: 90%;
+}
+
+::ng-deep .editor-custom .ql-editor {
+  min-height: 120px;
+  padding: 10px;
+}
+
 /* Fade-in animation */
 @keyframes fadeIn {
   from {

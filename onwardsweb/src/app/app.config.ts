@@ -26,6 +26,7 @@ import { ReferralTrackingComponent } from './carreropportunities/referral-tracki
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeng/themes/lara';
 import { ToastrModule } from 'ngx-toastr';
+import { SendEmailComponent } from './shared/send-email.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -54,6 +55,7 @@ const routes: Route[] = [
       { path: 'referraltracking', component: ReferralTrackingComponent },
     ],
   },
+  { path: 'email', component: SendEmailComponent },
 ];
 
 export const appConfig: ApplicationConfig = {

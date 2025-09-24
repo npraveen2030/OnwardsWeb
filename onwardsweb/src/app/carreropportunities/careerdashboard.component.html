@@ -93,6 +93,7 @@
           [filterid]="filterid ?? undefined"
           [filter]="filter ?? undefined"
           [setfilter]="setfilter.bind(this)"
+          [setjobid]="setjobid.bind(this)"
         ></app-jobsearch>
       </div>
 
@@ -123,6 +124,123 @@
       <div *ngIf="selectedTab === 'referraltrack'">
         <app-referral-tracking></app-referral-tracking>
       </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="emailfriendmodal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered custom-modal-width">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Label">Email this Job to a friend</h5>
+        <button type="button" class="btn-close" (click)="cancel()"></button>
+      </div>
+      <form [formGroup]="referfriendform" (submit)="sendemail()">
+        <div class="modal-body modal-body-custom">
+          <h6>Please Provide the information below</h6>
+          <div class="d-flex justify-content-end">
+            <table class="table table-borderless table-custom">
+              <tbody>
+                <!-- Job Title -->
+                <tr>
+                  <td class="align-top text-end" style="width: 30%">
+                    <label class="form-label">Job title:</label>
+                  </td>
+                  <td class="align-top text-start">
+                    <p class="form-message mb-0">{{ JobDetails?.roleName }}</p>
+                  </td>
+                </tr>
+
+                <!-- Your Email -->
+                <tr>
+                  <td class="align-top text-end">
+                    <label class="form-label">Your email address:</label>
+                  </td>
+                  <td class="align-top text-start">
+                    <p class="form-message mb-0">{{ useremail }}</p>
+                  </td>
+                </tr>
+
+                <!-- Friend's Name -->
+                <tr>
+                  <td class="align-top text-end">
+                    <label for="friendName" class="form-label required"
+                      >Your friend's name:<span style="color: red">*</span></label
+                    >
+                  </td>
+                  <td class="align-top text-start">
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="name"
+                      id="friendName"
+                      placeholder="Enter your friend's name"
+                      required
+                    />
+                    <div *ngIf="isInvalid('name')" class="text-danger small">name is required</div>
+                  </td>
+                </tr>
+
+                <!-- Friend's Email -->
+                <tr>
+                  <td class="align-top text-end">
+                    <label for="friendEmail" class="form-label"
+                      >Your friend's email address:<span style="color: red">*</span></label
+                    >
+                  </td>
+                  <td class="align-top text-start">
+                    <input
+                      type="email"
+                      class="form-control"
+                      formControlName="email"
+                      id="friendEmail"
+                      placeholder="Enter your friend's email"
+                      required
+                    />
+                    <div *ngIf="isInvalid('email')" class="text-danger small">
+                      email is required
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Message -->
+                <tr>
+                  <td class="align-top text-end">
+                    <label for="description" class="form-label">Message:</label>
+                  </td>
+                  <td class="align-top text-start">
+                    <quill-editor
+                      id="description"
+                      class="w-100 editor-custom"
+                      formControlName="message"
+                      [modules]="{
+                        toolbar: [
+                          ['bold', 'italic', 'underline'],
+                          [{ list: 'ordered' }, { list: 'bullet' }]
+                        ]
+                      }"
+                      [placeholder]="'Enter Role description'"
+                    ></quill-editor>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="modal-footer d-flex justify-content-center gap-1">
+          <button type="submit" class="btn btn-primary">Send Email</button>
+          <button type="button" class="btn btn-secondary" (click)="reset()">Reset</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

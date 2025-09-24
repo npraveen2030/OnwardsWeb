@@ -50,9 +50,11 @@ export class JobsearchComponent {
   selectedNameId: string = '';
   savedsearchnames: savesearch[] = [];
   savesearchnamemodal!: any;
+  emailfriendmodal!: any;
   @Input() filterid?: number;
   @Input() filter?: string;
   @Input() setfilter?: (filterid?: number, filter?: string) => void;
+  @Input() setjobid?: (id: number) => void;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -108,6 +110,12 @@ export class JobsearchComponent {
 
       if (NewJobmodalEl && bootstrap?.Modal) {
         this.savesearchnamemodal = new bootstrap.Modal(NewJobmodalEl);
+      }
+
+      const modalElement = document.getElementById('emailfriendmodal');
+
+      if (modalElement && bootstrap?.Modal) {
+        this.emailfriendmodal = new bootstrap.Modal(modalElement);
       }
     }
   }
@@ -187,6 +195,12 @@ export class JobsearchComponent {
 
   switchtolist() {
     this.showlist = true;
+  }
+
+  setjobidprop(id: number) {
+    if (this.setjobid !== undefined) {
+      this.setjobid(id);
+    }
   }
 
   showJobdetails(id: number) {

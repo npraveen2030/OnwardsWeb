@@ -26,6 +26,7 @@ export class SavedJobComponent {
   savejobmodal!: any;
   tobedeltedid!: number;
   @Input() switchTo?: (tabName: string) => void;
+  @Input() setrole?: (role: string) => void;
 
   constructor(
     private savedJobService: SavedJobService,

@@ -195,11 +195,15 @@
   </div>
 </div>
 } @else {
-<app-jobdescription [id]="JobId" [switchToJobList]="switchtolist.bind(this)"></app-jobdescription>
+<app-jobdescription
+  [id]="JobId"
+  [switchToJobList]="switchtolist.bind(this)"
+  [setjobid]="setjobidprop.bind(this)"
+></app-jobdescription>
 }
 
 <div
-  class="modal fade custom-high-zindex-modal"
+  class="modal fade"
   id="savesearchnamemodal"
   data-bs-backdrop="static"
   data-bs-keyboard="false"
@@ -220,7 +224,7 @@
             type="text"
             [(ngModel)]="searchName"
             class="form-control form-control-sm w-100 searchnameinput-custom"
-            placeholder="please enter a name"
+            placeholder="Please enter a name"
           />
         </div>
       </div>

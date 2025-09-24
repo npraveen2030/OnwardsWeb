@@ -26,6 +26,7 @@ export class JobApplicationComponent implements OnInit {
   jobapplicationmodal!: any;
   idtobedeleted!: number;
   @Input() switchTo?: (tabName: string) => void;
+  @Input() setrole?: (role: string) => void;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

@@ -94,15 +94,24 @@
           [filter]="filter ?? undefined"
           [setfilter]="setfilter.bind(this)"
           [setjobid]="setjobid.bind(this)"
+          [referredjobid]="referredjobid.bind(this)"
         ></app-jobsearch>
       </div>
 
       <div *ngIf="selectedTab === 'jobapplications'">
-        <app-jobapplication [switchTo]="switchTo.bind(this)"></app-jobapplication>
+        <app-jobapplication
+          [switchTo]="switchTo.bind(this)"
+          [setjobid]="setjobid.bind(this)"
+          [referredjobid]="referredjobid.bind(this)"
+        ></app-jobapplication>
       </div>
 
       <div *ngIf="selectedTab === 'savedjobs'">
-        <app-saved-job [switchTo]="switchTo.bind(this)"></app-saved-job>
+        <app-saved-job
+          [switchTo]="switchTo.bind(this)"
+          [setjobid]="setjobid.bind(this)"
+          [referredjobid]="referredjobid.bind(this)"
+        ></app-saved-job>
       </div>
 
       <div *ngIf="selectedTab === 'savedsearchesalerts'">
@@ -141,9 +150,9 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="Label">Email this Job to a friend</h5>
-        <button type="button" class="btn-close" (click)="cancel()"></button>
+        <button type="button" class="btn-close" (click)="cancelemailfriend()"></button>
       </div>
-      <form [formGroup]="referfriendform" (submit)="sendemail()">
+      <form [formGroup]="emailfriendform" (submit)="sendemail()">
         <div class="modal-body modal-body-custom">
           <h6>Please Provide the information below</h6>
           <div class="d-flex justify-content-end">
@@ -185,7 +194,9 @@
                       placeholder="Enter your friend's name"
                       required
                     />
-                    <div *ngIf="isInvalid('name')" class="text-danger small">name is required</div>
+                    <div *ngIf="isInvalidemailfriend('name')" class="text-danger small">
+                      name is required
+                    </div>
                   </td>
                 </tr>
 
@@ -205,7 +216,7 @@
                       placeholder="Enter your friend's email"
                       required
                     />
-                    <div *ngIf="isInvalid('email')" class="text-danger small">
+                    <div *ngIf="isInvalidemailfriend('email')" class="text-danger small">
                       email is required
                     </div>
                   </td>
@@ -238,7 +249,149 @@
 
         <div class="modal-footer d-flex justify-content-center gap-1">
           <button type="submit" class="btn btn-primary">Send Email</button>
-          <button type="button" class="btn btn-secondary" (click)="reset()">Reset</button>
+          <button type="button" class="btn btn-secondary" (click)="resetemailfriend()">
+            Reset
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="referralmodal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="Label">Add Referral</h5>
+        <button type="button" class="btn-close" (click)="cancelreferralForm()"></button>
+      </div>
+      <form [formGroup]="referralForm" (ngSubmit)="SubmitReferral()">
+        <!-- Modal Body -->
+        <div class="modal-body bg-white">
+          <p class="mb-4">Please provide the information below:</p>
+
+          <div class="d-flex gap-3">
+            <!-- First Name -->
+            <div class="mb-3 flex-grow-1">
+              <label for="firstName" class="form-label">
+                First Name <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="firstName"
+                formControlName="firstName"
+                placeholder="Enter your first name"
+              />
+              <div *ngIf="isInvalidreferral('firstName')" class="text-danger small">
+                First Name is required.
+              </div>
+            </div>
+
+            <!-- Last Name -->
+            <div class="mb-3 flex-grow-1">
+              <label for="lastName" class="form-label">
+                Last Name <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="lastName"
+                formControlName="lastName"
+                placeholder="Enter your last name"
+              />
+              <div *ngIf="isInvalidreferral('lastName')" class="text-danger small">
+                Last Name is required.
+              </div>
+            </div>
+          </div>
+          <div class="d-flex gap-3">
+            <!-- Email -->
+            <div class="mb-3 flex-grow-1">
+              <label for="email" class="form-label">
+                Email <span class="text-danger">*</span>
+              </label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                formControlName="email"
+                placeholder="Enter your email"
+              />
+              <div *ngIf="isInvalidreferral('email')" class="text-danger small">
+                Valid Email is required.
+              </div>
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-3 flex-grow-1">
+              <label for="phone" class="form-label">Phone</label>
+              <input
+                type="tel"
+                class="form-control"
+                id="phone"
+                formControlName="phone"
+                placeholder="Enter your phone number"
+              />
+            </div>
+          </div>
+
+          <!-- Country/Region -->
+          <div class="mb-3 w-50">
+            <label for="country" class="form-label">
+              Country/Region <span class="text-danger">*</span>
+            </label>
+            <select class="form-select" id="country" formControlName="country">
+              <option value="" disabled selected>No Selection</option>
+              @for(location of locations;track $index) {
+              <option [value]="location.id">{{ location.name }}</option>
+              }
+            </select>
+            <div *ngIf="isInvalidreferral('country')" class="text-danger small">
+              Country is required.
+            </div>
+          </div>
+
+          <!-- Resume Upload -->
+          <div class="mb-3">
+            <label for="resume" class="form-label">Add Resume</label>
+            <p class="small text-muted mb-1">Accepted File types: DOCX, PDF, Image and Text</p>
+            <div class="d-flex gap-1">
+              <input
+                type="file"
+                class="form-control w-50"
+                id="resume"
+                #resumefile
+                (change)="onresumeupload($event)"
+              />
+              @if(referralForm.get('resume')?.value) {
+              <button class="btn btn-danger btn-sm" (click)="onresumedelete()">
+                <i class="bi bi-trash"></i>
+              </button>
+              }
+            </div>
+
+            <div *ngIf="isInvalidreferral('resume')" class="text-danger small">
+              Resume is required.
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer d-flex justify-content-center gap-1">
+          <button type="submit" class="btn btn-primary">Apply Referral</button>
+          <button type="button" class="btn btn-secondary" (click)="resetreferralForm()">
+            Reset
+          </button>
         </div>
       </form>
     </div>

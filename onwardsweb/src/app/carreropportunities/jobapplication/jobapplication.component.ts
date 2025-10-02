@@ -26,7 +26,8 @@ export class JobApplicationComponent implements OnInit {
   jobapplicationmodal!: any;
   idtobedeleted!: number;
   @Input() switchTo?: (tabName: string) => void;
-  @Input() setrole?: (role: string) => void;
+  @Input() setjobid?: (id: number) => void;
+  @Input() referredjobid?: (jobid: number) => void;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -108,5 +109,17 @@ export class JobApplicationComponent implements OnInit {
         this.toastr.success('Job application withdrawn successfully!');
         this.jobapplicationmodal?.hide();
       });
+  }
+
+  setjobidprop(id: number) {
+    if (this.setjobid !== undefined) {
+      this.setjobid(id);
+    }
+  }
+
+  setreferredjobid(jobid: number) {
+    if (this.referredjobid !== undefined) {
+      this.referredjobid(jobid);
+    }
   }
 }

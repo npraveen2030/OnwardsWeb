@@ -56,7 +56,12 @@
   </div>
 </div>
 } @else {
-<app-jobdescription [id]="JobId" [switchToJobList]="switchtolist.bind(this)"></app-jobdescription>
+<app-jobdescription
+  [id]="JobId"
+  [switchToJobList]="switchtolist.bind(this)"
+  [setjobid]="setjobidprop.bind(this)"
+  [referencedjobid]="setreferredjobid.bind(this)"
+></app-jobdescription>
 }
 
 <div

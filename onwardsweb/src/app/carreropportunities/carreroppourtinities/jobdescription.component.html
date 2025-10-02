@@ -15,7 +15,7 @@
     </div>
     <div class="job-actions">
       <button class="btn btn-primary" (click)="applyjob()">Apply</button>
-      <button class="btn btn-outline-primary">Refer Friend to Job</button>
+      <button class="btn btn-outline-primary" (click)="referencejob()">Refer Friend to Job</button>
       <button class="btn btn-outline-secondary" (click)="emailfriend()">Email Job to Friend</button>
       <button class="btn btn-outline-secondary" (click)="savejob()">Save Job</button>
       <button class="btn btn-outline-secondary" (click)="PrintDetials()">Print</button>
@@ -61,10 +61,14 @@
 
   <!-- Footer Action Buttons -->
   <div class="footer-actions">
-    <button class="btn btn-primary">Apply</button>
-    <button class="btn btn-outline-primary ms-2">Refer Friend to Job</button>
-    <button class="btn btn-outline-secondary ms-2">Email Job to Friend</button>
-    <button class="btn btn-outline-secondary ms-2">Save Job</button>
+    <button class="btn btn-primary" (click)="applyjob()">Apply</button>
+    <button class="btn btn-outline-primary ms-2" (click)="referencejob()">
+      Refer Friend to Job
+    </button>
+    <button class="btn btn-outline-secondary ms-2" (click)="emailfriend()">
+      Email Job to Friend
+    </button>
+    <button class="btn btn-outline-secondary ms-2" (click)="savejob()">Save Job</button>
   </div>
 </div>
 }

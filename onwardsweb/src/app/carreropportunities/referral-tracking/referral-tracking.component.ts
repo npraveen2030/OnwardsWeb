@@ -1,55 +1,91 @@
-import { Component } from '@angular/core';
-import { CareerService } from '../../services/career/career.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Referral } from '../../models/career/referral';
-import { CommonModule } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { TableModule } from 'primeng/table';
+import { ReferralTrackingResponse } from '../../models/referraltrackingmodel';
+import { ReferralTrackingService } from '../../services/referraltracking.service';
+import { LoginResponse } from '../../models/loginResponseModel';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-referral-tracking',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, TableModule],
   templateUrl: './referral-tracking.component.html',
   styleUrl: './referral-tracking.component.scss',
 })
 export class ReferralTrackingComponent {
-  referralForm: FormGroup;
-  referrals: Referral[] = [];
-  selectedFile: File | null = null;
+  referrals: ReferralTrackingResponse[] = [];
+  userDetails!: LoginResponse;
+  referralId?: number;
+  deletereferralmodal!: any;
 
-  constructor(private fb: FormBuilder, private careerService: CareerService) {
-    this.referralForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phone: [''],
-      country: ['', Validators.required],
-      resume: [null],
-    });
+  constructor(
+    private referralTrackingService: ReferralTrackingService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private toastr: ToastrService
+  ) {}
 
-    this.careerService.referrals$.subscribe((data) => {
-      this.referrals = data;
-    });
-  }
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const userDetailsJson: string | null = sessionStorage.getItem('userDetails');
 
-  onFileChange(event: any) {
-    this.selectedFile = event.target.files[0];
-  }
+      if (userDetailsJson !== null) {
+        this.userDetails = JSON.parse(userDetailsJson);
+      }
 
-  submit() {
-    if (this.referralForm.valid) {
-      const formValue = this.referralForm.value;
-      const newReferral: Referral = {
-        firstName: formValue.firstName,
-        lastName: formValue.lastName,
-        email: formValue.email,
-        phone: formValue.phone,
-        country: formValue.country,
-        resume: this.selectedFile || undefined,
-      };
-
-      this.careerService.addReferral(newReferral);
-      this.referralForm.reset();
-      this.selectedFile = null;
+      this.getreferrals();
     }
+  }
+
+  ngAfterViewInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const bootstrap = (window as any).bootstrap;
+      const deletereferralmodalEl = document.getElementById('deletereferralmodal');
+
+      if (deletereferralmodalEl && bootstrap?.Modal) {
+        this.deletereferralmodal = new bootstrap.Modal(deletereferralmodalEl);
+      }
+    }
+  }
+
+  getreferrals() {
+    this.referralTrackingService.getReferrals(this.userDetails.id).subscribe((res) => {
+      this.referrals = res;
+    });
+  }
+
+  downloadReferralDocument(id: number, fileName: string): void {
+    this.referralTrackingService.getReferralDocument(id).subscribe({
+      next: (response) => {
+        const blob = response.body as Blob;
+
+        const url = window.URL.createObjectURL(blob);
+
+        // Create temporary anchor element
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.click();
+
+        // Cleanup
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Error downloading document:', err);
+      },
+    });
+  }
+
+  deleteconfirmationmodal(id: number) {
+    this.referralId = id;
+    this.deletereferralmodal.show();
+  }
+
+  deleteReferral() {
+    this.referralTrackingService.deleteReferral(this.referralId ?? 0).subscribe(() => {
+      this.getreferrals();
+      this.deletereferralmodal.hide();
+      this.toastr.success('referral Deleted');
+    });
   }
 }

@@ -2,107 +2,105 @@
   <div class="card">
     <div class="card-header bg-light">
       <h5 class="mb-0">Your Referrals</h5>
-      <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#referralModal">
-        Add Referral
-      </button>
     </div>
 
     <div class="card-body">
       <!-- <h6 class="mb-3">Jobs Applied</h6> -->
 
       <!-- Referral Table -->
-      <table class="table table-bordered">
-        <thead>
+      <p-table
+        [value]="referrals"
+        [paginator]="true"
+        [rows]="5"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [responsiveLayout]="'scroll'"
+        [tableStyle]="{ 'min-width': '60rem' }"
+      >
+        <ng-template pTemplate="header">
           <tr>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
             <th>Phone</th>
             <th>Country</th>
+            <th>Resume</th>
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let referral of referrals">
+        </ng-template>
+
+        <ng-template pTemplate="body" let-referral>
+          <tr>
             <td>{{ referral.firstName }}</td>
             <td>{{ referral.lastName }}</td>
             <td>{{ referral.email }}</td>
             <td>{{ referral.phone }}</td>
-            <td>{{ referral.country }}</td>
+            <td>{{ referral.locationName }}</td>
+            <td>{{ referral.fileName }}</td>
+            <td>{{ referral.status }}</td>
+            <td>
+              <a
+                href="javascript:void(0)"
+                class="referral-title"
+                (click)="downloadReferralDocument(referral.id, referral.fileName)"
+              >
+                Download
+              </a>
+              |
+              <a
+                href="javascript:void(0)"
+                class="referral-title"
+                (click)="deleteconfirmationmodal(referral.id)"
+              >
+                Delete
+              </a>
+            </td>
           </tr>
-        </tbody>
-      </table>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="text-center">Displaying 0 records</td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
   </div>
 </div>
- <div class="container-fluid mt-4">
+<div class="container-fluid mt-4">
   <div class="card">
     <div class="card-header bg-light">
-      <h5 class="mb-0"> Referral Timeline -  ( IGNORE THIS FEATURE)  </h5>
+      <h5 class="mb-0">Referral Timeline - ( IGNORE THIS FEATURE)</h5>
       <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#referralModal">
-        Referral Timeline -  ( IGNORE THIS FEATURE)  
+        Referral Timeline - ( IGNORE THIS FEATURE)
       </button>
     </div>
 
     <div class="card-body">
       <!-- <h6 class="mb-3">Jobs Applied</h6> -->
- 
     </div>
   </div>
 </div>
- 
 
-
-<!-- Modal -->
-<div class="modal fade" id="referralModal" tabindex="-1">
-  <div class="modal-dialog">
+<div
+  class="modal fade"
+  id="deletereferralmodal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add Referral</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <h5 class="modal-title" id="Label">Delete Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form [formGroup]="referralForm" (ngSubmit)="submit()">
-          <div class="mb-3">
-            <label class="form-label">First Name *</label>
-            <input type="text" formControlName="firstName" class="form-control" />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Last Name *</label>
-            <input type="text" formControlName="lastName" class="form-control" />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Email *</label>
-            <input type="email" formControlName="email" class="form-control" />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Phone</label>
-            <input type="text" formControlName="phone" class="form-control" />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Country/Region *</label>
-            <select formControlName="country" class="form-select">
-              <option value="">Select</option>
-              <option>India</option>
-              <option>USA</option>
-              <option>UK</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Resume</label>
-            <input type="file" class="form-control" (change)="onFileChange($event)" />
-          </div>
-          <div class="d-flex justify-content-end">
-            <button
-              type="submit"
-              class="btn btn-primary me-2"
-              [disabled]="referralForm.invalid"
-              data-bs-dismiss="modal"
-            >
-              Send
-            </button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          </div>
-        </form>
+      <div class="modal-body">Do you want to delete?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteReferral()">Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

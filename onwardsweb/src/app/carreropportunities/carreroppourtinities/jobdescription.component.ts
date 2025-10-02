@@ -8,7 +8,7 @@ import { LoginResponse } from '../../models/loginResponseModel';
 import { ToastrService } from 'ngx-toastr';
 import { JobApplicationService } from '../../services/job-application.service';
 import { JobApplicationRequest } from '../../models/jobapplication';
-import { ModalService } from '../../services/emailfriendmodal.service';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-jobdescription',
@@ -21,6 +21,7 @@ export class JobdescriptionComponent {
   @Input() id!: number;
   @Input() switchToJobList!: () => void;
   @Input() setjobid?: (id: number) => void;
+  @Input() referencedjobid?: (id: number) => void;
   JobDetails!: JobDetailsresponse;
   userDetails!: LoginResponse;
   emailfriendmodal!: any;
@@ -99,6 +100,12 @@ export class JobdescriptionComponent {
   emailfriend() {
     if (this.setjobid !== undefined) {
       this.setjobid(this.JobDetails.id ?? 0);
+    }
+  }
+
+  referencejob() {
+    if (this.referencedjobid !== undefined) {
+      this.referencedjobid(this.JobDetails.id ?? 0);
     }
   }
 }

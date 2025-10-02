@@ -16,17 +16,11 @@ import { PersonalInformationComponent } from './myworkspace/personal-information
 import { BasicDetailsComponent } from './myworkspace/basic-details/basic-details.component';
 import { ReimbursementsComponent } from './myworkspace/reimbursements/reimbursements.component';
 import { ReimbursementDetailsComponent } from './reimbursements/reimbursement-details/reimbursement-details.component';
-import { JobPostComponent } from './carreropportunities/carreroppourtinities/jobpost.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { CareerdashboardComponent } from './carreropportunities/careerdashboard.component';
-import { JobApplicationComponent } from './carreropportunities/jobapplication/jobapplication.component';
-import { SavedJobComponent } from './carreropportunities/saved-job/saved-job.component';
-import { SavedApplicationComponent } from './carreropportunities/saved-application/saved-application.component';
-import { ReferralTrackingComponent } from './carreropportunities/referral-tracking/referral-tracking.component';
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeng/themes/lara';
 import { ToastrModule } from 'ngx-toastr';
-import { SendEmailComponent } from './shared/send-email.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -36,26 +30,59 @@ const routes: Route[] = [
     canActivate: [SessionGuard],
     canActivateChild: [SessionGuard],
     children: [
-      { path: 'dashboard', component: DashboardComponent },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        data: { breadcrumb: 'Home' },
+      },
       { path: 'reports', component: ReportComponent },
-      { path: 'leavemanagement', component: LeavemanagementComponent },
-      { path: 'resignation', component: ResignationComponent },
-      { path: 'myworkspace', component: WorkspaceComponent },
+      { path: 'dashboard/leavemanagement', component: LeavemanagementComponent },
+      {
+        path: 'resignation',
+        component: ResignationComponent,
+        data: {
+          breadcrumb: 'resignation',
+          parent: '/myworkspace',
+        },
+      },
+      {
+        path: 'myworkspace',
+        component: WorkspaceComponent,
+        data: {
+          breadcrumb: 'Myworkspace',
+          parent: '/dashboard',
+        },
+      },
       { path: 'my-approvals', component: MyApprovalComponent },
       { path: 'exit-interview', component: ExitInterviewComponent },
-      { path: 'personal-info', component: PersonalInformationComponent },
+      {
+        path: 'personal-info',
+        component: PersonalInformationComponent,
+        data: {
+          breadcrumb: 'personal-info',
+          parent: '/myworkspace',
+        },
+      },
       { path: 'basic-details', component: BasicDetailsComponent },
-      { path: 'reimbursements', component: ReimbursementsComponent },
+      {
+        path: 'reimbursements',
+        component: ReimbursementsComponent,
+        data: {
+          breadcrumb: 'reimbursements',
+          parent: '/myworkspace',
+        },
+      },
       { path: 'reimbursement-details', component: ReimbursementDetailsComponent },
-      { path: 'career', component: CareerdashboardComponent },
-      { path: 'jobpost', component: JobPostComponent },
-      { path: 'jobapplication', component: JobApplicationComponent },
-      { path: 'savedjobs', component: SavedJobComponent },
-      { path: 'savedapplications', component: SavedApplicationComponent },
-      { path: 'referraltracking', component: ReferralTrackingComponent },
+      {
+        path: 'dashboard/career',
+        component: CareerdashboardComponent,
+        data: {
+          breadcrumb: 'Career',
+          parent: '/dashboard',
+        },
+      },
     ],
   },
-  { path: 'email', component: SendEmailComponent },
 ];
 
 export const appConfig: ApplicationConfig = {

@@ -1,4 +1,4 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, ElementRef, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { JobApplicationComponent } from './jobapplication/jobapplication.component';
 import { SavedJobComponent } from './saved-job/saved-job.component';
@@ -17,9 +17,11 @@ import {
 } from '@angular/forms';
 import { LoginResponse } from '../models/loginResponseModel';
 import { EmailService } from '../services/email.service';
-import { ModalService } from '../services/emailfriendmodal.service';
+import { ModalService } from '../services/modal.service';
 import { JobPostService } from '../services/jobpost.service';
-import { JobDetailsresponse } from '../models/jobpostresponse';
+import { JobDetailsresponse, location } from '../models/jobpostresponse';
+import { ReferralTrackingService } from '../services/referraltracking.service';
+import { ReferralTrackingRequest } from '../models/referraltrackingmodel';
 
 @Component({
   selector: 'app-careerdashboard',
@@ -45,8 +47,12 @@ export class CareerdashboardComponent {
   filter?: string;
   useremail: string = '';
   JobDetails?: JobDetailsresponse;
-  referfriendform!: FormGroup;
+  emailfriendform!: FormGroup;
+  referralForm!: FormGroup;
   userDetails!: LoginResponse;
+  referralmodal!: any;
+  locations: location[] = [];
+  @ViewChild('resumefile') resumefile!: ElementRef<HTMLInputElement>;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -54,15 +60,27 @@ export class CareerdashboardComponent {
     private jobPostService: JobPostService,
     private emailService: EmailService,
     private modalService: ModalService,
+    private referralService: ReferralTrackingService,
     private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
-    this.referfriendform = this.fb.group({
+    this.emailfriendform = this.fb.group({
       name: ['', Validators.required],
       email: ['', Validators.required],
       message: [''],
     });
+
+    this.referralForm = this.fb.group({
+      jobId: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: [''],
+      country: ['', Validators.required],
+      resume: [null, Validators.required],
+    });
+
     if (isPlatformBrowser(this.platformId)) {
       const userDetailsJson: string | null = sessionStorage.getItem('userDetails');
 
@@ -77,6 +95,12 @@ export class CareerdashboardComponent {
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.modalService.initialize('emailfriendmodal');
+      const bootstrap = (window as any).bootstrap;
+      const referralmodalEl = document.getElementById('referralmodal');
+
+      if (referralmodalEl && bootstrap?.Modal) {
+        this.referralmodal = new bootstrap.Modal(referralmodalEl);
+      }
     }
   }
 
@@ -90,7 +114,6 @@ export class CareerdashboardComponent {
   }
 
   setjobid(id: number) {
-    debugger;
     this.jobPostService.GetJobDetilsById(id).subscribe({
       next: (res) => {
         this.JobDetails = {
@@ -105,8 +128,16 @@ export class CareerdashboardComponent {
     });
   }
 
+  referredjobid(jobid: number) {
+    this.referralForm.patchValue({ jobId: jobid });
+    this.jobPostService.Getlocations().subscribe((res) => {
+      this.locations = res;
+      this.referralmodal.show();
+    });
+  }
+
   sendemail() {
-    if (this.referfriendform.valid) {
+    if (this.emailfriendform.valid) {
       const jobDetailsHTML = `
       <h5>Job Listing Detail</h5>
 
@@ -138,13 +169,13 @@ export class CareerdashboardComponent {
       </div>
     `;
 
-      this.referfriendform.get('message')?.setValue(jobDetailsHTML);
+      this.emailfriendform.get('message')?.setValue(jobDetailsHTML);
 
       this.emailService
         .sendEmail(
-          this.referfriendform.value.email,
+          this.emailfriendform.value.email,
           'Job Offer for you',
-          this.referfriendform.value.message
+          this.emailfriendform.value.message
         )
         .subscribe({
           next: () => {
@@ -158,23 +189,73 @@ export class CareerdashboardComponent {
           },
         });
     } else {
-      this.referfriendform.markAllAsTouched();
+      this.emailfriendform.markAllAsTouched();
       return;
     }
   }
 
-  reset() {
-    this.referfriendform.reset();
+  resetemailfriend() {
+    this.emailfriendform.reset();
   }
 
-  cancel() {
-    debugger;
-    this.referfriendform.reset();
+  cancelemailfriend() {
+    this.emailfriendform.reset();
     this.modalService.hide();
   }
 
-  isInvalid(controlName: string): boolean {
-    const control = this.referfriendform.get(controlName);
+  onresumeupload(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.referralForm.patchValue({ resume: file });
+    }
+  }
+
+  onresumedelete() {
+    this.resumefile.nativeElement.value = '';
+    this.referralForm.get('resume')?.setValue(null);
+  }
+
+  SubmitReferral() {
+    if (this.referralForm.valid) {
+      const referraltrackingrequest: ReferralTrackingRequest = {
+        jobId: this.referralForm.value.jobId,
+        firstName: this.referralForm.value.firstName,
+        lastName: this.referralForm.value.lastName,
+        email: this.referralForm.value.email,
+        phone: this.referralForm.value.phone,
+        locationId: this.referralForm.value.country,
+        fileData: this.referralForm.value.resume,
+        statusId: 1, // penidng
+        loginId: this.userDetails.id,
+      };
+
+      this.referralService.insertReferral(referraltrackingrequest).subscribe(() => {
+        this.cancelreferralForm();
+        this.toastr.success('Referral inserted successfully');
+      });
+    } else {
+      this.referralForm.markAllAsTouched();
+    }
+  }
+
+  resetreferralForm() {
+    this.referralForm.reset({ country: '' });
+    this.resumefile.nativeElement.value = '';
+  }
+
+  cancelreferralForm() {
+    this.referralmodal.hide();
+    this.resetreferralForm();
+  }
+
+  isInvalidemailfriend(controlName: string): boolean {
+    const control = this.emailfriendform.get(controlName);
+    return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+
+  isInvalidreferral(controlName: string): boolean {
+    const control = this.referralForm.get(controlName);
     return !!(control && control.invalid && (control.dirty || control.touched));
   }
 }

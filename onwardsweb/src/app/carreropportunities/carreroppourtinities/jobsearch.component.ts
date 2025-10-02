@@ -55,6 +55,7 @@ export class JobsearchComponent {
   @Input() filter?: string;
   @Input() setfilter?: (filterid?: number, filter?: string) => void;
   @Input() setjobid?: (id: number) => void;
+  @Input() referredjobid?: (jobid: number) => void;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -321,6 +322,12 @@ export class JobsearchComponent {
       case 'save':
         this.savejob(id);
         break;
+      case 'refer':
+        this.setreferredjobid(id);
+        break;
+      case 'email':
+        this.setjobidprop(id);
+        break;
       default:
         break;
     }
@@ -358,5 +365,11 @@ export class JobsearchComponent {
         this.toastr.warning('Job is Previously applied');
       }
     });
+  }
+
+  setreferredjobid(jobid: number) {
+    if (this.referredjobid !== undefined) {
+      this.referredjobid(jobid);
+    }
   }
 }

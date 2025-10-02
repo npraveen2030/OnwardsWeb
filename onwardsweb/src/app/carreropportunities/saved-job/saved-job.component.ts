@@ -26,7 +26,8 @@ export class SavedJobComponent {
   savejobmodal!: any;
   tobedeltedid!: number;
   @Input() switchTo?: (tabName: string) => void;
-  @Input() setrole?: (role: string) => void;
+  @Input() setjobid?: (id: number) => void;
+  @Input() referredjobid?: (jobid: number) => void;
 
   constructor(
     private savedJobService: SavedJobService,
@@ -100,6 +101,18 @@ export class SavedJobComponent {
         this.toastr.success('Job unsaved successfully!');
         this.savejobmodal?.hide();
       });
+    }
+  }
+
+  setjobidprop(id: number) {
+    if (this.setjobid !== undefined) {
+      this.setjobid(id);
+    }
+  }
+
+  setreferredjobid(jobid: number) {
+    if (this.referredjobid !== undefined) {
+      this.referredjobid(jobid);
     }
   }
 }

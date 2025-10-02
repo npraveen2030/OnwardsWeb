@@ -6,11 +6,12 @@ import { Router } from '@angular/router';
 import { LoginService } from '../../services/login-service.service';
 import { DashBoardService } from '../../services/dashboardservice.service';
 import { UserShiftLogResponse } from '../../models/DashBoardResponseModel';
+import { BreadcrumbComponent } from '../../shared/breadcrumb.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [BreadcrumbComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
@@ -87,13 +88,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   setLogoutTime() {
     this.logoutModal.hide();
-    this.dashboardservice
-      .InsertOrUpdateUserShiftLog(this.userDetails?.id ?? 0)
-      .subscribe({
-        next: (response) => {
-          console.log(response);
-        },
-      });
+    this.dashboardservice.InsertOrUpdateUserShiftLog(this.userDetails?.id ?? 0).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+    });
     this.loginservice.signout().subscribe({
       next: (response) => {
         console.log(response.message);

@@ -1,0 +1,71 @@
+<div class="card">
+  <div class="d-flex align-items-center gap-2 m-3">
+    <label for="projectSelect" class="form-label me-2 mb-0">Select a Project:</label>
+    <select
+      id="projectSelect"
+      class="form-select w-25"
+      [(ngModel)]="selectedprojectid"
+      (change)="selectedproject($event)"
+    >
+      <option value="" selected disabled>--Select--</option>
+      @for(project of projects; track $index) {
+      <option [value]="project.id">{{ project.projectName }}</option>
+      }
+    </select>
+  </div>
+  @if(selectedprojectid !== '') {
+  <div>
+    @for (role of userRoles;track $index) {
+    <div class="mb-3 ms-5 me-5">
+      <div class="d-flex align-items-center gap-2 m-3">
+        <label class="form-label me-2 mb-0 fw-semibold w-custom">{{ role.roleName }}:</label>
+        <p-autoComplete
+          id="RequesitionName"
+          [(ngModel)]="formvalues[role.roleName]"
+          [suggestions]="searchautocomplete[role.roleName]"
+          (completeMethod)="search($event, role.roleName)"
+          optionLabel="userName"
+          placeholder="Enter UserName"
+          [forceSelection]="true"
+          [showClear]="true"
+          (onClear)="formvalues[role.roleName] = null"
+        ></p-autoComplete>
+        <button
+          class="btn btn-primary"
+          (click)="insertassociation(formvalues[role.roleName].id, role.id, role.roleName)"
+          [disabled]="!formvalues[role.roleName]"
+        >
+          <i class="bi bi-save"></i>
+        </button>
+      </div>
+      <table class="table table-bordered w-75 ms-4s">
+        <thead class="table-light">
+          <tr>
+            <th class="col text-center">Name</th>
+            <th class="col text-center">Start Date</th>
+            <th class="col text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            @if (getAssociationsByRoleLength(role.id) <= 0) {
+
+            <td colspan="4" class="text-center text-muted">{{ noDataMessage }}</td>
+
+            } @for(association of getAssociationsByRole(role.id); track association.id) {
+            <td class="text-center">{{ association.fullName }}</td>
+            <td class="text-center">
+              {{ association.associationStartDate | date : 'dd/MM/yyyy' }}
+            </td>
+            <td class="text-center" (click)="deleteAssociation(association.id)">
+              <i class="bi bi-trash"></i>
+            </td>
+            }
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    }
+  </div>
+  }
+</div>

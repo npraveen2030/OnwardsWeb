@@ -21,6 +21,7 @@ import { CareerdashboardComponent } from './carreropportunities/careerdashboard.
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeng/themes/lara';
 import { ToastrModule } from 'ngx-toastr';
+import { UserprojectroleassociationComponent } from './admin/userprojectroleassociation/userprojectroleassociation.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -37,14 +38,7 @@ const routes: Route[] = [
       },
       { path: 'reports', component: ReportComponent },
       { path: 'dashboard/leavemanagement', component: LeavemanagementComponent },
-      {
-        path: 'resignation',
-        component: ResignationComponent,
-        data: {
-          breadcrumb: 'resignation',
-          parent: '/myworkspace',
-        },
-      },
+
       {
         path: 'myworkspace',
         component: WorkspaceComponent,
@@ -63,6 +57,14 @@ const routes: Route[] = [
           parent: '/myworkspace',
         },
       },
+      {
+        path: 'resignation',
+        component: ResignationComponent,
+        data: {
+          breadcrumb: 'resignation',
+          parent: '/myworkspace',
+        },
+      },
       { path: 'basic-details', component: BasicDetailsComponent },
       {
         path: 'reimbursements',
@@ -72,12 +74,23 @@ const routes: Route[] = [
           parent: '/myworkspace',
         },
       },
-      { path: 'reimbursement-details', component: ReimbursementDetailsComponent },
       {
-        path: 'dashboard/career',
+        path: 'reimbursement-details',
+        component: ReimbursementDetailsComponent,
+      },
+      {
+        path: 'career',
         component: CareerdashboardComponent,
         data: {
           breadcrumb: 'Career',
+          parent: '/dashboard',
+        },
+      },
+      {
+        path: 'userprojectroleassociation',
+        component: UserprojectroleassociationComponent,
+        data: {
+          breadcrumb: 'UserProjectRoleAssociation',
           parent: '/dashboard',
         },
       },

@@ -22,6 +22,7 @@ import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeng/themes/lara';
 import { ToastrModule } from 'ngx-toastr';
 import { UserprojectroleassociationComponent } from './admin/userprojectroleassociation/userprojectroleassociation.component';
+import { ProjectmanagementComponent } from './admin/projectmanagement/projectmanagement.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -34,7 +35,10 @@ const routes: Route[] = [
       {
         path: 'dashboard',
         component: DashboardComponent,
-        data: { breadcrumb: 'Home' },
+        data: {
+          breadcrumb: 'Home',
+          title: 'DASHBOARD',
+        },
       },
       { path: 'reports', component: ReportComponent },
       { path: 'dashboard/leavemanagement', component: LeavemanagementComponent },
@@ -45,6 +49,7 @@ const routes: Route[] = [
         data: {
           breadcrumb: 'Myworkspace',
           parent: '/dashboard',
+          title: 'MY WORKSPACE',
         },
       },
       { path: 'my-approvals', component: MyApprovalComponent },
@@ -55,6 +60,7 @@ const routes: Route[] = [
         data: {
           breadcrumb: 'personal-info',
           parent: '/myworkspace',
+          title: 'PERSONAL INFORMATION',
         },
       },
       {
@@ -63,6 +69,7 @@ const routes: Route[] = [
         data: {
           breadcrumb: 'resignation',
           parent: '/myworkspace',
+          title: 'RESIGNATION',
         },
       },
       { path: 'basic-details', component: BasicDetailsComponent },
@@ -72,6 +79,7 @@ const routes: Route[] = [
         data: {
           breadcrumb: 'reimbursements',
           parent: '/myworkspace',
+          title: 'REIMBURSEMENTS',
         },
       },
       {
@@ -84,6 +92,7 @@ const routes: Route[] = [
         data: {
           breadcrumb: 'Career',
           parent: '/dashboard',
+          title: 'CAREER',
         },
       },
       {
@@ -92,6 +101,16 @@ const routes: Route[] = [
         data: {
           breadcrumb: 'UserProjectRoleAssociation',
           parent: '/dashboard',
+          title: 'ASSOCIATIONS',
+        },
+      },
+      {
+        path: 'projectmanagement',
+        component: ProjectmanagementComponent,
+        data: {
+          breadcrumb: 'Projectmanagement',
+          parent: '/dashboard',
+          title: 'PROJECT MANAGEMENT',
         },
       },
     ],

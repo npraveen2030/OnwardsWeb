@@ -35,6 +35,13 @@ img {
   --bs-breadcrumb-divider: '>';
 }
 
+.toast-top-right {
+  top: 1rem; /* distance from top */
+  right: 1rem; /* distance from right */
+  position: fixed !important; /* keep it fixed on screen */
+  z-index: 9999 !important; /* ensure it stays above other elements */
+}
+
 @media print {
   body * {
     visibility: hidden;

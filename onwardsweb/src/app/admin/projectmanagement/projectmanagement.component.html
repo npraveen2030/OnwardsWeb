@@ -1,0 +1,151 @@
+<div class="projectmanagement-container bg-light">
+  <div class="d-flex justify-content-end mb-2">
+    <button class="btn btn-primary" (click)="insertProject()">+ Add Project</button>
+  </div>
+  <p-table
+    [value]="projects"
+    [paginator]="true"
+    [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [responsiveLayout]="'scroll'"
+    sortMode="single"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records"
+    class="p-datatable-striped"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="projectName">
+          ProjectName <p-sortIcon field="projectName"></p-sortIcon>
+        </th>
+        <th class="text-center">StartDate</th>
+        <th class="text-center">EndDate</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-project>
+      <tr>
+        <td>{{ project.projectName }}</td>
+        <td class="text-center">{{ project.startDate | date : 'dd/MM/yyyy' }}</td>
+        <td class="text-center">{{ project.endDate | date : 'dd/MM/yyyy' }}</td>
+        <td class="text-center d-flex align-items-center justify-content-center">
+          <a
+            href="javascript:void(0)"
+            class="flex-grow-1"
+            (click)="
+              updateProject(project.id, project.projectName, project.startDate, project.endDate)
+            "
+            ><i class="bi bi-pencil"></i
+          ></a>
+          <a href="javascript:void(0)" class="flex-grow-1" (click)="deleteprojectpopup(project.id)"
+            ><i class="bi bi-trash"></i
+          ></a>
+        </td>
+      </tr>
+    </ng-template>
+
+    <!-- Empty State -->
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" class="text-center">{{ noDataMessage }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!------------------------------- Add Or Update Modal ----------------------------------->
+<div
+  class="modal fade"
+  id="insertorupdateproject"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deletejobdetailsLabel">
+          @if(isInsert){Add New}@else{Update} Project
+        </h5>
+        <button type="button" class="btn-close" (click)="closemodal()"></button>
+      </div>
+      <form [formGroup]="projectForm" (ngSubmit)="insertorupdateProject()">
+        <div class="modal-body p-4 d-flex flex-column gap-3">
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              <label class="form-label mb-0 w-custom"
+                >Project Name:<span class="text-danger small">*</span></label
+              >
+              <input
+                id="projectname"
+                type="text"
+                class="form-control"
+                formControlName="projectName"
+                placeholder="Enter Project Name"
+              />
+            </div>
+            <div *ngIf="isInvalid('projectName')" class="text-danger small">
+              ProjectName is required
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <div class="d-flex flex-column gap-2 flex-grow-1">
+              <label class="form-label mb-0"
+                >StartDate:<span class="text-danger small">*</span></label
+              >
+              <input
+                id="startdate"
+                type="date"
+                class="form-control flex-grow-1"
+                formControlName="startDate"
+              />
+            </div>
+            <div class="d-flex flex-column gap-2 flex-grow-1">
+              <label class="form-label mb-0 w-custom">EndDate:</label>
+              <input
+                id="enddate"
+                type="date"
+                class="form-control flex-grow-1"
+                formControlName="endDate"
+              />
+            </div>
+          </div>
+          <div *ngIf="isInvalid('startDate')" class="text-danger small">StartDate is required</div>
+        </div>
+        <div class="modal-footer d-flex align-items-center justify-content-center gap-1">
+          <button type="submit" class="btn btn-primary">@if(isInsert){Insert}@else{Update}</button>
+          <button type="button" class="btn btn-secondary" (click)="reset()">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!------------------------------- Delete confirmation ----------------------------------->
+<div
+  class="modal fade"
+  id="deleteproject"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deletejobdetailsLabel">Delete Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">Do you want to delete ?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteproject()">Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

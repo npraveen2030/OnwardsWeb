@@ -28,10 +28,12 @@ export class UserprojectroleassociationComponent {
   projects: project[] = [];
   showAssociations: boolean = false;
   selectedprojectid: string = '';
+  deletedassociationid?: number;
   associations: UserProjectRoleAssociationResponse[] = [];
   searchautocomplete: any = {};
   formvalues: any = {};
   noDataMessage: string = '';
+  deleteassociationmodal!: any;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -76,6 +78,17 @@ export class UserprojectroleassociationComponent {
       });
 
       this.noDataMessage = environment.noDataMessage;
+    }
+  }
+
+  ngAfterViewInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const bootstrap = (window as any).bootstrap;
+      const deleteassociationmodalEl = document.getElementById('deleteassociation');
+
+      if (deleteassociationmodalEl && bootstrap?.Modal) {
+        this.deleteassociationmodal = new bootstrap.Modal(deleteassociationmodalEl);
+      }
     }
   }
 
@@ -140,24 +153,34 @@ export class UserprojectroleassociationComponent {
     });
   }
 
-  deleteAssociation(id: number) {
-    this.associatonService.deleteAssociation(id, this.userDetails.id).subscribe({
-      next: () => {
-        this.toastr.success('Association Deleted Successfully');
-      },
-      error: (err) => {
-        throw new Error(err.message);
-      },
-      complete: () => {
-        this.associatonService.getAssociations(parseInt(this.selectedprojectid, 10)).subscribe({
-          next: (res) => {
-            this.associations = res;
-          },
-          error: (err) => {
-            this.associations = [];
-          },
-        });
-      },
-    });
+  deleteAssociationmodal(id: number) {
+    this.deletedassociationid = id;
+    this.deleteassociationmodal.show();
+  }
+
+  deleteAssociation() {
+    this.associatonService
+      .deleteAssociation(this.deletedassociationid ?? 0, this.userDetails.id)
+      .subscribe({
+        next: () => {
+          this.toastr.success('Association Deleted Successfully');
+        },
+        error: (err) => {
+          throw new Error(err.message);
+        },
+        complete: () => {
+          this.associatonService.getAssociations(parseInt(this.selectedprojectid, 10)).subscribe({
+            next: (res) => {
+              this.associations = res;
+            },
+            error: (err) => {
+              this.associations = [];
+            },
+            complete: () => {
+              this.deleteassociationmodal.hide();
+            },
+          });
+        },
+      });
   }
 }

@@ -2,11 +2,12 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { LoginResponse } from '../../models/loginResponseModel';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { LoginService } from '../../services/login-service.service';
 import { DashBoardService } from '../../services/dashboardservice.service';
 import { UserShiftLogResponse } from '../../models/DashBoardResponseModel';
 import { BreadcrumbComponent } from '../../shared/breadcrumb.component';
+import { filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -18,6 +19,7 @@ import { BreadcrumbComponent } from '../../shared/breadcrumb.component';
 export class HeaderComponent implements OnInit, AfterViewInit {
   userDetails: LoginResponse | null = null;
   logoutModal: any;
+  pageTitle?: string;
   logouttimedetails: UserShiftLogResponse = {
     logId: 0,
     shiftId: 0,
@@ -40,9 +42,25 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
+    private route: ActivatedRoute,
     private loginservice: LoginService,
     private dashboardservice: DashBoardService
-  ) {}
+  ) {
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        map(() => {
+          let child = this.route.firstChild;
+          while (child?.firstChild) {
+            child = child.firstChild;
+          }
+          return child?.snapshot.data['title'] || '';
+        })
+      )
+      .subscribe((title: string) => {
+        this.pageTitle = title;
+      });
+  }
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {

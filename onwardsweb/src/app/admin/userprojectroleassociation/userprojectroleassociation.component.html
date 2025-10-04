@@ -1,5 +1,5 @@
-<div class="card">
-  <div class="d-flex align-items-center gap-2 m-3">
+<div class="userprojectroleassociation-container">
+  <div class="d-flex align-items-center gap-2 mb-3 ms-5 me-3 pt-3 pb-3">
     <label for="projectSelect" class="form-label me-2 mb-0">Select a Project:</label>
     <select
       id="projectSelect"
@@ -14,11 +14,13 @@
     </select>
   </div>
   @if(selectedprojectid !== '') {
-  <div>
+  <div class="w-75 m-auto pb-3">
     @for (role of userRoles;track $index) {
-    <div class="mb-3 ms-5 me-5">
+    <div class="card p-4 mb-3">
       <div class="d-flex align-items-center gap-2 m-3">
-        <label class="form-label me-2 mb-0 fw-semibold w-custom">{{ role.roleName }}:</label>
+        <label class="form-label me-2 mb-0 fw-bold fs-5 w-custom text-center"
+          >{{ role.roleName }}:</label
+        >
         <p-autoComplete
           id="RequesitionName"
           [(ngModel)]="formvalues[role.roleName]"
@@ -38,7 +40,7 @@
           <i class="bi bi-save"></i>
         </button>
       </div>
-      <table class="table table-bordered w-75 ms-4s">
+      <table class="table table-bordered">
         <thead class="table-light">
           <tr>
             <th class="col text-center">Name</th>
@@ -47,25 +49,52 @@
           </tr>
         </thead>
         <tbody>
+          @if (getAssociationsByRoleLength(role.id) <= 0) {
           <tr>
-            @if (getAssociationsByRoleLength(role.id) <= 0) {
-
             <td colspan="4" class="text-center text-muted">{{ noDataMessage }}</td>
+          </tr>
 
-            } @for(association of getAssociationsByRole(role.id); track association.id) {
+          } @else { @for(association of getAssociationsByRole(role.id); track association.id) {
+          <tr>
             <td class="text-center">{{ association.fullName }}</td>
             <td class="text-center">
               {{ association.associationStartDate | date : 'dd/MM/yyyy' }}
             </td>
-            <td class="text-center" (click)="deleteAssociation(association.id)">
+            <td class="text-center" (click)="deleteAssociationmodal(association.id)">
               <i class="bi bi-trash"></i>
             </td>
-            }
           </tr>
+
+          } }
         </tbody>
       </table>
     </div>
     }
   </div>
   }
+</div>
+
+<!------------------------------- Delete confirmation ----------------------------------->
+<div
+  class="modal fade"
+  id="deleteassociation"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deletejobdetailsLabel">Delete Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">Do you want to delete ?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteAssociation()">Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>

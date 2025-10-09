@@ -19,7 +19,7 @@
     <!-- Show Time -->
     <div class="d-flex align-items-center">
       <span class="me-2">show time:</span>
-      <input type="checkbox" class="form-check-input" />
+      <input type="checkbox" class="form-check-input" [(ngModel)]="showTime" />
     </div>
 
     <!-- Day Picker -->
@@ -38,7 +38,7 @@
       </div>
 
       <!-- Refresh -->
-      <button class="btn btn-light rounded-circle shadow-sm ms-2">
+      <button class="btn btn-light rounded-circle shadow-sm ms-2" (click)="refreshMonth()">
         <i class="bi bi-arrow-repeat"></i>
       </button>
     </div>
@@ -54,6 +54,10 @@
       <div class="cal-cell-top">
         {{ day.date | date : 'd' }}
       </div>
+      <div class="cal-cell-center" *ngIf="showTime">
+        {{ getLoginTime(day.date) || '' }} {{ getLoginTime(day.date) ? '-' : '' }}
+        {{ getLogoutTime(day.date) || '' }}
+      </div>
       <div class="event-dot-container">
         <span
           *ngFor="let event of day.events"
@@ -63,14 +67,15 @@
       </div>
     </div>
   </ng-template>
-  <div class="calendar-container">
-    <mwl-calendar-month-view
-      [viewDate]="viewDate"
-      [events]="events"
-      [refresh]="refresh"
-      [cellTemplate]="customCellTemplate"
-    >
-    </mwl-calendar-month-view>
+  <div class="container-fluid p-0">
+    <div class="calendar-container">
+      <mwl-calendar-month-view
+        [viewDate]="viewDate"
+        [events]="events"
+        [refresh]="refresh"
+        [cellTemplate]="customCellTemplate"
+      ></mwl-calendar-month-view>
+    </div>
   </div>
 
   <!-- rightclick popup -->
@@ -119,19 +124,14 @@
     aria-labelledby="staticBackdropLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5 w-100 text-center" id="loginmodalLabel">Leave Request</h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <button type="button" class="btn-close" (click)="cancelLeaveRequest()"></button>
         </div>
-        <div class="modal-body">
-          <form [formGroup]="leaveRequestForm" id="leaveForm" (ngSubmit)="submitLeaveRequestForm()">
+        <form [formGroup]="leaveRequestForm" id="leaveForm" (ngSubmit)="submitLeaveRequestForm()">
+          <div class="modal-body modal-body-custom">
             <!-- Employee Name -->
             <div class="mb-3">
               <label class="form-label required">Employee Name</label>
@@ -147,52 +147,100 @@
               <label class="form-label required">Leave Type</label>
               <select class="form-select" formControlName="leavetype">
                 <option value="" disabled>Select Leave Type</option>
-                @for (type of leavetypes; track type.id) {
-                <option [value]="type.id">{{ type.leaveTypeName }}</option>
+                @for (type of leavetypes; track $index) {
+                <option [value]="type.id">
+                  {{ type.leaveTypeName }}({{ type.remainingDays }})
+                </option>
                 }
               </select>
+              <div *ngIf="isInvalidLeaveRequest('leavetype')" class="text-danger small">
+                Leave Type is required
+              </div>
             </div>
 
-            <!-- Start Date and Day Period -->
-            <div class="row mb-3">
-              <div class="col">
-                <label class="form-label required">Start Date</label>
-                <input
-                  type="date"
-                  class="form-control"
-                  formControlName="startDate"
-                  [min]="minDate"
-                />
+            <div class="d-flex gap-3">
+              <div class="d-flex flex-column flex-grow-1">
+                <!-- Start Date -->
+                <div class="mb-3">
+                  <label class="form-label required">Start Date</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    formControlName="startDate"
+                    [min]="minDate"
+                    (change)="
+                      leaveRequestForm.get('dayPeriod')?.value === 'half' ? setendDate() : ''
+                    "
+                  />
+                  <div *ngIf="isInvalidLeaveRequest('startDate')" class="text-danger small">
+                    Start Date is required
+                  </div>
+                </div>
+                <!-- End Date -->
+                <div class="mb-3">
+                  <label class="form-label required">End Date</label>
+                  <input
+                    type="date"
+                    class="form-control {{
+                      leaveRequestForm.get('dayPeriod')?.value === 'half'
+                        ? 'bg-secondary-subtle'
+                        : ''
+                    }}"
+                    formControlName="endDate"
+                    [min]="minDate"
+                    [readOnly]="leaveRequestForm.get('dayPeriod')?.value === 'half'"
+                  />
+                  <div *ngIf="isInvalidLeaveRequest('endDate')" class="text-danger small">
+                    End Date is required
+                  </div>
+                </div>
               </div>
-              <div class="col">
+
+              <!-- Day Period -->
+              <div class="mb-3 flex-grow-1">
                 <label class="form-label required">Day Period</label>
-                <select class="form-select" formControlName="dayPeriod">
-                  <option value="" disabled>Select</option>
-                  <option value="full">Full Day</option>
+                <select
+                  class="form-select"
+                  formControlName="dayPeriod"
+                  (change)="halfdayhandler($event)"
+                >
+                  <option value="full" selected>Full Day</option>
                   <option value="half">Half Day</option>
                 </select>
+                <div *ngIf="isInvalidLeaveRequest('dayPeriod')" class="text-danger small">
+                  Day Period is required
+                </div>
               </div>
-            </div>
-
-            <!-- End Date -->
-            <div class="mb-3">
-              <label class="form-label required">End Date</label>
-              <input type="date" class="form-control" formControlName="endDate" [min]="minDate" />
             </div>
 
             <!-- Phone Number -->
             <div class="mb-3">
               <label class="form-label">Phone Number</label>
               <input
-                type="tel"
+                type="text"
                 class="form-control"
                 formControlName="phone"
-                placeholder="Optional"
+                placeholder="Enter Phone Number"
               />
             </div>
 
             <!-- Employees to be notified -->
-            <app-autocomplete formControlName="notify"></app-autocomplete>
+            <div>
+              <label class="form-label required">Employee to be notified</label> <br />
+              <p-autoComplete
+                id="RequesitionName"
+                class="custom-autocomplete"
+                formControlName="notify"
+                [suggestions]="usersuggestions"
+                (completeMethod)="searchuser($event)"
+                optionLabel="userName"
+                placeholder="Enter UserName"
+                [forceSelection]="true"
+              ></p-autoComplete>
+              <div *ngIf="isInvalidLeaveRequest('notify')" class="text-danger small">
+                Employee is required
+              </div>
+            </div>
 
             <!-- Reason -->
             <div class="mb-1">
@@ -200,6 +248,7 @@
               <textarea
                 class="form-control"
                 rows="3"
+                placeholder="Enter Reason"
                 formControlName="reason"
                 maxlength="250"
               ></textarea>
@@ -207,68 +256,57 @@
             <div class="char-count">
               {{ leaveRequestForm.get('reason')?.value?.length || 0 }} / 250
             </div>
+            <div *ngIf="isInvalidLeaveRequest('reason')" class="text-danger small">
+              Reason is required
+            </div>
 
             <!-- Drag & Drop File Upload -->
-            <div class="container my-4" style="max-width: 500px">
+            <div class="mb-3 d-flex flex-column">
               <div class="mb-2 text-muted small">
-                Recommended file upload size <strong>500kb</strong>.
+                Recommended file upload size <strong>1mb</strong>.
               </div>
+              <input
+                type="file"
+                id="bills"
+                (change)="onFileSelected($event)"
+                class="form-control d-none"
+                multiple
+                #fileInput
+              />
 
               <div
-                class="drag-drop-box"
-                (drop)="onDrop($event)"
+                class="btn btn-drag-drop d-flex justify-content-center align-items-center"
+                (click)="fileInput.click()"
                 (dragover)="onDragOver($event)"
-                (dragleave)="onDragLeave($event)"
-                (click)="!fileData && fileInput.click()"
+                (drop)="onDrop($event)"
               >
-                >
-                <ng-container *ngIf="!fileData">
-                  Drop supporting document here or click to upload
-                </ng-container>
-                <input
-                  type="file"
-                  #fileInput
-                  (change)="onFileSelected($event)"
-                  accept=".pdf,.jpg,.jpeg"
-                  hidden
-                />
+                Select or Drop File Here
               </div>
 
-              <!-- File info with cross -->
-              <div class="file-info d-flex align-items-center mt-2" *ngIf="fileName">
-                <span>{{ fileName }}</span>
-                <button
-                  type="button"
-                  class="btn-remove ms-2"
-                  aria-label="Remove"
-                  (click)="RemoveFile()"
-                >
-                  X
-                </button>
-              </div>
-
-              <!-- Validation message -->
-              <div
-                *ngIf="
-                  leaveRequestForm.get('file')?.invalid && leaveRequestForm.get('file')?.touched
-                "
-                class="text-danger small"
-              >
-                File is required
-              </div>
+              <ul class="list-group mt-3" *ngIf="selectedFile !== null">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  {{ selectedFile.name }}
+                  <button type="button" class="btn btn-sm btn-danger" (click)="removeFile()">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </li>
+              </ul>
+              @if(fileError !== null) {
+              <div class="text-danger small">{{ fileError }}</div>
+              }
             </div>
-
-            <div class="modal-footer d-flex justify-content-center">
-              <button type="submit" class="btn btn-primary btn-custom">Submit</button>
-
-              <button type="button" class="btn btn-secondary btn-custom">Clear Data</button>
-
-              <button type="button" class="btn btn-danger btn-custom" data-bs-dismiss="modal">
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary btn-custom">Submit</button>
+            <button
+              type="button"
+              class="btn btn-secondary btn-custom"
+              (click)="resetLeaveRequest()"
+            >
+              Reset
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -296,21 +334,21 @@
             aria-label="Close"
           ></button>
         </div>
-
-        <div class="modal-body">
-          <form
-            [formGroup]="attendanceForm"
-            id="attendanceForm"
-            (ngSubmit)="submitAttendanceRegualrization()"
-          >
+        <form
+          [formGroup]="attendanceForm"
+          id="attendanceForm"
+          (ngSubmit)="submitAttendanceRegualrization()"
+        >
+          <div class="modal-body">
             <!-- Employee Name -->
             <div class="mb-3">
               <label class="form-label required">Employee Name</label>
               <input
                 type="text"
-                class="form-control"
+                class="form-control-plaintext"
                 formControlName="employeeName"
                 placeholder="Enter employee name"
+                readonly
               />
             </div>
 
@@ -352,13 +390,11 @@
 
             <!-- Duration -->
             <div class="mb-3">
-              <label class="form-label">Duration</label>
-              <input
-                type="text"
-                class="form-control-plaintext ps-1"
-                formControlName="duration"
-                readonly
-              />
+              <p
+                class="bg-secondary-subtle d-flex align-items-center justify-content-center h-custom"
+              >
+                Duration x day/s
+              </p>
             </div>
 
             <!-- Reason -->
@@ -369,34 +405,28 @@
                 rows="3"
                 formControlName="reason"
                 maxlength="250"
+                placeholder="Enter Reason"
               ></textarea>
             </div>
             <div class="char-count">
               {{ attendanceForm.get('reason')?.value?.length || 0 }} / 250
             </div>
-          </form>
-
+            <div *ngIf="isInvalidAttendanceReg('reason')" class="text-danger small">
+              Reason is required
+            </div>
+          </div>
           <!-- Footer Buttons -->
           <div class="modal-footer d-flex justify-content-center">
-            <button
-              type="submit"
-              class="btn btn-success btn-custom"
-              (click)="submitAttendanceRegualrization()"
-            >
-              Submit
-            </button>
+            <button type="submit" class="btn btn-success btn-custom">Submit</button>
             <button
               type="button"
               class="btn btn-warning btn-custom"
               (click)="clearAttendanceForm()"
             >
-              Clear Data
-            </button>
-            <button type="button" class="btn btn-danger btn-custom" data-bs-dismiss="modal">
-              Cancel
+              Reset
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>

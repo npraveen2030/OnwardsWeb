@@ -5,3 +5,13 @@
 .w-custom {
   width: 18%;
 }
+
+.custom-autocomplete ::ng-deep .p-inputtext {
+  height: 35px;
+  line-height: 40px;
+  font-size: 14px;
+}
+
+.custom-button {
+  height: 35px;
+}

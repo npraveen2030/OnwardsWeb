@@ -206,16 +206,17 @@ textarea {
 }
 
 .calendar-container {
-  width: auto;
-  height: 500px;
+  width: 100%;
 }
 
 .calendar-container mwl-calendar-month-view {
   display: block;
-  width: 100%;
+  width: 98%;
   height: auto;
-  transform: scale(0.9); /* shrink content */
-  transform-origin: top left;
+  margin: auto;
+  margin-bottom: 8px;
+  margin-top: 8px;
+  transform: none !important; /* Remove scaling */
 }
 
 .file-info {
@@ -229,4 +230,55 @@ textarea {
   border: none;
   font-size: 1rem;
   cursor: pointer;
+}
+
+.w-custom {
+  width: 49%;
+}
+
+.btn-drag-drop {
+  background-color: transparent;
+  border: 1px dashed #6c757d;
+  height: 80px;
+  width: 100%;
+}
+
+::ng-deep .custom-autocomplete,
+::ng-deep .custom-autocomplete .p-autocomplete,
+::ng-deep .custom-autocomplete .p-inputtext {
+  width: 100% !important;
+  display: block;
+}
+
+:host ::ng-deep .custom-day-cell {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+:host ::ng-deep .cal-cell-top {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+:host ::ng-deep .cal-cell-center {
+  font-size: 0.8rem;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modal-body-custom {
+  height: 75vh;
+  overflow-y: auto;
+}
+
+.h-custom {
+  height: 36px;
 }

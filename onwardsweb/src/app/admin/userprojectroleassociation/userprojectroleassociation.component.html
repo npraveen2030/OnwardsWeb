@@ -1,5 +1,5 @@
 <div class="userprojectroleassociation-container">
-  <div class="d-flex align-items-center gap-2 mb-3 ms-5 me-3 pt-3 pb-3">
+  <div class="d-flex align-items-center gap-2 mb-3 ps-4 pt-3 pb-3 w-75 m-auto">
     <label for="projectSelect" class="form-label me-2 mb-0">Select a Project:</label>
     <select
       id="projectSelect"
@@ -17,12 +17,11 @@
   <div class="w-75 m-auto pb-3">
     @for (role of userRoles;track $index) {
     <div class="card p-4 mb-3">
-      <div class="d-flex align-items-center gap-2 m-3">
-        <label class="form-label me-2 mb-0 fw-bold fs-5 w-custom text-center"
-          >{{ role.roleName }}:</label
-        >
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <label class="form-label me-2 mb-0 fs-6 w-custom">{{ role.roleName }}:</label>
         <p-autoComplete
           id="RequesitionName"
+          class="custom-autocomplete"
           [(ngModel)]="formvalues[role.roleName]"
           [suggestions]="searchautocomplete[role.roleName]"
           (completeMethod)="search($event, role.roleName)"
@@ -33,11 +32,11 @@
           (onClear)="formvalues[role.roleName] = null"
         ></p-autoComplete>
         <button
-          class="btn btn-primary"
+          class="btn btn-primary custom-button"
           (click)="insertassociation(formvalues[role.roleName].id, role.id, role.roleName)"
           [disabled]="!formvalues[role.roleName]"
         >
-          <i class="bi bi-save"></i>
+          <i class="bi bi-save"></i> ADD
         </button>
       </div>
       <table class="table table-bordered">

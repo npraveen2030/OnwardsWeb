@@ -120,7 +120,6 @@ export class UserprojectroleassociationComponent {
   }
 
   insertassociation(userId: number, roleId: number, rolename: any) {
-    debugger;
     const insertreq: UserProjectRoleAssociationRequest = {
       loginId: this.userDetails.id,
       userId: userId,

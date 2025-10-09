@@ -41,7 +41,15 @@ const routes: Route[] = [
         },
       },
       { path: 'reports', component: ReportComponent },
-      { path: 'dashboard/leavemanagement', component: LeavemanagementComponent },
+      {
+        path: 'leavemanagement',
+        component: LeavemanagementComponent,
+        data: {
+          breadcrumb: 'Leavemanagement',
+          parent: '/dashboard',
+          title: 'LEAVE MANAGEMENT',
+        },
+      },
 
       {
         path: 'myworkspace',
@@ -123,7 +131,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     importProvidersFrom(
       ToastrModule.forRoot({
-        timeOut: 3000,
+        timeOut: 4000,
         positionClass: 'toast-top-right',
         preventDuplicates: true,
       })

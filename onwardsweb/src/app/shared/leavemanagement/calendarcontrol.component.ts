@@ -5,6 +5,7 @@ import {
   PLATFORM_ID,
   Inject,
   ChangeDetectorRef,
+  Input,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { addMonths, subMonths } from 'date-fns';
@@ -26,7 +27,10 @@ import { CalendarWrapperModule } from '../../services/calendar-wrapper.service';
 import { LoginResponse } from '../../models/loginResponseModel';
 import { LeaveManagementService } from '../../services/leavemanagement.service';
 import { LeaveTypes } from '../../models/leavemanagementResponseModel';
-import { LeaveRequest } from '../../models/leavemanagementRequestModel';
+import {
+  LeaveRequest,
+  AttendanceRegularizationrequest,
+} from '../../models/leavemanagementRequestModel';
 import { user } from '../../models/jobpostresponse';
 import { JobPostService } from '../../services/jobpost.service';
 import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
@@ -42,6 +46,7 @@ import { ToastrService } from 'ngx-toastr';
   providers: [CalendarDateFormatter],
 })
 export class CalendarControlComponent {
+  @Input() fullComponentRefresh!: () => void;
   view: CalendarView = CalendarView.Month;
   viewDate: Date = new Date();
   refresh = new Subject<void>();
@@ -85,10 +90,11 @@ export class CalendarControlComponent {
     });
     this.attendanceForm = this.fb.group({
       employeeName: ['', Validators.required],
-      type: ['day', Validators.required],
+      managerName: [''],
+      type: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      duration: [{ value: '', disabled: true }],
+      duration: ['', Validators.min(0)],
       reason: ['', [Validators.required, Validators.maxLength(250)]],
     });
   }
@@ -137,8 +143,6 @@ export class CalendarControlComponent {
       if (attendanceEl && bootstrap?.Modal) {
         this.attendanceregularizationModal = new bootstrap.Modal(attendanceEl);
       }
-
-      this.attendanceregularizationModal.show();
     }
   }
 
@@ -288,9 +292,12 @@ export class CalendarControlComponent {
     if (this.rightClickDay !== null) {
       this.attendanceForm.patchValue({
         employeeName: `${this.userDetails.fullName} (${this.userDetails.employeeCode})`,
+        managerName: `${this.userDetails.reportingManagerName} (${this.userDetails.reportingManagerEmpCode})`,
+        type: '1',
         startDate: this.toLocalDateString(this.rightClickDay),
         endDate: this.toLocalDateString(this.rightClickDay),
       });
+      this.dateDifference();
     }
     this.attendanceregularizationModal.show();
   }
@@ -408,6 +415,9 @@ export class CalendarControlComponent {
         error: (err) => {
           throw new Error(err.message);
         },
+        complete: () => {
+          this.fullComponentRefresh();
+        },
       });
     } else {
       this.leaveRequestForm.markAllAsTouched();
@@ -437,16 +447,64 @@ export class CalendarControlComponent {
   }
 
   //--------------------Attendance Regularization----------------------------------
+  dateDifference() {
+    this.attendanceForm.patchValue({
+      duration:
+        new Date(this.attendanceForm.get('endDate')?.value).getDate() -
+        new Date(this.attendanceForm.get('startDate')?.value).getDate() +
+        1,
+    });
+  }
+
   submitAttendanceRegualrization() {
     if (this.attendanceForm.valid) {
+      let payload: AttendanceRegularizationrequest = {
+        userId: this.userDetails.id,
+        typeId: this.attendanceForm.get('type')?.value,
+        startDate: this.attendanceForm.get('startDate')?.value,
+        endDate: this.attendanceForm.get('endDate')?.value,
+        duration: this.attendanceForm.get('duration')?.value,
+        reason: this.attendanceForm.get('reason')?.value,
+        loginId: this.userDetails.id,
+      };
+      this.leavemanagementservice.InsertAttendanceRegularization(payload).subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.cancelAttendanceForm();
+            this.toastr.success(res.message);
+          } else {
+            this.toastr.warning(res.message);
+          }
+        },
+        error: (err) => {
+          throw new Error(err.message);
+        },
+        complete: () => {
+          this.fullComponentRefresh();
+        },
+      });
     } else {
       this.attendanceForm.markAllAsTouched();
       return;
     }
   }
 
-  clearAttendanceForm() {
+  resetAttendanceForm() {
+    if (this.rightClickDay) {
+      this.attendanceForm.reset({
+        employeeName: `${this.userDetails.fullName} (${this.userDetails.employeeCode})`,
+        managerName: `${this.userDetails.reportingManagerName} (${this.userDetails.reportingManagerEmpCode})`,
+        type: '1',
+        startDate: this.toLocalDateString(this.rightClickDay),
+        endDate: this.toLocalDateString(this.rightClickDay),
+      });
+    }
+    this.dateDifference();
+  }
+
+  cancelAttendanceForm() {
     this.attendanceForm.reset();
+    this.attendanceregularizationModal.hide();
   }
 
   isInvalidAttendanceReg(controlName: string): boolean {

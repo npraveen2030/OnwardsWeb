@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CalendarControlComponent } from './calendarcontrol.component';
 import { LeavesappliedComponent } from './leavesapplied.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-leavemanagement',
@@ -9,4 +10,6 @@ import { LeavesappliedComponent } from './leavesapplied.component';
   templateUrl: './leavemanagement.component.html',
   styleUrl: './leavemanagement.component.scss',
 })
-export class LeavemanagementComponent {}
+export class LeavemanagementComponent {
+  constructor(private router: Router) {}
+}

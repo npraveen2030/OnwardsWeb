@@ -327,19 +327,14 @@
           <h1 class="modal-title fs-5 w-100 text-center" id="attendanceRegularizationLabel">
             Attendance Regularization
           </h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <button type="button" class="btn-close" (click)="cancelAttendanceForm()"></button>
         </div>
         <form
           [formGroup]="attendanceForm"
           id="attendanceForm"
           (ngSubmit)="submitAttendanceRegualrization()"
         >
-          <div class="modal-body">
+          <div class="modal-body modal-body-custom">
             <!-- Employee Name -->
             <div class="mb-3">
               <label class="form-label required">Employee Name</label>
@@ -347,6 +342,17 @@
                 type="text"
                 class="form-control-plaintext"
                 formControlName="employeeName"
+                placeholder="Enter employee name"
+                readonly
+              />
+            </div>
+            <!-- reportingManagerEmpCode -->
+            <div class="mb-3">
+              <label class="form-label required">Reporting Manager Name</label>
+              <input
+                type="text"
+                class="form-control-plaintext"
+                formControlName="managerName"
                 placeholder="Enter employee name"
                 readonly
               />
@@ -361,7 +367,7 @@
                   class="btn-check"
                   id="dayBased"
                   formControlName="type"
-                  value="day"
+                  value="1"
                 />
                 <label class="btn btn-outline-primary" for="dayBased">Day Based</label>
 
@@ -370,7 +376,7 @@
                   class="btn-check"
                   id="timeBased"
                   formControlName="type"
-                  value="time"
+                  value="2"
                 />
                 <label class="btn btn-outline-primary" for="timeBased">Time Based</label>
               </div>
@@ -380,11 +386,21 @@
             <div class="row mb-3">
               <div class="col">
                 <label class="form-label required">Start Date</label>
-                <input type="date" class="form-control" formControlName="startDate" />
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="startDate"
+                  (change)="dateDifference()"
+                />
               </div>
               <div class="col">
                 <label class="form-label required">End Date</label>
-                <input type="date" class="form-control" formControlName="endDate" />
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="endDate"
+                  (change)="dateDifference()"
+                />
               </div>
             </div>
 
@@ -393,8 +409,14 @@
               <p
                 class="bg-secondary-subtle d-flex align-items-center justify-content-center h-custom"
               >
-                Duration x day/s
+                Duration
+                {{ attendanceForm.get('duration')?.value }}
+                day(s)
               </p>
+            </div>
+
+            <div *ngIf="isInvalidAttendanceReg('duration')" class="text-danger small">
+              Duration cannot be negitive
             </div>
 
             <!-- Reason -->
@@ -421,7 +443,7 @@
             <button
               type="button"
               class="btn btn-warning btn-custom"
-              (click)="clearAttendanceForm()"
+              (click)="resetAttendanceForm()"
             >
               Reset
             </button>

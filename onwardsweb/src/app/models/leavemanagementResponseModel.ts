@@ -10,3 +10,16 @@ export interface calendarevent {
   loginTime: string;
   logOutTime: string;
 }
+
+export interface LeavesAndAttendance {
+  isLeave: boolean;
+  id: number;
+  leaveTypeName?: string | null;
+  type?: number | null;
+  startDate: string;
+  endDate: string;
+  duration: number;
+  status?: string | null;
+  reason?: string | null;
+  createdDate?: string | null;
+}

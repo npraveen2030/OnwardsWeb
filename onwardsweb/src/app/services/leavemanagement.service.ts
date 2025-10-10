@@ -1,8 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
-import { calendarevent, LeaveTypes } from '../models/leavemanagementResponseModel';
-import { LeaveRequest } from '../models/leavemanagementRequestModel';
+import {
+  calendarevent,
+  LeavesAndAttendance,
+  LeaveTypes,
+} from '../models/leavemanagementResponseModel';
+import {
+  AttendanceRegularizationrequest,
+  LeaveRequest,
+} from '../models/leavemanagementRequestModel';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +31,23 @@ export class LeaveManagementService {
       params,
       withCredentials: true,
     });
+  }
+
+  GetLeavesAndAttendance(userId: number): Observable<LeavesAndAttendance[]> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    const params = new HttpParams().set('userId', userId.toString());
+
+    return this.http.get<LeavesAndAttendance[]>(
+      `${this.apiService}/UserLeaveApplied/getleaveandattendance`,
+      {
+        headers,
+        params,
+        withCredentials: true,
+      }
+    );
   }
 
   GetCalanderEvents(userId: number, month: number, year: number): Observable<calendarevent[]> {
@@ -70,6 +94,16 @@ export class LeaveManagementService {
     return this.http.post<{ success: string; message: string }>(
       `${this.apiService}/UserLeaveApplied/insert`,
       formData,
+      { withCredentials: true }
+    );
+  }
+
+  InsertAttendanceRegularization(
+    payload: AttendanceRegularizationrequest
+  ): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(
+      `${this.apiService}/AttendanceRegularization/insert`,
+      payload,
       { withCredentials: true }
     );
   }

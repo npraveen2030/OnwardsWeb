@@ -2,26 +2,37 @@
   <div>
     <h4>Leaves Applied</h4>
   </div>
-  <div class="card p-2">
+  @for(item of leavesandattendance;track $index) {
+  <div class="card p-2 mb-1">
     <table class="table-custom">
       <tr>
-        <td>Name</td>
+        <td>{{ item.isLeave ? 'Leave Request' : 'Attendance' }}</td>
         <td>From</td>
         <td>To</td>
         <td>Day/Hr</td>
       </tr>
       <tr>
-        <td>John</td>
-        <td class="text-secondary">25</td>
-        <td class="text-secondary">New York</td>
-        <td class="text-secondary">Name</td>
-        <td>Approved</td>
-        <td><i class="bi bi-eye"></i></td>
+        <td>{{ item.isLeave ? '.............................' : 'Regularization' }}</td>
+        <td class="text-secondary">{{ item.startDate | date : 'dd-MMM-yyyy' }}</td>
+        <td class="text-secondary">{{ item.endDate | date : 'dd-MMM-yyyy' }}</td>
+        <td class="text-secondary">{{ item.duration }} Day(s)</td>
+        @if(item.status === "Requested") {
+        <td class="text-primary">Requested</td>
+        } @if(item.status === "Approved") {
+        <td class="text-success">Approved</td>
+        } @if(item.status === "Rejected") {
+        <td class="text-danger">Rejected</td>
+        } @if(item.status === "Cancelled") {
+        <td class="text-warning">Cancelled</td>
+        }
+
+        <td><i class="bi bi-eye pe-2"></i></td>
         <td><i class="bi bi-pencil"></i></td>
       </tr>
       <tr>
-        <td>Mary</td>
+        <td>{{ item.isLeave ? item.leaveTypeName : '.............................' }}</td>
       </tr>
     </table>
   </div>
+  }
 </div>

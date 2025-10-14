@@ -23,6 +23,7 @@ import Lara from '@primeng/themes/lara';
 import { ToastrModule } from 'ngx-toastr';
 import { UserprojectroleassociationComponent } from './admin/userprojectroleassociation/userprojectroleassociation.component';
 import { ProjectmanagementComponent } from './admin/projectmanagement/projectmanagement.component';
+import { ManagerleavemanagementComponent } from './shared/leavemanagement/managerleavemanagement/managerleavemanagement.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -121,10 +122,19 @@ const routes: Route[] = [
           title: 'PROJECT MANAGEMENT',
         },
       },
+      {
+        path: 'managerleavemanagement',
+        component: ManagerleavemanagementComponent,
+        data: {
+          breadcrumb: 'Managerleavemanagement',
+          parent: '/dashboard',
+          title: 'MANAGER LEAVE MANAGEMENT',
+        },
+      },
     ],
   },
 ];
-
+// ManagerleavemanagementComponent
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection(),

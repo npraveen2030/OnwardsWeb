@@ -1,0 +1,15 @@
+<div class="bg-light p-4">
+  <div class="custom-tabs mb-4">
+    <a [class.active]="activeTab === 'leaves'" (click)="setActiveTab('leaves')">Leaves</a>
+    <a [class.active]="activeTab === 'attendance'" (click)="setActiveTab('attendance')"
+      >Attendance</a
+    >
+  </div>
+  <div>
+    @if(activeTab === 'leaves') {
+    <app-managerleaves />
+    } @else {
+    <app-managerattendance />
+    }
+  </div>
+</div>

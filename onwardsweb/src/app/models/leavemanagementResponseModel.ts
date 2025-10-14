@@ -14,6 +14,7 @@ export interface calendarevent {
 export interface LeavesAndAttendance {
   isLeave: boolean;
   id: number;
+  leaveTypeId?: number | null;
   leaveTypeName?: string | null;
   type?: number | null;
   startDate: string;

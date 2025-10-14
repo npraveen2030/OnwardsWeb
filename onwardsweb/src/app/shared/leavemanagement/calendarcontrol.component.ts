@@ -22,7 +22,7 @@ import {
   Validators,
   FormsModule,
 } from '@angular/forms';
-import { map, Subject } from 'rxjs';
+import { map, Subject, Subscription } from 'rxjs';
 import { CalendarWrapperModule } from '../../services/calendar-wrapper.service';
 import { LoginResponse } from '../../models/loginResponseModel';
 import { LeaveManagementService } from '../../services/leavemanagement.service';
@@ -35,6 +35,7 @@ import { user } from '../../models/jobpostresponse';
 import { JobPostService } from '../../services/jobpost.service';
 import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { ToastrService } from 'ngx-toastr';
+import { SiblingCommunicationService } from '../../services/SiblingCommunication.service';
 
 @Component({
   selector: 'app-calendarcontrol',
@@ -69,6 +70,7 @@ export class CalendarControlComponent {
   selectedFile: File | null = null;
   fileError: string | null = null;
   times: any = [];
+  private sub!: Subscription;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -76,7 +78,8 @@ export class CalendarControlComponent {
     private fb: FormBuilder,
     private jobPostService: JobPostService,
     private leavemanagementservice: LeaveManagementService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private commService: SiblingCommunicationService
   ) {
     this.leaveRequestForm = this.fb.group({
       employeename: ['', Validators.required],
@@ -111,21 +114,37 @@ export class CalendarControlComponent {
         employeename: `${this.userDetails.fullName} (${this.userDetails.employeeCode})`,
       });
 
-      this.leavemanagementservice.GetLeaveTypes(this.userDetails.id).subscribe({
-        next: (response) => {
-          this.leavetypes = response;
-        },
-        error: (err) => {
-          console.error('Error fetching leave types', err);
-        },
+      this.sub = this.commService.triggerAction$.subscribe((action) => {
+        if (action === 'refetchcalendercontrol') {
+          this.getcalendercontrol();
+        }
       });
 
-      this.jobPostService.Getusers().subscribe((res) => {
-        this.users = res;
-      });
-
-      this.getCalenderEvents();
+      this.getcalendercontrol();
     }
+  }
+
+  ngOnDestroy() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+  }
+
+  getcalendercontrol(): void {
+    this.leavemanagementservice.GetLeaveTypes(this.userDetails.id).subscribe({
+      next: (response) => {
+        this.leavetypes = response;
+      },
+      error: (err) => {
+        console.error('Error fetching leave types', err);
+      },
+    });
+
+    this.jobPostService.Getusers().subscribe((res) => {
+      this.users = res;
+    });
+
+    this.getCalenderEvents();
   }
 
   ngAfterViewInit() {
@@ -416,7 +435,7 @@ export class CalendarControlComponent {
           throw new Error(err.message);
         },
         complete: () => {
-          this.fullComponentRefresh();
+          this.commService.trigger('refetchleavesandattendance');
         },
       });
     } else {
@@ -480,7 +499,7 @@ export class CalendarControlComponent {
           throw new Error(err.message);
         },
         complete: () => {
-          this.fullComponentRefresh();
+          this.commService.trigger('refetchleavesandattendance');
         },
       });
     } else {

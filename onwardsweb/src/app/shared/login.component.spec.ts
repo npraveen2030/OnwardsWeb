@@ -22,7 +22,7 @@ describe('LoginComponent', () => {
         LoginComponent, // standalone component
       ],
       providers: [
-        provideHttpClientTesting(), // ✅ goes here
+        provideHttpClientTesting(),
         { provide: Router, useValue: mockRouter },
         { provide: LoginService, useValue: mockLoginService },
       ],

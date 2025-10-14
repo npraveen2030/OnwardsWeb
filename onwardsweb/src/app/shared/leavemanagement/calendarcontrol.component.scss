@@ -215,8 +215,7 @@ textarea {
   height: auto;
   margin: auto;
   margin-bottom: 8px;
-  margin-top: 8px;
-  transform: none !important; /* Remove scaling */
+  // transform: scale(0.9) !important;
 }
 
 .file-info {

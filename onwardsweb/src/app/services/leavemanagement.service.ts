@@ -8,7 +8,9 @@ import {
 } from '../models/leavemanagementResponseModel';
 import {
   AttendanceRegularizationrequest,
+  AttendanceRegularizationUpdateRequest,
   LeaveRequest,
+  LeaveUpdateRequest,
 } from '../models/leavemanagementRequestModel';
 
 @Injectable({
@@ -103,6 +105,24 @@ export class LeaveManagementService {
   ): Observable<{ success: boolean; message: string }> {
     return this.http.post<{ success: boolean; message: string }>(
       `${this.apiService}/AttendanceRegularization/insert`,
+      payload,
+      { withCredentials: true }
+    );
+  }
+
+  UpdateLeaves(payload: LeaveUpdateRequest): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(
+      `${this.apiService}/UserLeaveApplied/update`,
+      payload,
+      { withCredentials: true }
+    );
+  }
+
+  UpdateAttendanceRegularization(
+    payload: AttendanceRegularizationUpdateRequest
+  ): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(
+      `${this.apiService}/AttendanceRegularization/update`,
       payload,
       { withCredentials: true }
     );

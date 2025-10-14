@@ -27,7 +27,21 @@
         }
 
         <td><i class="bi bi-eye pe-2"></i></td>
-        <td><i class="bi bi-pencil"></i></td>
+        <td>
+          <i
+            class="bi bi-pencil"
+            (click)="
+              cancelrequestpopup(
+                item.isLeave,
+                item.startDate,
+                item.endDate,
+                item.id,
+                item.leaveTypeId ?? 0,
+                item.duration
+              )
+            "
+          ></i>
+        </td>
       </tr>
       <tr>
         <td>{{ item.isLeave ? item.leaveTypeName : '.............................' }}</td>
@@ -35,4 +49,34 @@
     </table>
   </div>
   }
+</div>
+
+<div
+  class="modal fade"
+  id="cancelrequest"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deletejobdetailsLabel">Cancellation Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">Do you want to Cancel?</div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="isLeave ? updateleaves() : updateattendance()"
+        >
+          Cancel
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>

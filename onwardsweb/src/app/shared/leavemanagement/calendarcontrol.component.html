@@ -394,6 +394,7 @@
                   class="form-control"
                   formControlName="startDate"
                   (change)="dateDifference()"
+                  [min]="minDate"
                 />
               </div>
               <div class="col">
@@ -403,6 +404,7 @@
                   class="form-control"
                   formControlName="endDate"
                   (change)="dateDifference()"
+                  [min]="minDate"
                 />
               </div>
             </div>

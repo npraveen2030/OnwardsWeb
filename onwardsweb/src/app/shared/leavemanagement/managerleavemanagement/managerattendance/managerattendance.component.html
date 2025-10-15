@@ -1,1 +1,140 @@
-<p>managerattendance works!</p>
+<div class="d-flex gap-2 mb-2">
+  <button class="btn btn-success btn-sm" (click)="showConfirmationPopup(true)">Approve</button>
+  <button class="btn btn-danger btn-sm" (click)="showConfirmationPopup(false)">Reject</button>
+</div>
+
+<p-table
+  [value]="attendanceregularization"
+  [(selection)]="selectedRecords"
+  dataKey="id"
+  [paginator]="true"
+  [rows]="5"
+  [rowsPerPageOptions]="[5, 10, 20]"
+  [responsiveLayout]="'scroll'"
+  sortMode="single"
+  [showCurrentPageReport]="true"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records"
+  class="p-datatable-striped"
+>
+  <!-- ✅ Header -->
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 3rem">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th>User Name</th>
+      <th class="text-center">From</th>
+      <th class="text-center">To</th>
+      <th class="text-center">Duration</th>
+      <th class="text-center">Reason</th>
+      <th class="text-center">Action</th>
+      <th class="text-center">Status</th>
+    </tr>
+  </ng-template>
+
+  <!-- ✅ Body -->
+  <ng-template pTemplate="body" let-row>
+    <tr [pSelectableRow]="row">
+      <!-- Checkbox per row -->
+      <td>
+        <p-tableCheckbox [value]="row"></p-tableCheckbox>
+      </td>
+
+      <!-- Full Name -->
+      <td pTooltip="{{ row.fullName }}" tooltipPosition="top">
+        {{ row.fullName }}
+      </td>
+
+      <!-- Start Date -->
+      <td class="text-center" pTooltip="{{ row.startDate | date : 'fullDate' }}">
+        {{ row.startDate | date : 'dd/MM/yyyy' }}
+      </td>
+
+      <!-- End Date -->
+      <td class="text-center" pTooltip="{{ row.endDate | date : 'fullDate' }}">
+        {{ row.endDate | date : 'dd/MM/yyyy' }}
+      </td>
+
+      <!-- Duration -->
+      <td class="text-center" pTooltip="{{ row.duration }} Day(s)">{{ row.duration }} Day(s)</td>
+
+      <!-- ✅ Reason -->
+      <td class="text-center text-truncate" style="max-width: 200px" pTooltip="{{ row.reason }}">
+        {{ row.reason || '—' }}
+      </td>
+
+      <!-- ✅ Action -->
+      <td class="text-center text-truncate" style="max-width: 200px" pTooltip="{{ row.action }}">
+        {{ row.action || '—' }}
+      </td>
+
+      <!-- ✅ Status -->
+      <td
+        class="text-center {{ row.statusName === 'Requested' ? 'text-primary' : 'text-success' }}"
+        pTooltip="{{ row.statusName }}"
+      >
+        {{ row.statusName }}
+      </td>
+    </tr>
+  </ng-template>
+
+  <!-- Empty State -->
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="9" class="text-center">{{ noDataMessage }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<div
+  class="modal fade"
+  id="updateconfirmation"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form [formGroup]="updateRequestForm" (ngSubmit)="updateAttendanceRegularization()">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deletejobdetailsLabel">
+            {{ isApprove ? 'Approval' : 'Rejection' }} Confirmation
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div>Do you want to {{ isApprove ? 'Approve' : 'Reject' }} ?</div>
+          <div class="mb-1">
+            <label class="form-label required">Reason</label>
+            <textarea
+              class="form-control"
+              rows="3"
+              placeholder="Enter Action"
+              formControlName="action"
+              maxlength="250"
+            ></textarea>
+          </div>
+          <div class="char-count">
+            {{ updateRequestForm.get('action')?.value?.length || 0 }} / 250
+          </div>
+          <div *ngIf="isInvalid('action')" class="text-danger small">Reason is required</div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">
+            {{ isApprove ? 'Approve' : 'Reject' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="updateRequestForm.reset()">
+            Reset
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

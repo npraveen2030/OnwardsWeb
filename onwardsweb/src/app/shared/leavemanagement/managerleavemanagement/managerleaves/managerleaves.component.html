@@ -1,5 +1,12 @@
+<div class="d-flex gap-2 mb-2">
+  <button class="btn btn-success btn-sm" (click)="showUpdatePopup(true)">Approve</button>
+  <button class="btn btn-danger btn-sm" (click)="showUpdatePopup(false)">Reject</button>
+</div>
+
 <p-table
-  [value]="projects"
+  [value]="userleaveapplied"
+  [(selection)]="selectedRecords"
+  dataKey="id"
   [paginator]="true"
   [rows]="5"
   [rowsPerPageOptions]="[5, 10, 20]"
@@ -9,33 +16,156 @@
   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records"
   class="p-datatable-striped"
 >
+  <!-- ✅ Header -->
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="projectName">
-        ProjectName <p-sortIcon field="projectName"></p-sortIcon>
+      <th style="width: 3rem">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
-      <th class="text-center">StartDate</th>
-      <th class="text-center">EndDate</th>
-      <th class="text-center">Actions</th>
+      <th>User Name</th>
+      <th class="text-center">Phone No</th>
+      <th class="text-center">Leave Type</th>
+      <th class="text-center">From</th>
+      <th class="text-center">To</th>
+      <th class="text-center">Days</th>
+      <th class="text-center">Reason</th>
+      <th class="text-center">Action</th>
+      <th class="text-center">Notified To</th>
+      <th class="text-center">File Name</th>
+      <th class="text-center">Download</th>
+      <th class="text-center">Status</th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-project>
-    <tr>
-      <td>{{ project.projectName }}</td>
-      <td class="text-center">{{ project.startDate | date : 'dd/MM/yyyy' }}</td>
-      <td class="text-center">{{ project.endDate | date : 'dd/MM/yyyy' }}</td>
-      <td class="text-center d-flex align-items-center justify-content-center">
-        <a href="javascript:void(0)" class="flex-grow-1"><i class="bi bi-pencil"></i></a>
-        <a href="javascript:void(0)" class="flex-grow-1"><i class="bi bi-trash"></i></a>
+  <!-- ✅ Body -->
+  <ng-template pTemplate="body" let-row>
+    <tr [pSelectableRow]="row">
+      <td>
+        <p-tableCheckbox [value]="row"></p-tableCheckbox>
+      </td>
+
+      <!-- Full Name -->
+      <td pTooltip="{{ row.fullName }}" tooltipPosition="top">
+        {{ row.fullName }}
+      </td>
+
+      <!-- Phone No -->
+      <td class="text-center" pTooltip="{{ row.phoneNo }}">
+        {{ row.phoneNo || '—' }}
+      </td>
+
+      <!-- Leave Type -->
+      <td class="text-center" pTooltip="{{ row.leaveTypeName }}">
+        {{ row.leaveTypeName }}
+      </td>
+
+      <!-- Start Date -->
+      <td class="text-center" pTooltip="{{ row.startDate | date : 'fullDate' }}">
+        {{ row.startDate | date : 'dd/MM/yyyy' }}
+      </td>
+
+      <!-- End Date -->
+      <td class="text-center" pTooltip="{{ row.endDate | date : 'fullDate' }}">
+        {{ row.endDate | date : 'dd/MM/yyyy' }}
+      </td>
+
+      <!-- No Of Days -->
+      <td class="text-center" pTooltip="{{ row.noOfDays }}Day(s)">{{ row.noOfDays }} Day(s)</td>
+
+      <!-- Reason -->
+      <td class="text-truncate text-center" style="max-width: 200px" pTooltip="{{ row.reason }}">
+        {{ row.reason || '—' }}
+      </td>
+
+      <!-- Action -->
+      <td class="text-truncate text-center" style="max-width: 150px" pTooltip="{{ row.action }}">
+        {{ row.action || '—' }}
+      </td>
+
+      <!-- Notified User -->
+      <td class="text-center" pTooltip="{{ row.notifiedUserName }}">
+        {{ row.notifiedUserName || '—' }}
+      </td>
+
+      <!--  FileName -->
+      <td class="text-center text-truncate" style="max-width: 200px" pTooltip="{{ row.fileName }}">
+        {{ row.fileName || '—' }}
+      </td>
+
+      <!--  FileDowload -->
+      <td class="text-center">
+        @if(row.fileName) {<button class="btn" (click)="downloadDocument(row.id, row.fileName)">
+          <i class="bi bi-download"></i></button
+        >} @else { — }
+      </td>
+
+      <!-- Status -->
+      <td
+        class="text-center {{ row.statusName === 'Requested' ? 'text-primary' : 'text-success' }}"
+        pTooltip="{{ row.statusName }}"
+      >
+        {{ row.statusName }}
       </td>
     </tr>
   </ng-template>
 
-  <!-- Empty State -->
+  <!-- Empty Message -->
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="8" class="text-center">{{ noDataMessage }}</td>
+      <td colspan="13" class="text-center">{{ noDataMessage }}</td>
     </tr>
   </ng-template>
 </p-table>
+
+<div
+  class="modal fade"
+  id="updateconfirmationleave"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form [formGroup]="updateRequestForm" (ngSubmit)="updateUserLeaveApplied()">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deletejobdetailsLabel">
+            {{ isApprove ? 'Approval' : 'Rejection' }} Confirmation
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div>Do you want to {{ isApprove ? 'Approve' : 'Reject' }} ?</div>
+          <div class="mb-1">
+            <label class="form-label required">Reason</label>
+            <textarea
+              class="form-control"
+              rows="3"
+              placeholder="Enter Action"
+              formControlName="action"
+              maxlength="250"
+            ></textarea>
+          </div>
+          <div class="char-count">
+            {{ updateRequestForm.get('action')?.value?.length || 0 }} / 250
+          </div>
+          <div *ngIf="isInvalid('action')" class="text-danger small">Reason is required</div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">
+            {{ isApprove ? 'Approve' : 'Reject' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="updateRequestForm.reset()">
+            Reset
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

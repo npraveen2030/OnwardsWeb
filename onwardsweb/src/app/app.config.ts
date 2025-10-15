@@ -126,9 +126,9 @@ const routes: Route[] = [
         path: 'managerleavemanagement',
         component: ManagerleavemanagementComponent,
         data: {
-          breadcrumb: 'Managerleavemanagement',
+          breadcrumb: 'LeaveApproval',
           parent: '/dashboard',
-          title: 'MANAGER LEAVE MANAGEMENT',
+          title: 'LEAVE APPROVAL',
         },
       },
     ],

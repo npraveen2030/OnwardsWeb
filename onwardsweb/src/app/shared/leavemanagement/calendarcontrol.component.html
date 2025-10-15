@@ -215,13 +215,16 @@
 
             <!-- Phone Number -->
             <div class="mb-3">
-              <label class="form-label">Phone Number</label>
+              <label class="form-label required">Phone Number</label>
               <input
                 type="text"
                 class="form-control"
                 formControlName="phone"
                 placeholder="Enter Phone Number"
               />
+              <div *ngIf="isInvalidLeaveRequest('phone')" class="text-danger small">
+                phone no is required
+              </div>
             </div>
 
             <!-- Employees to be notified -->

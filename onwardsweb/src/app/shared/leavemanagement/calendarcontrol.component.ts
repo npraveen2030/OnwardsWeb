@@ -87,7 +87,7 @@ export class CalendarControlComponent {
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
       dayPeriod: ['full', Validators.required],
-      phone: [''],
+      phone: ['', Validators.required],
       notify: ['', Validators.required],
       reason: ['', Validators.required],
     });

@@ -100,16 +100,18 @@ export class LeavesappliedComponent {
   }
 
   updateleaves() {
-    const payload: LeaveUpdateRequest = {
-      id: this.requestId ?? 0,
-      userId: this.userDetails.id,
-      loginId: this.userDetails.id,
-      leaveTypeId: this.leaveTypeId ?? 0,
-      startDate: this.startDate ?? '',
-      endDate: this.endDate ?? '',
-      noOfDays: this.duration ?? 0,
-      leaveStatusId: 4, // 4 => Cancelled
-    };
+    const payload: LeaveUpdateRequest[] = [
+      {
+        id: this.requestId ?? 0,
+        userId: this.userDetails.id,
+        loginId: this.userDetails.id,
+        leaveTypeId: this.leaveTypeId ?? 0,
+        startDate: this.startDate ?? '',
+        endDate: this.endDate ?? '',
+        noOfDays: this.duration ?? 0,
+        leaveStatusId: 4, // 4 => Cancelled
+      },
+    ];
 
     this.leavemanagementservice.UpdateLeaves(payload).subscribe({
       next: (res) => {
@@ -126,14 +128,16 @@ export class LeavesappliedComponent {
   }
 
   updateattendance() {
-    const payload: AttendanceRegularizationUpdateRequest = {
-      id: this.requestId ?? 0,
-      userId: this.userDetails.id,
-      loginId: this.userDetails.id,
-      startDate: this.startDate ?? '',
-      endDate: this.endDate ?? '',
-      statusId: 4, // 4 => Cancelled
-    };
+    const payload: AttendanceRegularizationUpdateRequest[] = [
+      {
+        id: this.requestId ?? 0,
+        userId: this.userDetails.id,
+        loginId: this.userDetails.id,
+        startDate: this.startDate ?? '',
+        endDate: this.endDate ?? '',
+        statusId: 4, // 4 => Cancelled
+      },
+    ];
 
     this.leavemanagementservice.UpdateAttendanceRegularization(payload).subscribe({
       next: (res) => {

@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
+  AttendanceRegularization,
   calendarevent,
   LeavesAndAttendance,
   LeaveTypes,
+  UserLeaveApplied,
 } from '../models/leavemanagementResponseModel';
 import {
   AttendanceRegularizationrequest,
@@ -110,7 +112,7 @@ export class LeaveManagementService {
     );
   }
 
-  UpdateLeaves(payload: LeaveUpdateRequest): Observable<{ success: boolean; message: string }> {
+  UpdateLeaves(payload: LeaveUpdateRequest[]): Observable<{ success: boolean; message: string }> {
     return this.http.post<{ success: boolean; message: string }>(
       `${this.apiService}/UserLeaveApplied/update`,
       payload,
@@ -119,12 +121,55 @@ export class LeaveManagementService {
   }
 
   UpdateAttendanceRegularization(
-    payload: AttendanceRegularizationUpdateRequest
+    payload: AttendanceRegularizationUpdateRequest[]
   ): Observable<{ success: boolean; message: string }> {
     return this.http.post<{ success: boolean; message: string }>(
       `${this.apiService}/AttendanceRegularization/update`,
       payload,
       { withCredentials: true }
+    );
+  }
+
+  GetUserLeaveAppliedByManagerId(managerId: number): Observable<UserLeaveApplied[]> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    const params = new HttpParams().set('managerId', managerId.toString());
+
+    return this.http.get<UserLeaveApplied[]>(
+      `${this.apiService}/UserLeaveApplied/getuserleaveappliedbymanagerid`,
+      {
+        headers,
+        params,
+        withCredentials: true,
+      }
+    );
+  }
+
+  downloadUserLeaveAppliedDocument(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiService}/UserLeaveApplied/getdocument/${id}`, {
+      responseType: 'blob',
+      withCredentials: true,
+    });
+  }
+
+  GetAttendanceRegularizationByManagerId(
+    managerId: number
+  ): Observable<AttendanceRegularization[]> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    const params = new HttpParams().set('managerId', managerId.toString());
+
+    return this.http.get<AttendanceRegularization[]>(
+      `${this.apiService}/AttendanceRegularization/getAttendanceregularizationbymanagerid`,
+      {
+        headers,
+        params,
+        withCredentials: true,
+      }
     );
   }
 }

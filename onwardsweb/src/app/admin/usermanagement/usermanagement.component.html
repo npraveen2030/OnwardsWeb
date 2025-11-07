@@ -1,0 +1,522 @@
+<div class="projectmanagement-container bg-light">
+  <div class="d-flex justify-content-end mb-2">
+    <button class="btn btn-primary" (click)="onClickAddUser()">+ Add User</button>
+  </div>
+  <p-table
+    [value]="users"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [responsiveLayout]="'scroll'"
+    sortMode="multiple"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+    class="p-datatable-striped"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="employeeCode">
+          Employee<br />
+          Code <p-sortIcon field="employeeCode"></p-sortIcon>
+        </th>
+        <th pSortableColumn="fullName">Full Name <p-sortIcon field="fullName"></p-sortIcon></th>
+        <th class="email-custom">Email</th>
+        <th>Mobile</th>
+        <th class="text-center" pSortableColumn="doj">DOJ <p-sortIcon field="doj"></p-sortIcon></th>
+        <th class="text-center">DOR</th>
+        <th>Role</th>
+        <th>Grade</th>
+        <th>Department</th>
+        <th>Type</th>
+        <th>
+          Reporting<br />
+          Manager
+        </th>
+        <th>
+          Administrative<br />
+          Manager
+        </th>
+        <th>Location</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td>{{ user.employeeCode }}</td>
+        <td [pTooltip]="user.fullName">{{ user.fullName }}</td>
+
+        <td [pTooltip]="user.email">
+          <i
+            class="pi pi-copy copy-icon"
+            [ngClass]="{ copied: copiedEmail === user.email }"
+            (click)="copyToClipboard(user.email)"
+          ></i>
+          {{ user.email }}
+        </td>
+
+        <td>{{ user.mobile }}</td>
+        <td class="text-center">
+          {{ user.doj | date : 'dd/MM/yyyy' }}
+        </td>
+        <td class="text-center">
+          {{ user.dor ? (user.dor | date : 'dd/MM/yyyy') : '—' }}
+        </td>
+        <td [pTooltip]="user.roleName">{{ user.roleName }}</td>
+        <td>{{ user.gradeValue }}</td>
+        <td [pTooltip]="user.departmentName">{{ user.departmentName }}</td>
+        <td>{{ user.typeName }}</td>
+        <td [pTooltip]="user.reportingManagerName">{{ user.reportingManagerName }}</td>
+        <td [pTooltip]="user.administrativeManagerName">{{ user.administrativeManagerName }}</td>
+        <td>{{ user.locationName }}</td>
+
+        <td class="text-center d-flex align-items-center justify-content-center gap-2">
+          <a href="javascript:void(0)" (click)="onClickupdateUser(user)">
+            <i class="bi bi-pencil text-primary fs-5"></i>
+          </a>
+          <a href="javascript:void(0)" (click)="onDeleteclick(user.id)">
+            <i class="bi bi-trash text-danger fs-5"></i>
+          </a>
+        </td>
+      </tr>
+    </ng-template>
+
+    <!-- 🧩 Empty Message -->
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="13" class="text-center">{{ noDataMessage }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!------------------------------- Add Or Update Modal ----------------------------------->
+  <div
+    class="modal fade"
+    id="insertorupdateuser"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="deletejobdetailsLabel">
+            @if(isInsert){Add New}@else{Update} User
+          </h5>
+          <button type="button" class="btn-close" (click)="cancelForm()"></button>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+          <div class="modal-body modal-body-custom">
+            <!-- ✅ Full Name -->
+            <div class="mb-3">
+              <div class="row align-items-center">
+                <label for="fullname" class="col-2 col-form-label">Full Name:</label>
+                <div class="col-10">
+                  <input
+                    type="text"
+                    id="fullname"
+                    class="form-control"
+                    placeholder="Enter Full Name"
+                    formControlName="fullName"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div *ngIf="isInvalid('fullName')" class="text-danger small col-10 offset-2">
+                  Full Name is required
+                </div>
+              </div>
+            </div>
+
+            <!-- ✅ Email -->
+            <div class="mb-3">
+              <div class="row align-items-center">
+                <label for="email" class="col-2 col-form-label">Email:</label>
+                <div class="col-10">
+                  <input
+                    type="email"
+                    id="email"
+                    class="form-control"
+                    placeholder="Enter Email"
+                    formControlName="email"
+                  />
+                </div>
+              </div>
+
+              <div class="row">
+                <!-- Required -->
+                <div
+                  *ngIf="email?.hasError('required') && (email?.dirty || email?.touched)"
+                  class="text-danger small col-10 offset-2"
+                >
+                  Email is required
+                </div>
+
+                <!-- Invalid Format -->
+                <div
+                  *ngIf="
+                    email?.hasError('email') &&
+                    !email?.hasError('required') &&
+                    (email?.dirty || email?.touched)
+                  "
+                  class="text-danger small col-10 offset-2"
+                >
+                  Please enter a valid email format
+                </div>
+
+                <!-- Async Duplicate Check -->
+                <div
+                  *ngIf="email?.hasError('emailTaken') && !email?.hasError('required')"
+                  class="text-danger small col-10 offset-2"
+                >
+                  This email is already registered.
+                </div>
+
+                <!-- Checking -->
+                <div *ngIf="email?.pending" class="text-info small col-10 offset-2">
+                  Checking email availability...
+                </div>
+
+                <!-- Valid -->
+                <div
+                  *ngIf="email?.valid && !email?.pending"
+                  class="text-success small col-10 offset-2"
+                >
+                  Email is available.
+                </div>
+              </div>
+            </div>
+
+            <!-- ✅ Password -->
+            <div class="mb-3">
+              <div class="row align-items-center password-wrapper">
+                <label for="password" class="col-2 col-form-label">Password:</label>
+                <div class="position-relative col-10">
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    id="password"
+                    class="form-control pe-5"
+                    placeholder="Enter Password"
+                    formControlName="password"
+                  />
+                  <i
+                    class="pi"
+                    [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"
+                    (click)="togglePasswordVisibility()"
+                  ></i>
+                </div>
+              </div>
+              <div class="row">
+                <div *ngIf="isInvalid('password')" class="text-danger small col-10 offset-2">
+                  Password is required
+                </div>
+              </div>
+            </div>
+
+            <!-- ✅ Mobile -->
+            <div class="mb-3">
+              <div class="row align-items-center">
+                <label for="mobile" class="col-2 col-form-label">Mobile No:</label>
+                <div class="col-10">
+                  <input
+                    type="text"
+                    id="mobile"
+                    class="form-control"
+                    placeholder="Enter Mobile Number"
+                    formControlName="mobile"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div *ngIf="isInvalid('mobile')" class="text-danger small col-10 offset-2">
+                  Mobile No is required
+                </div>
+              </div>
+            </div>
+
+            <!-- ✅ Location -->
+            <div class="mb-3">
+              <div class="row align-items-center">
+                <label for="location" class="col-2 col-form-label">Location:</label>
+                <div class="col-10">
+                  <select id="location" class="form-select" formControlName="location">
+                    <option value="" disabled selected>-- Select Location --</option>
+                    <option *ngFor="let loc of locationOptions" [value]="loc.id">
+                      {{ loc.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div *ngIf="isInvalid('location')" class="text-danger small col-10 offset-2">
+                  Location is required
+                </div>
+              </div>
+            </div>
+
+            <!-- ✅ DOJ / DOR -->
+            <div class="mb-3">
+              <div class="row">
+                <!-- DOJ -->
+                <div class="col-6">
+                  <div class="row align-items-center">
+                    <label
+                      for="doj"
+                      class="form-label mb-0 col-4"
+                      pTooltip="Date of Joining"
+                      tooltipPosition="top"
+                      >DOJ:</label
+                    >
+                    <div class="col-8">
+                      <input type="date" id="doj" class="form-control" formControlName="doj" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- DOR -->
+                <div class="col-6">
+                  <div class="row align-items-center">
+                    <label
+                      for="dor"
+                      class="form-label mb-0 col-4"
+                      pTooltip="Date of Resignation"
+                      tooltipPosition="top"
+                      >DOR:</label
+                    >
+                    <div class="col-8">
+                      <input type="date" id="dor" class="form-control" formControlName="dor" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div *ngIf="isInvalid('doj')" class="text-danger small col-4 offset-2">
+                  DOJ is required
+                </div>
+              </div>
+            </div>
+
+            <!-- ✅ Role / Grade -->
+            <div class="mb-3">
+              <div class="row">
+                <!-- Role -->
+                <div class="col-6">
+                  <div class="row align-items-center">
+                    <label for="role" class="form-label mb-0 col-4 required">Role:</label>
+                    <div class="col-8">
+                      <select id="role" class="form-select" formControlName="role">
+                        <option value="" disabled selected>-- Select Role --</option>
+                        <option *ngFor="let role of roleOptions" [value]="role.id">
+                          {{ role.roleName }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div *ngIf="isInvalid('role')" class="text-danger small col-8 offset-4">
+                      Role is required
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Grade -->
+                <div class="col-6">
+                  <div class="row align-items-center">
+                    <label for="grade" class="form-label mb-0 col-4">Grade:</label>
+                    <div class="col-8">
+                      <select id="grade" class="form-select" formControlName="grade">
+                        <option value="" disabled selected>-- Select Grade --</option>
+                        <option *ngFor="let grade of gradeOptions" [value]="grade.id">
+                          {{ grade.gradeValue }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div *ngIf="isInvalid('grade')" class="text-danger small col-8 offset-4">
+                      Grade is required
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ✅ Department / Type -->
+            <div class="mb-3">
+              <div class="row">
+                <!-- Department -->
+                <div class="col-6">
+                  <div class="row align-items-center">
+                    <label for="department" class="form-label mb-0 col-4 required"
+                      >Department:</label
+                    >
+                    <div class="col-8">
+                      <select id="department" class="form-select" formControlName="department">
+                        <option value="" disabled selected>-- Select Department --</option>
+                        <option *ngFor="let dept of departmentOptions" [value]="dept.id">
+                          {{ dept.departmentName }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div *ngIf="isInvalid('department')" class="text-danger small col-8 offset-4">
+                      Department is required
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Type -->
+                <div class="col-6">
+                  <div class="row align-items-center">
+                    <label for="type" class="form-label mb-0 col-4">Type:</label>
+                    <div class="col-8">
+                      <select id="type" class="form-select" formControlName="type">
+                        <option value="" disabled selected>-- Select Type --</option>
+                        <option *ngFor="let t of typeOptions" [value]="t.id">
+                          {{ t.typeName }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div *ngIf="isInvalid('type')" class="text-danger small col-8 offset-4">
+                      Type is required
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ShiftId -->
+            <div class="mb-3">
+              <div class="row">
+                <div class="col-6">
+                  <div class="row align-items-center">
+                    <label for="shift" class="form-label mb-0 col-4">Shift:</label>
+                    <div class="col-8">
+                      <select id="shift" class="form-select" formControlName="shift">
+                        <option value="" disabled selected>-- Select shift --</option>
+                        <option *ngFor="let t of shiftOptions" [value]="t.shiftId">
+                          {{ t.shiftName }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div *ngIf="isInvalid('shift')" class="text-danger small col-8 offset-4">
+                      Shift is required
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ✅ Reporting Manager -->
+            <div class="mb-3">
+              <div class="row align-items-center">
+                <label class="form-label mb-0 col-2">Reporting Manager:</label>
+                <div class="col-10">
+                  <p-autoComplete
+                    formControlName="reportingManager"
+                    [suggestions]="reportingmanagersuggestions"
+                    (completeMethod)="searchreportingmanager($event)"
+                    optionLabel="userName"
+                    placeholder="Enter UserName"
+                    [forceSelection]="true"
+                  ></p-autoComplete>
+                </div>
+              </div>
+              <div class="row">
+                <div
+                  *ngIf="isInvalid('reportingManager')"
+                  class="text-danger small col-10 offset-2"
+                >
+                  Reporting Manager is required
+                </div>
+              </div>
+            </div>
+
+            <!-- ✅ Administrative Manager -->
+            <div class="mb-5">
+              <div class="row align-items-center">
+                <label class="form-label mb-0 col-2">Administrative Manager:</label>
+                <div class="col-10">
+                  <p-autoComplete
+                    formControlName="administrativeManager"
+                    [suggestions]="administrativemanagersuggestions"
+                    (completeMethod)="searchadministrativemanager($event)"
+                    optionLabel="userName"
+                    placeholder="Enter UserName"
+                    [forceSelection]="true"
+                  ></p-autoComplete>
+                </div>
+              </div>
+              <div class="row">
+                <div
+                  *ngIf="isInvalid('administrativeManager')"
+                  class="text-danger small col-10 offset-2"
+                >
+                  Administrative Manager is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ✅ end of modal-body -->
+
+          <!-- Modal Footer -->
+          <div class="modal-footer d-flex align-items-center justify-content-center gap-1">
+            <button type="submit" class="btn btn-primary" [disabled]="!employeeForm.valid">
+              {{ isInsert ? 'Insert' : 'Update' }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="isInsert ? InsertresetForm() : updateresetForm()"
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+      </div>
+      <!-- modal-content -->
+    </div>
+    <!-- modal-dialog -->
+  </div>
+  <!-- modal -->
+
+  <!------------------------------- Delete confirmation ----------------------------------->
+  <div
+    class="modal fade"
+    id="deleteuser"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deletejobdetailsLabel">Delete Confirmation</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">Do you want to delete ?</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="onDelete()">Delete</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,124 @@
+<div class="projectmanagement-container bg-light">
+  <div class="d-flex justify-content-end mb-2">
+    <button class="btn btn-primary" (click)="addcourierClick()">+ Add Courier</button>
+  </div>
+  <p-table
+    [value]="couriers"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [responsiveLayout]="'scroll'"
+    sortMode="multiple"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+    class="p-datatable-striped"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="fullName">Full Name <p-sortIcon field="fullName"></p-sortIcon></th>
+        <th>Comments</th>
+        <th>Status</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td>{{ user.fullName }}</td>
+        <td>{{ user.comments }}</td>
+        <td>{{ user.status }}</td>
+      </tr>
+    </ng-template>
+
+    <!-- 🧩 Empty Message -->
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="13" class="text-center">{{ noDataMessage }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!------------------------------- Add Or Update Modal ----------------------------------->
+  <div
+    class="modal fade"
+    id="insertorupdatecourier"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="Label">{{ isInsert ? 'Add' : 'Update' }} Courier</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="CourierForm" (ngSubmit)="onSubmit()">
+          <div class="modal-body">
+            <div class="row">
+              <label class="col-2 form-label required">User Details:</label>
+            </div>
+
+            <div class="row mb-3">
+              <div class="f-flex flex-column">
+                <p-autoComplete
+                  formControlName="userDetails"
+                  [suggestions]="usersuggestions"
+                  (completeMethod)="searchuser($event)"
+                  optionLabel="fullName"
+                  placeholder="Enter EmpCode or FullName or MobileNo"
+                  [forceSelection]="true"
+                  [dropdown]="true"
+                >
+                  <ng-template let-user pTemplate="item">
+                    <div class="flex flex-column p-2 border-bottom-1 surface-border">
+                      <div class="font-semibold text-lg">
+                        Name: {{ user.fullName }}({{ user.employeeCode }})
+                      </div>
+                      <div class="text-sm text-gray-600">Mobile: {{ user.mobile }}</div>
+                    </div>
+                  </ng-template>
+
+                  <ng-template pTemplate="empty">
+                    <div class="p-2 text-center text-gray-500">No matching users found</div>
+                  </ng-template>
+                </p-autoComplete>
+
+                <div *ngIf="isInvalid('userDetails')" class="text-danger small">
+                  User Details is required
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="form-label required col-2">Comments:</label>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <textarea
+                  class="form-control"
+                  formControlName="comments"
+                  placeholder="Enter Comments"
+                  style="min-height: 100px"
+                ></textarea>
+              </div>
+            </div>
+            <div *ngIf="isInvalid('comments')" class="text-danger small">Commments is required</div>
+          </div>
+          <!-- Modal Footer -->
+          <div class="modal-footer d-flex align-items-center justify-content-center gap-1">
+            <button type="submit" class="btn btn-primary">
+              {{ isInsert ? 'Insert' : 'Update' }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="reset()">Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

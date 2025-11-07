@@ -5,7 +5,7 @@ import { LoginComponent } from './shared/login.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { DashboardComponent } from './shared/dashboard.component';
 import { ReportComponent } from './report/report.component';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { SessionGuard } from './gaurds/session.gaurd';
 import { ResignationComponent } from './myworkspace/resignation/resignation.component';
 import { WorkspaceComponent } from './myworkspace/workspace.component';
@@ -24,6 +24,11 @@ import { ToastrModule } from 'ngx-toastr';
 import { UserprojectroleassociationComponent } from './admin/userprojectroleassociation/userprojectroleassociation.component';
 import { ProjectmanagementComponent } from './admin/projectmanagement/projectmanagement.component';
 import { ManagerleavemanagementComponent } from './shared/leavemanagement/managerleavemanagement/managerleavemanagement.component';
+import { UsermanagementComponent } from './admin/usermanagement/usermanagement.component';
+import { loadingInterceptor } from './interceptors/loading.interceptor';
+import { CouriermanagementComponent } from './couriermanagement/couriermanagement.component';
+import { AdminschedulemanagementComponent } from './admin/adminschedulemanagement/adminschedulemanagement.component';
+import { UserschedulemanagementComponent } from './schedulemanagement/userschedulemanagement/userschedulemanagement.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -41,7 +46,6 @@ const routes: Route[] = [
           title: 'DASHBOARD',
         },
       },
-      { path: 'reports', component: ReportComponent },
       {
         path: 'leavemanagement',
         component: LeavemanagementComponent,
@@ -131,14 +135,59 @@ const routes: Route[] = [
           title: 'LEAVE APPROVAL',
         },
       },
+      {
+        path: 'usermanagement',
+        component: UsermanagementComponent,
+        data: {
+          breadcrumb: 'UserManagement',
+          parent: '/dashboard',
+          title: 'USER MANAGEMENT',
+        },
+      },
+      {
+        path: 'reports',
+        component: ReportComponent,
+        data: {
+          breadcrumb: 'Reports',
+          parent: '/dashboard',
+          title: 'REPORTS',
+        },
+      },
+      {
+        path: 'couriermanagement',
+        component: CouriermanagementComponent,
+        data: {
+          breadcrumb: 'Couriermanagement',
+          parent: '/dashboard',
+          title: 'COURIER MANAGEMENT SYSTEM',
+        },
+      },
+      {
+        path: 'adminschedulemanagement',
+        component: AdminschedulemanagementComponent,
+        data: {
+          breadcrumb: 'Adminschedulemanagement',
+          parent: '/dashboard',
+          title: 'ADMIN SCHEDULE MANAGEMENT',
+        },
+      },
+      {
+        path: 'userschedulemanagement',
+        component: UserschedulemanagementComponent,
+        data: {
+          breadcrumb: 'Userschedulemanagement',
+          parent: '/dashboard',
+          title: 'USER SCHEDULE MANAGEMENT',
+        },
+      },
     ],
   },
 ];
-// ManagerleavemanagementComponent
+// UserschedulemanagementComponent
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection(),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([loadingInterceptor])),
     importProvidersFrom(
       ToastrModule.forRoot({
         timeOut: 4000,

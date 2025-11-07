@@ -27,7 +27,12 @@
           <td class="text-warning">Cancelled</td>
           }
 
-          <td><i class="bi bi-eye pe-2"></i></td>
+          <td>
+            <i
+              class="bi bi-eye pe-2"
+              (click)="isLeave ? viewLeaveDetails(item.id) : viewAttendanceDetails(item.id)"
+            ></i>
+          </td>
           @if(item.isLeave) { @if(item.status === "Requested" || item.status === "Approved") {
           <td>
             <i
@@ -75,6 +80,7 @@
   </div>
 </div>
 
+<!-- Cancel Request Modal -->
 <div
   class="modal fade"
   id="cancelrequest"
@@ -99,6 +105,188 @@
         >
           Cancel
         </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Leave and Attendance Details Modal -->
+<div
+  class="modal fade"
+  id="detailsModal"
+  tabindex="-1"
+  aria-labelledby="detailsModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content rounded-3 shadow">
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="detailsModalLabel">
+          {{ isLeaveView ? 'Leave Application Details' : 'Attendance Regularization Details' }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <!-- ✅ Leave Section -->
+        <ng-container *ngIf="isLeaveView && leaveDetails">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>User Name:</strong>
+              <div>{{ leaveDetails.userName }}</div>
+            </div>
+            <div class="col-md-6">
+              <strong>Manager:</strong>
+              <div>{{ leaveDetails.managerName }}</div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>Leave Type:</strong>
+              <div>{{ leaveDetails.leaveTypeName }}</div>
+            </div>
+            <div class="col-md-6">
+              <strong>Status:</strong>
+              <div>
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'bg-success': leaveDetails.statusName === 'Approved',
+                    'bg-danger': leaveDetails.statusName === 'Rejected',
+                    'bg-primary text-dark': leaveDetails.statusName === 'Requested',
+                    'bg-warning text-dark': leaveDetails.statusName === 'Cancelled'
+                  }"
+                >
+                  {{ leaveDetails.statusName }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>Start Date:</strong>
+              <div>{{ leaveDetails.startDate | date : 'dd/MM/yyyy' }}</div>
+            </div>
+            <div class="col-md-6">
+              <strong>End Date:</strong>
+              <div>{{ leaveDetails.endDate | date : 'dd/MM/yyyy' }}</div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>Duration:</strong>
+              <div>{{ leaveDetails.noOfDays }} Days</div>
+            </div>
+            <div class="col-md-6">
+              <strong>Reason:</strong>
+              <div>{{ leaveDetails.reason }}</div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <strong>Manager Action:</strong>
+              <div>{{ leaveDetails.action || 'N/A' }}</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <strong>FileName:</strong>
+              <div class="d-flex align-items-center">
+                <div>{{ leaveDetails.fileName || 'N/A' }}</div>
+                @if (leaveDetails.fileName) {
+                <button
+                  class="btn"
+                  (click)="downloadDocument(leaveDetails.id, leaveDetails.fileName)"
+                >
+                  <i class="bi bi-download"></i>
+                </button>
+                }
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- ✅ Attendance Section -->
+        <ng-container *ngIf="!isLeaveView && attendanceDetails">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>User Name:</strong>
+              <div>{{ attendanceDetails.userName }}</div>
+            </div>
+            <div class="col-md-6">
+              <strong>Manager:</strong>
+              <div>{{ attendanceDetails.managerName }}</div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>Type:</strong>
+              <div>{{ attendanceDetails.type }}</div>
+            </div>
+            <div class="col-md-6">
+              <strong>Status:</strong>
+              <div>
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'bg-success': attendanceDetails.statusName === 'Approved',
+                    'bg-danger': attendanceDetails.statusName === 'Rejected',
+                    'bg-primary text-dark': attendanceDetails.statusName === 'Requested',
+                    'bg-warning text-dark': attendanceDetails.statusName === 'Cancelled'
+                  }"
+                >
+                  {{ attendanceDetails.statusName }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>Start Date:</strong>
+              <div>{{ attendanceDetails.startDate | date : 'dd/MM/yyyy' }}</div>
+            </div>
+            <div class="col-md-6">
+              <strong>End Date:</strong>
+              <div>{{ attendanceDetails.endDate | date : 'dd/MM/yyyy' }}</div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>Duration:</strong>
+              <div>{{ attendanceDetails.duration }} Days</div>
+            </div>
+            <div class="col-md-6">
+              <strong>Reason:</strong>
+              <div>{{ attendanceDetails.reason }}</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <strong>Manager Action:</strong>
+              <div>{{ attendanceDetails.action || 'N/A' }}</div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>

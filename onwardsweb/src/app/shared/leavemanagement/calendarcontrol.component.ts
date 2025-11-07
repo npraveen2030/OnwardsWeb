@@ -467,12 +467,25 @@ export class CalendarControlComponent {
 
   //--------------------Attendance Regularization----------------------------------
   dateDifference() {
-    this.attendanceForm.patchValue({
-      duration:
-        new Date(this.attendanceForm.get('endDate')?.value).getDate() -
-        new Date(this.attendanceForm.get('startDate')?.value).getDate() +
-        1,
-    });
+    this.leavemanagementservice
+      .getAttendanceRegularizationDuration(
+        this.userDetails.locationId,
+        this.attendanceForm.get('startDate')?.value,
+        this.attendanceForm.get('endDate')?.value
+      )
+      .subscribe({
+        next: (res) => {
+          this.attendanceForm.patchValue({
+            duration: res,
+          });
+        },
+        error: (err) => {
+          throw new Error(err.message);
+        },
+        complete: () => {
+          this.cd.detectChanges();
+        },
+      });
   }
 
   submitAttendanceRegualrization() {

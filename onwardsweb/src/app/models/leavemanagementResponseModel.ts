@@ -58,3 +58,29 @@ export interface UserLeaveApplied {
   statusName: string;
   fileName?: string; // may be NULL (file attachment)
 }
+
+export interface AttendanceRegularizationDetails {
+  userName: string;
+  managerName: string;
+  type: string;
+  startDate: string;
+  endDate: string;
+  duration: number;
+  reason: string;
+  action?: string;
+  statusName: string;
+}
+
+export interface UserLeaveAppliedDetails {
+  id: number;
+  userName: string;
+  managerName: string;
+  leaveTypeName: string;
+  noOfDays: number;
+  startDate: string;
+  endDate: string;
+  reason: string;
+  action?: string;
+  statusName: string;
+  fileName: string;
+}

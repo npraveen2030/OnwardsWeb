@@ -1,0 +1,169 @@
+<div class="projectmanagement-container bg-light">
+  <div class="d-flex justify-content-end mb-2">
+    <button class="btn btn-primary" (click)="addScheduleClick()">+ Add Schedule</button>
+  </div>
+  <p-table
+    [value]="adminSchedules"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [responsiveLayout]="'scroll'"
+    sortMode="multiple"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+    class="p-datatable-striped"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="companyName" class="text-center">
+          Company Name <p-sortIcon field="companyName"></p-sortIcon>
+        </th>
+        <th class="text-center">NoOfDays</th>
+        <th class="text-center">User Schedule Holiday</th>
+        <th class="text-center">User Schedule WeekOff</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td class="text-center">{{ user.companyName }}</td>
+        <td class="text-center">{{ user.noOfDays }}</td>
+        <td class="text-center">{{ user.userScheduleHoliday }}</td>
+        <td class="text-center">{{ user.userScheduleWeekOff }}</td>
+        <td class="d-flex justify-content-center gap-2">
+          <a href="javascript:void(0)" (click)="updateScheduleClick(user)">
+            <i class="bi bi-pencil text-primary fs-5"></i>
+          </a>
+          <a href="javascript:void(0)" (click)="onDeletePopup(user)">
+            <i class="bi bi-trash text-danger fs-5"></i>
+          </a>
+        </td>
+      </tr>
+    </ng-template>
+
+    <!--  Empty Message -->
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="13" class="text-center">{{ noDataMessage }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!------------------------------- Add Or Update Modal ----------------------------------->
+  <div
+    class="modal fade"
+    id="insertorupdateschedule"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="Label">{{ isInsert ? 'Add' : 'Update' }} Schedule</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="ScheduleForm" (ngSubmit)="onSubmit()">
+          <div class="modal-body">
+            <div class="row align-items-center mb-3">
+              <label class="form-label required col-3">Company Name:</label>
+              <div class="col-6">
+                <select class="form-control" formControlName="companyId">
+                  <option value="" disabled selected>-- SELECT --</option>
+                  @for (company of companies; track $index) {
+                  <option [value]="company.id">{{ company.companyName }}</option>
+                  }
+                </select>
+                <div *ngIf="isInvalid('companyId')" class="text-danger small">
+                  Company Name is required
+                </div>
+              </div>
+            </div>
+
+            <div class="row align-items-center mb-3">
+              <label class="form-label required col-3">No Of Days:</label>
+              <div class="col-2">
+                <input
+                  type="number"
+                  class="form-control"
+                  style="width: 70px"
+                  formControlName="noOfDays"
+                  min="1"
+                />
+                <div *ngIf="isInvalid('noOfDays')" class="text-danger small">
+                  No Of Days is required
+                </div>
+              </div>
+            </div>
+
+            <div class="row align-items-center">
+              <div class="offset-3 form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  formControlName="userScheduleHoliday"
+                />
+                <label class="form-label">User Schedule Holiday</label>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="small offset-3">*If checked, user will be available on Holidays</div>
+            </div>
+
+            <div class="row align-items-center">
+              <div class="offset-3 form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  formControlName="userScheduleWeekOff"
+                />
+                <label class="form-label">User Schedule WeekOff</label>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="small offset-3">*If checked, user will be available on WeekOff</div>
+            </div>
+          </div>
+
+          <div class="modal-footer d-flex align-items-center justify-content-center gap-1">
+            <button type="submit" class="btn btn-primary">
+              {{ isInsert ? 'Insert' : 'Update' }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="onReset()">Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!------------------------------- Delete confirmation ----------------------------------->
+<div
+  class="modal fade"
+  id="deleteschedule"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deletejobdetailsLabel">Delete Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">Do you want to delete ?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onDelete()">Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

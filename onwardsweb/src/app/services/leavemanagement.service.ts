@@ -3,10 +3,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
   AttendanceRegularization,
+  AttendanceRegularizationDetails,
   calendarevent,
   LeavesAndAttendance,
   LeaveTypes,
   UserLeaveApplied,
+  UserLeaveAppliedDetails,
 } from '../models/leavemanagementResponseModel';
 import {
   AttendanceRegularizationrequest,
@@ -168,6 +170,52 @@ export class LeaveManagementService {
       {
         headers,
         params,
+        withCredentials: true,
+      }
+    );
+  }
+
+  GetAttendanceRegularizationById(id: number): Observable<AttendanceRegularizationDetails> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get<AttendanceRegularizationDetails>(
+      `${this.apiService}/AttendanceRegularization/getattendanceregularizationbyid/${id}`,
+      {
+        headers,
+        withCredentials: true,
+      }
+    );
+  }
+
+  GetUserLeaveAppliedById(id: number): Observable<UserLeaveAppliedDetails> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get<UserLeaveAppliedDetails>(
+      `${this.apiService}/UserLeaveApplied/getuserleaveappliedbyid/${id}`,
+      {
+        headers,
+        withCredentials: true,
+      }
+    );
+  }
+
+  getAttendanceRegularizationDuration(
+    locationId: number,
+    startDate: string,
+    endDate: string
+  ): Observable<number> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get<number>(
+      `${this.apiService}/AttendanceRegularization/getAttendanceregularizationduration?locationId=${locationId}&startDate=${startDate}&endDate=${endDate}`,
+      {
+        headers,
         withCredentials: true,
       }
     );

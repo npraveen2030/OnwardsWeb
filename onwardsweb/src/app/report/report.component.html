@@ -1,1 +1,23 @@
-<p>report works!</p>
+<div class="bg-light p-4">
+  <div class="custom-tabs mb-4">
+    <a [class.active]="activeTab === 'leaves'" (click)="setActiveTab('leaves')">Leaves</a>
+    <a [class.active]="activeTab === 'attendance'" (click)="setActiveTab('attendance')"
+      >Attendance</a
+    >
+  </div>
+  <div>
+    @if(activeTab === 'leaves') {
+    <app-report-leaves
+      [leaves_startDate]="leaves_startDate"
+      [leaves_endDate]="leaves_endDate"
+      [setleavesDate]="setleaveDates.bind(this)"
+    />
+    } @else {
+    <app-report-attendance
+      [attendance_startDate]="attendance_startDate"
+      [attendance_endDate]="attendance_endDate"
+      [setattendanceDates]="setattendanceDates.bind(this)"
+    />
+    }
+  </div>
+</div>

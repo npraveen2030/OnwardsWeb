@@ -1,0 +1,40 @@
+.bg-secondary-light {
+  background-color: rgba(108, 117, 125, 0.3); /* 30% opacity of secondary */
+  color: #000; /* Text remains dark for contrast */
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Remove border between the two rows of same date */
+.no-border-bottom {
+  border-bottom: none !important;
+}
+
+/* Dot row has no top border */
+.no-border-top {
+  border-top: none !important;
+}
+
+/* Zebra striping for grouped rows */
+// .striped-row:nth-child(even) td {
+//   background-color: #f8f9fa; /* light grey */
+// }
+.striped-row:nth-child(odd) td {
+  background-color: #ffffff; /* white */
+}
+
+/* Weekend/holiday stays as is - don't apply striping */
+.no-stripe td {
+  background-color: var(--bs-secondary-bg-subtle); /* same as your bg-secondary-light */
+}
+
+:host ::ng-deep .p-datatable tbody tr td,
+:host ::ng-deep .p-datatable thead tr {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}

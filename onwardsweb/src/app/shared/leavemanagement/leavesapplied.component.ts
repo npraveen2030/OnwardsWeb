@@ -1,8 +1,12 @@
 import { Component, Inject, Input, PLATFORM_ID } from '@angular/core';
 import { LeaveManagementService } from '../../services/leavemanagement.service';
 import { LoginResponse } from '../../models/loginResponseModel';
-import { DatePipe, isPlatformBrowser } from '@angular/common';
-import { LeavesAndAttendance } from '../../models/leavemanagementResponseModel';
+import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
+import {
+  AttendanceRegularizationDetails,
+  LeavesAndAttendance,
+  UserLeaveAppliedDetails,
+} from '../../models/leavemanagementResponseModel';
 import { SiblingCommunicationService } from '../../services/SiblingCommunication.service';
 import { Subscription } from 'rxjs';
 import {
@@ -14,7 +18,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-leavesapplied',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, CommonModule],
   templateUrl: './leavesapplied.component.html',
   styleUrl: './leavesapplied.component.scss',
 })
@@ -30,6 +34,10 @@ export class LeavesappliedComponent {
   duration?: number;
   startDate?: string;
   endDate?: string;
+  isLeaveView: boolean = false;
+  leaveDetails: UserLeaveAppliedDetails | null = null;
+  attendanceDetails: AttendanceRegularizationDetails | null = null;
+  detailsModal!: any;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -60,9 +68,14 @@ export class LeavesappliedComponent {
     if (isPlatformBrowser(this.platformId)) {
       const bootstrap = (window as any).bootstrap;
       const cancelrequestmodalEl = document.getElementById('cancelrequest');
+      const detailsmodalEl = document.getElementById('detailsModal');
 
       if (cancelrequestmodalEl && bootstrap?.Modal) {
         this.cancelrequestmodal = new bootstrap.Modal(cancelrequestmodalEl);
+      }
+
+      if (detailsmodalEl && bootstrap?.Modal) {
+        this.detailsModal = new bootstrap.Modal(detailsmodalEl);
       }
     }
   }
@@ -149,6 +162,46 @@ export class LeavesappliedComponent {
         } else {
           console.log(res);
         }
+      },
+    });
+  }
+
+  viewLeaveDetails(id: number): void {
+    this.isLeaveView = true;
+    this.attendanceDetails = null; // Clear other details
+    this.leavemanagementservice.GetUserLeaveAppliedById(id).subscribe({
+      next: (data) => {
+        this.leaveDetails = data;
+        this.detailsModal.show();
+      },
+      error: (err) => console.error('Error fetching leave details:', err),
+    });
+  }
+
+  viewAttendanceDetails(id: number): void {
+    this.isLeaveView = false;
+    this.leaveDetails = null; // Clear other details
+    this.leavemanagementservice.GetAttendanceRegularizationById(id).subscribe({
+      next: (data) => {
+        this.attendanceDetails = data;
+        this.detailsModal.show();
+      },
+      error: (err) => console.error('Error fetching attendance details:', err),
+    });
+  }
+
+  downloadDocument(leaveId: number, fileName: string) {
+    this.leavemanagementservice.downloadUserLeaveAppliedDocument(leaveId).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName || `LeaveDocument_${leaveId}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        alert('Error downloading document');
       },
     });
   }

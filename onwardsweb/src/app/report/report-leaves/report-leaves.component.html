@@ -1,0 +1,89 @@
+<div class="bg-light">
+  <div class="container">
+    <div class="row align-items-center">
+      <!-- Start Date -->
+      <div class="col-3">
+        <div class="row align-items-center">
+          <label class="col-4"> Start Date: </label>
+          <div class="col-8">
+            <input type="date" class="form-control" [(ngModel)]="startDate" />
+          </div>
+        </div>
+      </div>
+
+      <!-- End Date -->
+      <div class="col-3">
+        <div class="row align-items-center">
+          <label class="col-4"> End Date: </label>
+          <div class="col-8">
+            <input type="date" class="form-control" [(ngModel)]="endDate" />
+          </div>
+        </div>
+      </div>
+
+      <!-- View  -->
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="getleaveReports()"
+          [disabled]="startDate === '' || endDate === ''"
+        >
+          View
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <p-table
+      [value]="leaves"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [responsiveLayout]="'scroll'"
+      sortMode="single"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records"
+      class="p-datatable-striped"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="employeeCode" class="text-center">
+            Employee Code <p-sortIcon field="employeeCode"></p-sortIcon>
+          </th>
+          <th pSortableColumn="fullName" class="text-center">
+            Full Name <p-sortIcon field="fullName"></p-sortIcon>
+          </th>
+          <th class="text-center">Sick Leave</th>
+          <th class="text-center">Casual Leave</th>
+          <th class="text-center">Earned Leave</th>
+          <th class="text-center">Maternity Leave</th>
+          <th class="text-center">Paternity Leave</th>
+          <th class="text-center">Bereavement Leave</th>
+          <th class="text-center">Unpaid Leave</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-leave>
+        <tr>
+          <td class="text-center">{{ leave.employeeCode }}</td>
+          <td class="text-center">{{ leave.fullName }}</td>
+          <td class="text-center">{{ leave.sickLeave }}</td>
+          <td class="text-center">{{ leave.casualLeave }}</td>
+          <td class="text-center">{{ leave.earnedLeave }}</td>
+          <td class="text-center">{{ leave.maternityLeave }}</td>
+          <td class="text-center">{{ leave.paternityLeave }}</td>
+          <td class="text-center">{{ leave.bereavementLeave }}</td>
+          <td class="text-center">{{ leave.unpaidLeave }}</td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="9" class="text-center">{{ noDataMessage }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

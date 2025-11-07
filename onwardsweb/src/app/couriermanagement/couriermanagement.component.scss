@@ -1,0 +1,9 @@
+:host ::ng-deep .p-autocomplete,
+:host ::ng-deep .p-autocomplete-input {
+  width: 100% !important;
+}
+
+.required::after {
+  content: ' *';
+  color: red;
+}

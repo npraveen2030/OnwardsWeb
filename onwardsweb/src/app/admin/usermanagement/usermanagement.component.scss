@@ -1,0 +1,71 @@
+p-table {
+  font-size: smaller;
+}
+
+.copy-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.copy-icon {
+  cursor: pointer;
+  color: #007bff;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.copy-icon:hover {
+  color: #0056b3;
+}
+
+.copy-icon.copied {
+  color: #28a745 !important; /* green success color */
+  transform: scale(1.2);
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+::ng-deep .p-datatable table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+::ng-deep .p-datatable td,
+::ng-deep .p-datatable th {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: hidden;
+}
+
+/* Custom width for email column */
+.email-custom {
+  width: 160px;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper i {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6c757d;
+  font-size: 1.1rem;
+  transition: color 0.2s ease;
+}
+
+.password-wrapper i:hover {
+  color: #007bff;
+}
+
+:host ::ng-deep .p-autocomplete,
+:host ::ng-deep .p-autocomplete-input {
+  width: 100% !important;
+}
+.modal-body-custom {
+  height: 75vh;
+  overflow-y: auto;
+}

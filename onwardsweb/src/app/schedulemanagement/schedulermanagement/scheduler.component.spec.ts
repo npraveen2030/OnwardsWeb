@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserschedulemanagementComponent } from './userschedulemanagement.component';
+import { UserschedulemanagementComponent } from './scheduler.component';
 
 describe('UserschedulemanagementComponent', () => {
   let component: UserschedulemanagementComponent;
@@ -8,9 +8,8 @@ describe('UserschedulemanagementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserschedulemanagementComponent]
-    })
-    .compileComponents();
+      imports: [UserschedulemanagementComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(UserschedulemanagementComponent);
     component = fixture.componentInstance;

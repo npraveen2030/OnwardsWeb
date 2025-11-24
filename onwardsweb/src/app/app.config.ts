@@ -28,7 +28,10 @@ import { UsermanagementComponent } from './admin/usermanagement/usermanagement.c
 import { loadingInterceptor } from './interceptors/loading.interceptor';
 import { CouriermanagementComponent } from './couriermanagement/couriermanagement.component';
 import { AdminschedulemanagementComponent } from './admin/adminschedulemanagement/adminschedulemanagement.component';
-import { UserschedulemanagementComponent } from './schedulemanagement/userschedulemanagement/userschedulemanagement.component';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { SchedulerComponent } from './schedulemanagement/schedulermanagement/scheduler.component';
+import { ParticipantComponent } from './schedulemanagement/participantmanagement/participant.component';
 
 const routes: Route[] = [
   { path: '', component: LoginComponent },
@@ -41,29 +44,17 @@ const routes: Route[] = [
       {
         path: 'dashboard',
         component: DashboardComponent,
-        data: {
-          breadcrumb: 'Home',
-          title: 'DASHBOARD',
-        },
+        data: { breadcrumb: 'Home', title: 'DASHBOARD' },
       },
       {
         path: 'leavemanagement',
         component: LeavemanagementComponent,
-        data: {
-          breadcrumb: 'Leavemanagement',
-          parent: '/dashboard',
-          title: 'LEAVE MANAGEMENT',
-        },
+        data: { breadcrumb: 'Leavemanagement', parent: '/dashboard', title: 'LEAVE MANAGEMENT' },
       },
-
       {
         path: 'myworkspace',
         component: WorkspaceComponent,
-        data: {
-          breadcrumb: 'Myworkspace',
-          parent: '/dashboard',
-          title: 'MY WORKSPACE',
-        },
+        data: { breadcrumb: 'Myworkspace', parent: '/dashboard', title: 'MY WORKSPACE' },
       },
       { path: 'my-approvals', component: MyApprovalComponent },
       { path: 'exit-interview', component: ExitInterviewComponent },
@@ -79,34 +70,19 @@ const routes: Route[] = [
       {
         path: 'resignation',
         component: ResignationComponent,
-        data: {
-          breadcrumb: 'resignation',
-          parent: '/myworkspace',
-          title: 'RESIGNATION',
-        },
+        data: { breadcrumb: 'resignation', parent: '/myworkspace', title: 'RESIGNATION' },
       },
       { path: 'basic-details', component: BasicDetailsComponent },
       {
         path: 'reimbursements',
         component: ReimbursementsComponent,
-        data: {
-          breadcrumb: 'reimbursements',
-          parent: '/myworkspace',
-          title: 'REIMBURSEMENTS',
-        },
+        data: { breadcrumb: 'reimbursements', parent: '/myworkspace', title: 'REIMBURSEMENTS' },
       },
-      {
-        path: 'reimbursement-details',
-        component: ReimbursementDetailsComponent,
-      },
+      { path: 'reimbursement-details', component: ReimbursementDetailsComponent },
       {
         path: 'career',
         component: CareerdashboardComponent,
-        data: {
-          breadcrumb: 'Career',
-          parent: '/dashboard',
-          title: 'CAREER',
-        },
+        data: { breadcrumb: 'Career', parent: '/dashboard', title: 'CAREER' },
       },
       {
         path: 'userprojectroleassociation',
@@ -129,29 +105,17 @@ const routes: Route[] = [
       {
         path: 'managerleavemanagement',
         component: ManagerleavemanagementComponent,
-        data: {
-          breadcrumb: 'LeaveApproval',
-          parent: '/dashboard',
-          title: 'LEAVE APPROVAL',
-        },
+        data: { breadcrumb: 'LeaveApproval', parent: '/dashboard', title: 'LEAVE APPROVAL' },
       },
       {
         path: 'usermanagement',
         component: UsermanagementComponent,
-        data: {
-          breadcrumb: 'UserManagement',
-          parent: '/dashboard',
-          title: 'USER MANAGEMENT',
-        },
+        data: { breadcrumb: 'UserManagement', parent: '/dashboard', title: 'USER MANAGEMENT' },
       },
       {
         path: 'reports',
         component: ReportComponent,
-        data: {
-          breadcrumb: 'Reports',
-          parent: '/dashboard',
-          title: 'REPORTS',
-        },
+        data: { breadcrumb: 'Reports', parent: '/dashboard', title: 'REPORTS' },
       },
       {
         path: 'couriermanagement',
@@ -172,37 +136,49 @@ const routes: Route[] = [
         },
       },
       {
-        path: 'userschedulemanagement',
-        component: UserschedulemanagementComponent,
+        path: 'scheduler',
+        component: SchedulerComponent,
         data: {
-          breadcrumb: 'Userschedulemanagement',
+          breadcrumb: 'Scheduler',
           parent: '/dashboard',
-          title: 'USER SCHEDULE MANAGEMENT',
+          title: 'SCHEDULER',
+        },
+      },
+      {
+        path: 'participant',
+        component: ParticipantComponent,
+        data: {
+          breadcrumb: 'Participant',
+          parent: '/dashboard',
+          title: 'PARTICIPANT',
         },
       },
     ],
   },
 ];
-// UserschedulemanagementComponent
+// SchedulerComponent
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection(),
     provideHttpClient(withFetch(), withInterceptors([loadingInterceptor])),
+
+    /* 👇 Add all your imported modules here */
     importProvidersFrom(
       ToastrModule.forRoot({
         timeOut: 4000,
         positionClass: 'toast-top-right',
         preventDuplicates: true,
-      })
+      }),
+      DialogModule,
+      ButtonModule
     ),
+
     provideRouter(routes, withComponentInputBinding()),
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
         preset: Lara,
-        options: {
-          darkModeSelector: false || 'none',
-        },
+        options: { darkModeSelector: false || 'none' },
       },
     }),
   ],

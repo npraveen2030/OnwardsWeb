@@ -15,3 +15,12 @@ export interface UserScheduleProfile {
   h10to11pm: number | null;
   h11to12pm: number | null;
 }
+
+export interface UserScheduleTVP {
+  id: number | null;
+  schedulerId: number;
+  participantId: number | null; // -1 or userId or null
+  date: string; // yyyy-mm-dd
+  startTime: string; // HH:mm:ss
+  loginId: number;
+}

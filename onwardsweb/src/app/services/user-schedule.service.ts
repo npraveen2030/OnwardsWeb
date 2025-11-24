@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AdminSchedule, AdminScheduleModel, Company } from '../models/admin-schedule.model';
-import { UserScheduleProfile } from '../models/user-schedule.model';
+import { UserScheduleProfile, UserScheduleTVP } from '../models/user-schedule.model';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +32,13 @@ export class UserScheduleService {
     return this.http.get<UserScheduleProfile[]>(`${this.api}/getschedule`, {
       headers,
       params,
+      withCredentials: true,
+    });
+  }
+
+  insertOrUpdateSchedule(data: UserScheduleTVP[]): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.api}/submit`, data, {
+      headers: this.headers,
       withCredentials: true,
     });
   }

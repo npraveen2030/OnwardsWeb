@@ -1,0 +1,71 @@
+.scheduler-wrapper {
+  height: 80vh;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+}
+
+.scheduler-table {
+  width: 90%;
+  margin: auto;
+  border-collapse: collapse;
+  text-align: center;
+  user-select: none;
+  font-family: 'Inter', sans-serif;
+
+  th {
+    background: #1976d2;
+    color: white;
+    padding: 8px;
+  }
+
+  td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+
+    &.date-cell {
+      font-weight: bold;
+      background: #f7f7f7;
+      min-width: 120px;
+    }
+
+    // 3 base alternating colors
+    &.unavailable {
+      background-color: #cfd8dc;
+    }
+
+    &.available {
+      background-color: #b0cbf4;
+    }
+
+    &.scheduled {
+      background-color: #ffc273;
+    }
+
+    // Highlight selection
+    &.selected {
+      background-color: #42a5f5 !important;
+      color: white;
+      transform: scale(1.05);
+    }
+  }
+}
+
+.skillname-custom {
+  width: 130px;
+  white-space: normal; /* allow wrapping */
+  word-wrap: break-word; /* break long words */
+  word-break: break-word; /* break long continuous text */
+}
+
+.profileimage img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}

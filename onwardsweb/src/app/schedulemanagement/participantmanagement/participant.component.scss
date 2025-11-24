@@ -1,0 +1,28 @@
+.profileimage img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  display: block;
+  margin-bottom: 0;
+}
+
+.horizontal-scroll {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 400px; /* width of each card */
+  gap: 1rem;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 1rem 0;
+
+  scroll-snap-type: x mandatory; /* optional smooth snapping */
+  white-space: nowrap;
+}
+
+.profile-card {
+  scroll-snap-align: start;
+  width: 100%;
+}

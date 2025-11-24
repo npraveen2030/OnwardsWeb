@@ -1,0 +1,111 @@
+<div class="container py-4 participant-container">
+  <!-- Filters Section -->
+  <div class="row g-4 mb-4">
+    <!-- Skills -->
+    <div class="col-md-6">
+      <label class="form-label fw-bold">Select Skills</label>
+      <p-multiSelect
+        [options]="skills"
+        optionLabel="skillName"
+        optionValue="id"
+        [(ngModel)]="selectedSkills"
+        [filter]="true"
+        filterBy="skillName"
+        placeholder="Select Skills"
+        display="chip"
+        class="w-100"
+        (onChange)="onSkillChange(selectedSkills)"
+      ></p-multiSelect>
+    </div>
+
+    <!-- Users -->
+    <div class="col-md-6">
+      <label class="form-label fw-bold">Select User</label>
+      <p-select
+        [options]="users"
+        optionLabel="userName"
+        optionValue="id"
+        [filter]="true"
+        filterBy="userName"
+        placeholder="Select User"
+        class="w-100"
+      ></p-select>
+    </div>
+  </div>
+
+  <div class="horizontal-scroll">
+    <div class="profile-card card shadow-sm">
+      <div class="d-flex justify-content-center mt-2">
+        <img src="assets/profilepic.png" class="profile-image" />
+      </div>
+      <div class="card-body text-center">
+        <h4 class="card-title mb-1">John Doe</h4>
+        <p class="text-muted mb-3">Full Stack Developer</p>
+        <p class="card-text small">Skilled in Angular, .NET, SQL Server, Microservices.</p>
+        <button class="btn btn-primary w-100">See Profile</button>
+      </div>
+    </div>
+
+    <div class="profile-card card shadow-sm">
+      <div class="d-flex justify-content-center mt-2">
+        <img src="assets/profilepic.png" class="profile-image" />
+      </div>
+      <div class="card-body text-center">
+        <h4 class="card-title mb-1">John Doe</h4>
+        <p class="text-muted mb-3">Full Stack Developer</p>
+        <p class="card-text small">Skilled in Angular, .NET, SQL Server, Microservices.</p>
+        <button class="btn btn-primary w-100">See Profile</button>
+      </div>
+    </div>
+
+    <div class="profile-card card shadow-sm">
+      <div class="d-flex justify-content-center mt-2">
+        <img src="assets/profilepic.png" class="profile-image" />
+      </div>
+      <div class="card-body text-center">
+        <h4 class="card-title mb-1">John Doe</h4>
+        <p class="text-muted mb-3">Full Stack Developer</p>
+        <p class="card-text small">Skilled in Angular, .NET, SQL Server, Microservices.</p>
+        <button class="btn btn-primary w-100">See Profile</button>
+      </div>
+    </div>
+
+    <div class="profile-card card shadow-sm">
+      <div class="d-flex justify-content-center mt-2">
+        <img src="assets/profilepic.png" class="profile-image" />
+      </div>
+      <div class="card-body text-center">
+        <h4 class="card-title mb-1">John Doe</h4>
+        <p class="text-muted mb-3">Full Stack Developer</p>
+        <p class="card-text small">Skilled in Angular, .NET, SQL Server, Microservices.</p>
+        <button class="btn btn-primary w-100">See Profile</button>
+      </div>
+    </div>
+
+    <div class="profile-card card shadow-sm">
+      <div class="d-flex justify-content-center mt-2">
+        <img src="assets/profilepic.png" class="profile-image" />
+      </div>
+      <div class="card-body text-center">
+        <h4 class="card-title mb-1">John Doe</h4>
+        <p class="text-muted mb-3">Full Stack Developer</p>
+        <p class="card-text small">Skilled in Angular, .NET, SQL Server, Microservices.</p>
+        <button class="btn btn-primary w-100">See Profile</button>
+      </div>
+    </div>
+
+    <div class="profile-card card shadow-sm">
+      <div class="d-flex justify-content-center mt-2">
+        <img src="assets/profilepic.png" class="profile-image" />
+      </div>
+      <div class="card-body text-center">
+        <h4 class="card-title mb-1">John Doe</h4>
+        <p class="text-muted mb-3">Full Stack Developer</p>
+        <p class="card-text small">Skilled in Angular, .NET, SQL Server, Microservices.</p>
+        <button class="btn btn-primary w-100">See Profile</button>
+      </div>
+    </div>
+
+    <!-- Repeat same card div -->
+  </div>
+</div>

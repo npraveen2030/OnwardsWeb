@@ -7,30 +7,68 @@ import { FormsModule } from '@angular/forms';
 import { JobPostService } from '../../services/jobpost.service';
 import { skill, user } from '../../models/jobpostresponse';
 import { Select } from 'primeng/select';
+import { SchedulerSkillsService } from '../../services/scheduler-skills.service';
+import { SchedulerDetails } from '../../models/scheduler-details.model';
+import { ParticipantCalendarComponent } from './participant-calendar/participant-calendar.component';
 
 @Component({
   selector: 'app-userscheduleappointment',
   standalone: true,
-  imports: [CommonModule, DialogModule, ButtonModule, MultiSelectModule, FormsModule, Select],
+  imports: [
+    CommonModule,
+    DialogModule,
+    ButtonModule,
+    MultiSelectModule,
+    FormsModule,
+    Select,
+    ParticipantCalendarComponent,
+  ],
   templateUrl: './participant.component.html',
   styleUrl: './participant.component.scss',
 })
 export class ParticipantComponent {
   skills: skill[] = [];
-  users: user[] = [];
-  constructor(private jobPostService: JobPostService) {}
+  selectedSkills: string[] = [];
+  schedulers: SchedulerDetails[] = [];
+  issearch: boolean = true;
+  selectedSchedulerId!: number;
+
+  constructor(
+    private jobPostService: JobPostService,
+    private schedulerSkillService: SchedulerSkillsService
+  ) {}
   ngOnInit(): void {
     this.jobPostService.GetSkills().subscribe((res) => {
       this.skills = res;
     });
-    this.jobPostService.Getusers().subscribe((res) => {
-      this.users = res;
+
+    this.schedulerSkillService.getSchedulersBySkills([]).subscribe({
+      next: (res) => {
+        this.schedulers = res;
+      },
+      error: (err) => {
+        console.error(err);
+      },
     });
   }
 
-  selectedSkills: skill[] = [];
+  onSkillChange() {
+    this.schedulerSkillService.getSchedulersBySkills(this.selectedSkills).subscribe({
+      next: (res) => {
+        this.schedulers = res;
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
+  }
 
-  onSkillChange(input: any) {
-    console.log(input);
+  selectedId(id: number) {
+    this.selectedSchedulerId = id;
+    this.issearch = false;
+  }
+
+  swithtosearch() {
+    this.issearch = true;
   }
 }

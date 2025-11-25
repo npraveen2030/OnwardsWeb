@@ -1,3 +1,4 @@
+@if (issearch) {
 <div class="container py-4 participant-container">
   <!-- Filters Section -->
   <div class="row g-4 mb-4">
@@ -7,14 +8,14 @@
       <p-multiSelect
         [options]="skills"
         optionLabel="skillName"
-        optionValue="id"
+        optionValue="skillName"
         [(ngModel)]="selectedSkills"
         [filter]="true"
         filterBy="skillName"
         placeholder="Select Skills"
         display="chip"
         class="w-100"
-        (onChange)="onSkillChange(selectedSkills)"
+        (onChange)="onSkillChange()"
       ></p-multiSelect>
     </div>
 
@@ -22,7 +23,7 @@
     <div class="col-md-6">
       <label class="form-label fw-bold">Select User</label>
       <p-select
-        [options]="users"
+        [options]="schedulers"
         optionLabel="userName"
         optionValue="id"
         [filter]="true"
@@ -33,79 +34,28 @@
     </div>
   </div>
 
-  <div class="horizontal-scroll">
-    <div class="profile-card card shadow-sm">
+  <div class="user-search">
+    <div class="profile-card card shadow-sm" *ngFor="let s of schedulers">
       <div class="d-flex justify-content-center mt-2">
         <img src="assets/profilepic.png" class="profile-image" />
       </div>
+
       <div class="card-body text-center">
-        <h4 class="card-title mb-1">John Doe</h4>
-        <p class="text-muted mb-3">Full Stack Developer</p>
-        <p class="card-text small">Skilled in Angular, .NET, SQL Server, Microservices.</p>
-        <button class="btn btn-primary w-100">See Profile</button>
+        <h4 class="card-title mb-1">{{ s.fullName }}</h4>
+        <p class="text-muted mb-3">{{ s.roleName }}</p>
+
+        <p class="card-text small">
+          {{ s.skillList }}
+        </p>
+
+        <p class="fw-bold">⭐ Rating: {{ s.rating }}</p>
+
+        <button class="btn btn-primary w-100" (click)="selectedId(s.id)">See Profile</button>
       </div>
     </div>
-
-    <div class="profile-card card shadow-sm">
-      <div class="d-flex justify-content-center mt-2">
-        <img src="assets/profilepic.png" class="profile-image" />
-      </div>
-      <div class="card-body text-center">
-        <h4 class="card-title mb-1">John Doe</h4>
-        <p class="text-muted mb-3">Full Stack Developer</p>
-        <p class="card-text small">Skilled in Angular, .NET, SQL Server, Microservices.</p>
-        <button class="btn btn-primary w-100">See Profile</button>
-      </div>
-    </div>
-
-    <div class="profile-card card shadow-sm">
-      <div class="d-flex justify-content-center mt-2">
-        <img src="assets/profilepic.png" class="profile-image" />
-      </div>
-      <div class="card-body text-center">
-        <h4 class="card-title mb-1">John Doe</h4>
-        <p class="text-muted mb-3">Full Stack Developer</p>
-        <p class="card-text small">Skilled in Angular, .NET, SQL Server, Microservices.</p>
-        <button class="btn btn-primary w-100">See Profile</button>
-      </div>
-    </div>
-
-    <div class="profile-card card shadow-sm">
-      <div class="d-flex justify-content-center mt-2">
-        <img src="assets/profilepic.png" class="profile-image" />
-      </div>
-      <div class="card-body text-center">
-        <h4 class="card-title mb-1">John Doe</h4>
-        <p class="text-muted mb-3">Full Stack Developer</p>
-        <p class="card-text small">Skilled in Angular, .NET, SQL Server, Microservices.</p>
-        <button class="btn btn-primary w-100">See Profile</button>
-      </div>
-    </div>
-
-    <div class="profile-card card shadow-sm">
-      <div class="d-flex justify-content-center mt-2">
-        <img src="assets/profilepic.png" class="profile-image" />
-      </div>
-      <div class="card-body text-center">
-        <h4 class="card-title mb-1">John Doe</h4>
-        <p class="text-muted mb-3">Full Stack Developer</p>
-        <p class="card-text small">Skilled in Angular, .NET, SQL Server, Microservices.</p>
-        <button class="btn btn-primary w-100">See Profile</button>
-      </div>
-    </div>
-
-    <div class="profile-card card shadow-sm">
-      <div class="d-flex justify-content-center mt-2">
-        <img src="assets/profilepic.png" class="profile-image" />
-      </div>
-      <div class="card-body text-center">
-        <h4 class="card-title mb-1">John Doe</h4>
-        <p class="text-muted mb-3">Full Stack Developer</p>
-        <p class="card-text small">Skilled in Angular, .NET, SQL Server, Microservices.</p>
-        <button class="btn btn-primary w-100">See Profile</button>
-      </div>
-    </div>
-
-    <!-- Repeat same card div -->
   </div>
 </div>
+} @else {<app-participant-calendar
+  [SchedulerId]="selectedSchedulerId"
+  [SwitchToSearch]="swithtosearch.bind(this)"
+/>}

@@ -42,7 +42,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private router: Router,
     private dashboardservice: DashBoardService
   ) {}
 

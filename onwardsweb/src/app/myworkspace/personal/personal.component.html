@@ -1,591 +1,722 @@
 <div class="info-wrapper mt-4">
-  <!-- Right Section -->
   <div class="right-section">
     <div class="card">
       <h5 class="ms-3 mt-3">Basic Details</h5>
+
       <div class="card-body">
         <form [formGroup]="PersonalInformationForm" (ngSubmit)="onSubmit()">
-          <!-- Basic Info -->
+          <!-- BASIC INFO -->
           <div class="d-flex gap-3 mb-3">
+            <!-- First Name -->
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="firstName"
-                placeholder="Enter First Name"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="firstName"
+                class="form-control form-control-sm"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('firstName')) }"
               />
               <label for="firstName">First Name</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('firstName'))"
                 class="text-danger small"
               >
-                First Name is Required
+                First name is required
               </div>
             </div>
 
+            <!-- Middle Name -->
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="middleName"
-                placeholder="Enter Middle Name"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="middleName"
+                class="form-control form-control-sm"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('middleName')) }"
               />
               <label for="middleName">Middle Name</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('middleName'))"
                 class="text-danger small"
               >
-                Middle Name is Required
+                Middle name is required
               </div>
             </div>
 
+            <!-- Last Name -->
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="lastName"
-                placeholder="Enter Last Name"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="lastName"
+                class="form-control form-control-sm"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('lastName')) }"
               />
               <label for="lastName">Last Name</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('lastName'))"
                 class="text-danger small"
               >
-                Last Name is Required
+                Last name is required
               </div>
             </div>
 
+            <!-- Personal Email -->
             <div class="form-floating flex-fill">
               <input
+                id="personalEmailID"
                 type="email"
-                id="personalEmailId"
-                placeholder="Enter Personal Email"
+                formControlName="personalEmailID"
                 class="form-control form-control-sm"
-                formControlName="personalEmailId"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('personalEmailID'))
+                }"
               />
-              <label for="personalEmailId">Personal Email Id</label>
+              <label for="personalEmailID">Personal Email ID</label>
               <div
-                *ngIf="isInvalid(PersonalInformationForm.get('personalEmailId'))"
+                *ngIf="isInvalid(PersonalInformationForm.get('personalEmailID'))"
                 class="text-danger small"
               >
-                Valid Email is Required
+                A valid email ID is required
               </div>
             </div>
           </div>
 
-          <!-- Additional Details -->
+          <!-- EXTRA BASIC DETAILS -->
           <div class="d-flex gap-3 mb-3">
+            <!-- Primary Contact -->
+            <div class="form-floating flex-fill">
+              <input
+                id="primaryContactNumber_BasicDetails"
+                type="text"
+                formControlName="primaryContactNumber_BasicDetails"
+                class="form-control form-control-sm"
+                [ngClass]="{
+                  'is-invalid': isInvalid(
+                    PersonalInformationForm.get('primaryContactNumber_BasicDetails')
+                  )
+                }"
+              />
+              <label for="primaryContactNumber_BasicDetails">Primary Contact Number</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('primaryContactNumber_BasicDetails'))"
+                class="text-danger small"
+              >
+                Primary Contact Number is required
+              </div>
+            </div>
+
+            <!-- Gender -->
+            <div class="form-floating flex-fill">
+              <select
+                id="gender"
+                class="form-select form-select-sm"
+                formControlName="gender"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('gender')) }"
+              >
+                <option value="" disabled>Select Gender</option>
+                <option *ngFor="let opt of genders" [value]="opt.id">{{ opt.value }}</option>
+              </select>
+              <label for="gender">Gender</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('gender'))"
+                class="text-danger small"
+              >
+                Gender is required
+              </div>
+            </div>
+
+            <!-- Father/Husband Name -->
+            <div class="form-floating flex-fill">
+              <input
+                id="fatherOrHusbandName"
+                type="text"
+                formControlName="fatherOrHusbandName"
+                class="form-control form-control-sm"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('fatherOrHusbandName'))
+                }"
+              />
+              <label for="fatherOrHusbandName">Father/Husband Name</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('fatherOrHusbandName'))"
+                class="text-danger small"
+              >
+                This field is required
+              </div>
+            </div>
+
+            <!-- DOB -->
+            <div class="form-floating flex-fill">
+              <input
+                id="dob"
+                type="date"
+                formControlName="dob"
+                class="form-control form-control-sm"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('dob')) }"
+              />
+              <label for="dob">DOB</label>
+              <div *ngIf="isInvalid(PersonalInformationForm.get('dob'))" class="text-danger small">
+                Date of Birth is required
+              </div>
+            </div>
+          </div>
+
+          <!-- ADDITIONAL DETAILS -->
+          <div class="d-flex gap-3 mb-3">
+            <!-- Nationality -->
             <div class="form-floating flex-fill">
               <select
                 id="nationality"
                 class="form-select form-select-sm"
                 formControlName="nationality"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('nationality')) }"
               >
                 <option value="" disabled>Select Nationality</option>
-                <option value="Indian">Indian</option>
-                <option value="Other">Other</option>
+                <option *ngFor="let opt of nationalities" [value]="opt.id">{{ opt.value }}</option>
               </select>
-              <label for="nationality">Nationality*</label>
+              <label for="nationality">Nationality</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('nationality'))"
                 class="text-danger small"
               >
-                Nationality is Required
+                Nationality is required
               </div>
             </div>
 
+            <!-- Differently Abled -->
             <div class="form-floating flex-fill">
               <select
                 id="differentlyAbled"
                 class="form-select form-select-sm"
                 formControlName="differentlyAbled"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('differentlyAbled'))
+                }"
               >
                 <option value="" disabled>Select One</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
+                <option *ngFor="let opt of yesNoList" [value]="opt.id">{{ opt.value }}</option>
               </select>
               <label for="differentlyAbled">Differently Abled</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('differentlyAbled'))"
                 class="text-danger small"
               >
-                Differently Abled status is Required
+                This field is required
               </div>
             </div>
 
+            <!-- Vaccination -->
             <div class="form-floating flex-fill">
               <select
                 id="vaccinationStatus"
                 class="form-select form-select-sm"
                 formControlName="vaccinationStatus"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('vaccinationStatus'))
+                }"
               >
                 <option value="" disabled>Select One</option>
-                <option value="Dosage1">Dosage 1</option>
-                <option value="Dosage2">Dosage 2</option>
-                <option value="Dosage3">Dosage 3</option>
+                <option *ngFor="let opt of vaccinationOptions" [value]="opt.id">
+                  {{ opt.value }}
+                </option>
               </select>
               <label for="vaccinationStatus">Vaccination Status</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('vaccinationStatus'))"
                 class="text-danger small"
               >
-                Vaccination Status is Required
+                This field is required
               </div>
             </div>
 
+            <!-- Blood Group -->
             <div class="form-floating flex-fill">
               <select
                 id="bloodGroup"
                 class="form-select form-select-sm"
                 formControlName="bloodGroup"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('bloodGroup')) }"
               >
                 <option value="" disabled>Select One</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
+                <option *ngFor="let opt of bloodGroups" [value]="opt.id">{{ opt.value }}</option>
               </select>
               <label for="bloodGroup">Blood Group</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('bloodGroup'))"
                 class="text-danger small"
               >
-                Blood Group is Required
+                This field is required
               </div>
             </div>
           </div>
 
+          <!-- MORE DETAILS -->
           <div class="d-flex gap-3 mb-3">
+            <!-- Blood Donor -->
             <div class="form-floating flex-fill">
               <select
                 id="bloodDonor"
                 class="form-select form-select-sm"
                 formControlName="bloodDonor"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('bloodDonor')) }"
               >
                 <option value="" disabled>Select One</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
+                <option *ngFor="let opt of yesNoList" [value]="opt.id">{{ opt.value }}</option>
               </select>
               <label for="bloodDonor">Blood Donor</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('bloodDonor'))"
                 class="text-danger small"
               >
-                Blood Donor status is Required
+                This field is required
               </div>
             </div>
 
+            <!-- PAN -->
             <div class="form-floating flex-fill">
               <input
+                id="panNumber"
                 type="text"
-                id="panNo"
-                placeholder="Enter PAN"
+                formControlName="panNumber"
                 class="form-control form-control-sm"
-                formControlName="panNo"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('panNumber')) }"
               />
-              <label for="panNo">PAN No.</label>
+              <label for="panNumber">PAN Number</label>
               <div
-                *ngIf="isInvalid(PersonalInformationForm.get('panNo'))"
+                *ngIf="isInvalid(PersonalInformationForm.get('panNumber'))"
                 class="text-danger small"
               >
-                PAN Number is Required
+                PAN Number is required
               </div>
             </div>
 
+            <!-- Aadhaar -->
             <div class="form-floating flex-fill">
               <input
+                id="aadhaarCardno"
                 type="text"
-                id="aadharNo"
-                placeholder="Enter Aadhar"
+                formControlName="aadhaarCardno"
                 class="form-control form-control-sm"
-                formControlName="aadharNo"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('aadhaarCardno'))
+                }"
               />
-              <label for="aadharNo">Aadhar No.</label>
+              <label for="aadhaarCardno">Aadhaar Card No</label>
               <div
-                *ngIf="isInvalid(PersonalInformationForm.get('aadharNo'))"
+                *ngIf="isInvalid(PersonalInformationForm.get('aadhaarCardno'))"
                 class="text-danger small"
               >
-                Aadhar Number is Required
+                Aadhaar number is required
               </div>
             </div>
           </div>
 
           <hr />
           <h5>Address Details</h5>
-          <hr />
+
+          <!-- PRESENT ADDRESS -->
           <h6>Present Address</h6>
-          <div class="d-flex gap-3">
+
+          <div class="d-flex gap-3 mb-3">
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="presentDoorNo"
-                placeholder="Door No"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="presentDoorNo"
+                class="form-control form-control-sm"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('presentDoorNo'))
+                }"
               />
               <label for="presentDoorNo">Door No</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('presentDoorNo'))"
                 class="text-danger small"
               >
-                Door Number is Required
+                Required field
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="presentAddressLine"
-                placeholder="Address"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="presentAddressLine"
+                class="form-control form-control-sm"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('presentAddressLine'))
+                }"
               />
               <label for="presentAddressLine">Address Line</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('presentAddressLine'))"
                 class="text-danger small"
               >
-                Address Line is Required
+                Required field
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="presentState"
-                placeholder="State"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="presentState"
+                class="form-control form-control-sm"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('presentState')) }"
               />
               <label for="presentState">State</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('presentState'))"
                 class="text-danger small"
               >
-                State is Required
+                Required field
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="presentPinCode"
-                placeholder="Pin Code"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="presentPinCode"
+                class="form-control form-control-sm"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('presentPinCode'))
+                }"
               />
               <label for="presentPinCode">Pin Code</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('presentPinCode'))"
                 class="text-danger small"
               >
-                Pin Code is Required
+                Required field
               </div>
             </div>
           </div>
 
-          <!-- Same Address Checkbox -->
-          <div class="form-check my-3">
+          <!-- SAME ADDRESS CHECKBOX -->
+          <div class="form-check mb-3">
             <input
-              class="form-check-input"
               type="checkbox"
-              id="sameAddress"
+              class="form-check-input"
               formControlName="sameAddress"
+              id="sameAddress"
             />
-            <label class="form-check-label" for="sameAddress">
+            <label for="sameAddress" class="form-check-label">
               Click if Present Address and Permanent Address are Same
             </label>
           </div>
 
+          <!-- PERMANENT ADDRESS -->
           <h6>Permanent Address</h6>
-          <div class="d-flex gap-3">
+
+          <div class="d-flex gap-3 mb-3">
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="permanentDoorNo"
-                placeholder="Door No"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="permanentDoorNo"
+                class="form-control form-control-sm"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('permanentDoorNo'))
+                }"
               />
               <label for="permanentDoorNo">Door No</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('permanentDoorNo'))"
                 class="text-danger small"
               >
-                Door Number is Required
+                Required field
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="permanentAddressLine"
-                placeholder="Address"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="permanentAddressLine"
+                class="form-control form-control-sm"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('permanentAddressLine'))
+                }"
               />
               <label for="permanentAddressLine">Address Line</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('permanentAddressLine'))"
                 class="text-danger small"
               >
-                Address Line is Required
+                Required field
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="permanentState"
-                placeholder="State"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="permanentState"
+                class="form-control form-control-sm"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('permanentState'))
+                }"
               />
               <label for="permanentState">State</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('permanentState'))"
                 class="text-danger small"
               >
-                State is Required
+                Required field
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="permanentPinCode"
-                placeholder="Pin Code"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="permanentPinCode"
+                class="form-control form-control-sm"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('permanentPinCode'))
+                }"
               />
               <label for="permanentPinCode">Pin Code</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('permanentPinCode'))"
                 class="text-danger small"
               >
-                Pin Code is Required
+                Required field
               </div>
             </div>
           </div>
 
           <hr />
           <h5>Compliance</h5>
+
           <div class="d-flex gap-3 mb-3">
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="pfNo"
-                placeholder="PF Number"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="pfNo"
+                class="form-control form-control-sm"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('pfNo')) }"
               />
-              <label for="pfNo">PF No.</label>
+              <label for="pfNo">PF No</label>
               <div *ngIf="isInvalid(PersonalInformationForm.get('pfNo'))" class="text-danger small">
-                PF Number is Required
+                PF number is required
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="uanNo"
-                placeholder="UAN Number"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="uanNo"
+                class="form-control form-control-sm"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('uanNo')) }"
               />
-              <label for="uanNo">UAN No.</label>
+              <label for="uanNo">UAN No</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('uanNo'))"
                 class="text-danger small"
               >
-                UAN Number is Required
+                UAN number is required
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="esicNo"
-                placeholder="ESIC Number"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="esicNo"
+                class="form-control form-control-sm"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('esicNo')) }"
               />
-              <label for="esicNo">ESIC No.</label>
+              <label for="esicNo">ESIC No</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('esicNo'))"
                 class="text-danger small"
               >
-                ESIC Number is Required
+                ESIC number is required
               </div>
             </div>
           </div>
 
           <hr />
           <h5>Bank Details</h5>
+
           <div class="d-flex gap-3 mb-3">
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="bankAccountNumber"
-                placeholder="Account Number"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="bankAccountNumber"
+                class="form-control form-control-sm"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('bankAccountNumber'))
+                }"
               />
-              <label for="bankAccountNumber">Bank Account Number</label>
+              <label for="bankAccountNumber">Account Number</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('bankAccountNumber'))"
                 class="text-danger small"
               >
-                Account Number is Required
+                Bank account number is required
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="accountHolderName"
-                placeholder="Account Holder Name"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="accountHolderName"
+                class="form-control form-control-sm"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('accountHolderName'))
+                }"
               />
               <label for="accountHolderName">Account Holder Name</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('accountHolderName'))"
                 class="text-danger small"
               >
-                Account Holder Name is Required
+                Account holder name is required
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="ifsc"
-                placeholder="IFSC Code"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="ifsc"
+                class="form-control form-control-sm"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('ifsc')) }"
               />
               <label for="ifsc">IFSC Code</label>
               <div *ngIf="isInvalid(PersonalInformationForm.get('ifsc'))" class="text-danger small">
-                IFSC Code is Required
+                IFSC code is required
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="bankName"
-                placeholder="Bank Name"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="bankName"
+                class="form-control form-control-sm"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('bankName')) }"
               />
               <label for="bankName">Bank Name</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('bankName'))"
                 class="text-danger small"
               >
-                Bank Name is Required
+                Bank name is required
               </div>
             </div>
           </div>
 
-        <div style="width: 50%;" class="d-flex gap-3 mb-3">
-          <div class="form-floating flex-fill">
-            <input
-              type="text"
-              id="branchName"
-              placeholder="Branch Name"
-              class="form-control form-control-sm"
-              formControlName="branchName"
-            />
-            <label for="branchName">Branch Name</label>
-            <div
-              *ngIf="isInvalid(PersonalInformationForm.get('branchName'))"
-              class="text-danger small"
-            >
-              Branch Name is Required
+          <div class="d-flex gap-3 mb-3" style="width: 50%">
+            <div class="form-floating flex-fill">
+              <input
+                id="branchName"
+                type="text"
+                formControlName="branchName"
+                class="form-control form-control-sm"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('branchName')) }"
+              />
+              <label for="branchName">Branch Name</label>
+              <div
+                *ngIf="isInvalid(PersonalInformationForm.get('branchName'))"
+                class="text-danger small"
+              >
+                Branch name is required
+              </div>
             </div>
           </div>
 
           <hr />
-          <h5>Emergency Contact Details</h5>
+          <h5>Emergency Contact</h5>
+
           <div class="d-flex gap-3 mb-3">
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="contactName"
-                placeholder="Contact Name"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="contactName"
+                class="form-control form-control-sm"
+                [ngClass]="{ 'is-invalid': isInvalid(PersonalInformationForm.get('contactName')) }"
               />
               <label for="contactName">Contact Name</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('contactName'))"
                 class="text-danger small"
               >
-                Contact Name is Required
+                Contact name is required
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="contactRelationship"
-                placeholder="Relationship"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="contactRelationship"
+                class="form-control form-control-sm"
+                [ngClass]="{
+                  'is-invalid': isInvalid(PersonalInformationForm.get('contactRelationship'))
+                }"
               />
               <label for="contactRelationship">Relationship</label>
               <div
                 *ngIf="isInvalid(PersonalInformationForm.get('contactRelationship'))"
                 class="text-danger small"
               >
-                Relationship is Required
+                Relationship is required
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
+                id="primaryContactNumber_EmergencyContactDetails"
                 type="text"
-                id="primaryContactNumber"
-                placeholder="Primary Number"
+                formControlName="primaryContactNumber_EmergencyContactDetails"
                 class="form-control form-control-sm"
-                formControlName="primaryContactNumber"
+                [ngClass]="{
+                  'is-invalid': isInvalid(
+                    PersonalInformationForm.get('primaryContactNumber_EmergencyContactDetails')
+                  )
+                }"
               />
-              <label for="primaryContactNumber">Primary Contact</label>
+              <label for="primaryContactNumber_EmergencyContactDetails">Primary Contact</label>
               <div
-                *ngIf="isInvalid(PersonalInformationForm.get('primaryContactNumber'))"
+                *ngIf="
+                  isInvalid(
+                    PersonalInformationForm.get('primaryContactNumber_EmergencyContactDetails')
+                  )
+                "
                 class="text-danger small"
               >
-                Primary Contact is Required
+                Primary contact number is required
               </div>
             </div>
 
             <div class="form-floating flex-fill">
               <input
-                type="text"
                 id="secondaryContactNumber"
-                placeholder="Secondary Number"
-                class="form-control form-control-sm"
+                type="text"
                 formControlName="secondaryContactNumber"
+                class="form-control form-control-sm"
               />
               <label for="secondaryContactNumber">Secondary Contact</label>
             </div>
           </div>
 
+          <!-- BUTTONS -->
           <div class="d-flex justify-content-center gap-3 mt-4">
             <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
             <button type="submit" class="btn btn-primary">Submit</button>
           </div>
+        </form>
       </div>
-      </form>
     </div>
   </div>
 </div>

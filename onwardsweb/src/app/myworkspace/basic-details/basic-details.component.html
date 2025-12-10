@@ -1,291 +1,533 @@
 <div class="info-wrapper mt-4">
+  <div class="right-section">
+    <div class="card">
+      <h5 class="ms-3 mt-3">Education & Experience</h5>
 
-    <!-- Right Section -->
-<div>
-  <div class="card mt-1">
-    <h5 class="ms-3 mt-3">Previous Experience Details</h5>
-    <div class="card-body">
-      
-      <form #form="ngForm">
-        <div *ngFor="let job of jobs; let i = index" class="d-flex gap-3 mb-3 align-items-start">
-        <div class="d-flex gap-3 mb-3">
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="companyName"
-            id="companyName"
-            placeholder="Enter Company Name"
-            class="form-control form-control-sm" required
-            ngModel
-            #companyName="ngModel">
-            <label for="companyName">Company Name</label>
-            <div *ngIf="isInvalid(companyName)" class="text-danger small">
-                Company Name is Required
+      <div class="card-body">
+        <form [formGroup]="EducationForm" (ngSubmit)="onSubmit()">
+          <!-- EDUCATION -->
+          <h6>Education</h6>
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="qualification"
+                class="form-control form-control-sm"
+                formControlName="qualification"
+              />
+              <label for="qualification">Qualification</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="specialization"
+                class="form-control form-control-sm"
+                formControlName="specialization"
+              />
+              <label for="specialization">Specialization</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="collegeName"
+                class="form-control form-control-sm"
+                formControlName="collegeName"
+              />
+              <label for="collegeName">Name of School/College</label>
             </div>
           </div>
 
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="designation"
-            id="designation"
-            placeholder="Enter Designation*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #designation="ngModel">
-            <label for="designation">Designation</label>
-            <div *ngIf="isInvalid(designation)" class="text-danger small">
-                Designation is Required
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="yearOfPassing"
+                class="form-control form-control-sm"
+                formControlName="yearOfPassing"
+              />
+              <label for="yearOfPassing">Year</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="boardUniversity"
+                class="form-control form-control-sm"
+                formControlName="boardUniversity"
+              />
+              <label for="boardUniversity">Board/University</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="percentage"
+                class="form-control form-control-sm"
+                formControlName="percentage"
+              />
+              <label for="percentage">Percentage</label>
             </div>
           </div>
 
-          <div class="form-floating flex-fill">
-            <input type="date" 
-            name="startDate"
-            id="startDate"
-            placeholder="Select Start Date*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #startDate="ngModel">
-            <label for="startDate">Start Date</label>
-            <div *ngIf="isInvalid(startDate)" class="text-danger small">
-                Start Date is Required
+          <hr />
+
+          <!-- ADDITIONAL CERTIFICATION -->
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="mb-0">Additional Certification</h6>
+            <button type="button" class="btn btn-sm btn-primary" (click)="onAddCertification()">
+              +
+            </button>
+          </div>
+
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="courseName"
+                class="form-control form-control-sm"
+                formControlName="courseName"
+              />
+              <label for="courseName">Course</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="instituteName"
+                class="form-control form-control-sm"
+                formControlName="instituteName"
+              />
+              <label for="instituteName">Institute</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="courseYear"
+                class="form-control form-control-sm"
+                formControlName="courseYear"
+              />
+              <label for="courseYear">Year</label>
             </div>
           </div>
 
-          <div class="form-floating flex-fill">
-            <input type="date" 
-            name="endDate"
-            id="endDate"
-            placeholder="Select End Date*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #endDate="ngModel">
-            <label for="endDate">End Date</label>
-            <div *ngIf="isInvalid(endDate)" class="text-danger small">
-                End Date is Required
+          <hr />
+
+          <!-- SKILLS -->
+          <h6>Skills</h6>
+
+          <!-- Primary skills row -->
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating" style="min-width: 180px">
+              <select
+                id="primarySkill"
+                class="form-select form-select-sm"
+                formControlName="primarySkill"
+              >
+                <option value="" disabled>Select</option>
+                <option value="C#">C#</option>
+                <option value="ASP.NET">ASP.NET</option>
+                <option value="Angular">Angular</option>
+                <option value="SQL Server">SQL Server</option>
+              </select>
+              <label for="primarySkill">Primary</label>
             </div>
-            
+
+            <div class="flex-fill d-flex flex-wrap align-items-center gap-2 border rounded p-2">
+              <!-- Example static tags (replace with *ngFor if dynamic) -->
+              <span class="badge rounded-pill bg-light text-dark border">C#</span>
+              <span class="badge rounded-pill bg-light text-dark border">ASP.NET</span>
+              <span class="badge rounded-pill bg-light text-dark border">AngularJs</span>
+              <span class="badge rounded-pill bg-light text-dark border">Angular</span>
+              <span class="badge rounded-pill bg-light text-dark border">HTML</span>
+              <span class="badge rounded-pill bg-light text-dark border">CSS</span>
+              <span class="badge rounded-pill bg-light text-dark border">Jquery</span>
+              <span class="badge rounded-pill bg-light text-dark border">Bootstrap</span>
+            </div>
           </div>
 
-          <button type="button" class="btn btn-primary btn-sm align-self-start ms-5" (click)="addJob()">+</button>
-  <button *ngIf="jobs.length > 1"
-          type="button"
-          class="btn btn-danger btn-sm btn-same align-self-start"
-          (click)="removeJob(i)">-</button>
+          <!-- Secondary skills row -->
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating" style="min-width: 180px">
+              <select
+                id="secondarySkill"
+                class="form-select form-select-sm"
+                formControlName="secondarySkill"
+              >
+                <option value="" disabled>Select</option>
+                <option value="Sqlserver">Sqlserver</option>
+              </select>
+              <label for="secondarySkill">Secondary</label>
+            </div>
 
-        </div>
-        </div>
+            <div class="flex-fill d-flex flex-wrap align-items-center gap-2 border rounded p-2">
+              <span class="badge rounded-pill bg-light text-dark border">Sqlserver</span>
+            </div>
+          </div>
 
-        <hr><hr>
-        <div class="mb-3">
-  <h5>Marital Status</h5>
-  <div class="form-check form-switch">
-    <input class="form-check-input" 
-           type="checkbox" 
-           role="switch" 
-           id="maritalStatus" 
-           unchecked>
-    <label class="form-check-label no-margin" for="maritalStatus">
-      Unmarried or Married
-    </label>
-  </div>
-</div>
+          <hr />
 
-        <!-- Existing fields above -->
+          <!-- EXPERIENCE (YEARS) -->
+          <h6>Experience (Years)</h6>
 
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="previousExperience"
+                class="form-control form-control-sm"
+                formControlName="previousExperience"
+              />
+              <label for="previousExperience">Previous Experience</label>
+            </div>
 
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="totalExperience"
+                class="form-control form-control-sm"
+                formControlName="totalExperience"
+              />
+              <label for="totalExperience">Total Experience</label>
+            </div>
 
-<div class="d-flex gap-3 mb-3">
-  <!-- Blood Donor Dropdown -->
-  <div class="form-floating flex-fill">
-    <select 
-      name="title"
-      id="title"
-      class="form-select form-select-sm"
-      required
-      ngModel
-      #title="ngModel">
-      <option value="" disabled selected>Select One</option>
-      <option value="Mrs">Mrs.</option>
-      <option value="Miss">Miss.</option>
-      <option value="Mr">Mr.</option>
-    </select>
-      <label for="bloodDonor">Title</label>
-    <div *ngIf="isInvalid(title)" class="text-danger small">
-      Title is Required
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="relevantExperience"
+                class="form-control form-control-sm"
+                formControlName="relevantExperience"
+              />
+              <label for="relevantExperience">Relevant Experience (Before Joining)</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="currentEmployer"
+                class="form-control form-control-sm"
+                formControlName="currentEmployer"
+              />
+              <label for="currentEmployer">Name of Current Employer</label>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="currentDesignation"
+                class="form-control form-control-sm"
+                formControlName="currentDesignation"
+              />
+              <label for="currentDesignation">Current Designation</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="previousOnwardExperience"
+                class="form-control form-control-sm"
+                formControlName="previousOnwardExperience"
+              />
+              <label for="previousOnwardExperience">Previous Onward Experience</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="previousOnwardEmployeeCode"
+                class="form-control form-control-sm"
+                formControlName="previousOnwardEmployeeCode"
+              />
+              <label for="previousOnwardEmployeeCode">Previous Onward Employee Code</label>
+            </div>
+          </div>
+
+          <hr />
+
+          <!-- PREVIOUS EXPERIENCE DETAILS -->
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="mb-0">Previous Experience Details</h6>
+            <small class="text-muted">
+              Do you have previous experience, if yes please provide all company information.
+            </small>
+          </div>
+
+          <div class="d-flex gap-3 mb-3 align-items-start">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="companyName"
+                class="form-control form-control-sm"
+                formControlName="companyName"
+              />
+              <label for="companyName">Company Name</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="designation"
+                class="form-control form-control-sm"
+                formControlName="designation"
+              />
+              <label for="designation">Designation</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="date"
+                id="startDate"
+                class="form-control form-control-sm"
+                formControlName="startDate"
+              />
+              <label for="startDate">Start Date</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="date"
+                id="endDate"
+                class="form-control form-control-sm"
+                formControlName="endDate"
+              />
+              <label for="endDate">End Date</label>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-sm btn-primary ms-2 mt-1"
+              (click)="onAddPreviousExperience()"
+            >
+              +
+            </button>
+          </div>
+
+          <hr />
+
+          <!-- MARITAL STATUS -->
+          <h6>Marital Status</h6>
+
+          <div class="mb-3">
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="unmarried"
+                value="Unmarried"
+                formControlName="maritalStatus"
+              />
+              <label class="form-check-label" for="unmarried">Unmarried</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="married"
+                value="Married"
+                formControlName="maritalStatus"
+              />
+              <label class="form-check-label" for="married">Married</label>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="title"
+                class="form-control form-control-sm"
+                formControlName="title"
+              />
+              <label for="title">Title</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="spouseName"
+                class="form-control form-control-sm"
+                formControlName="spouseName"
+              />
+              <label for="spouseName">Spouse Name</label>
+            </div>
+
+            <div class="d-flex align-items-center">
+              <label class="me-2 mb-0">Have Children</label>
+              <div class="form-check form-switch mb-0">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="haveChildren"
+                  formControlName="haveChildren"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3 mb-3">
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="maritalName"
+                class="form-control form-control-sm"
+                formControlName="maritalName"
+              />
+              <label for="maritalName">Name</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <select
+                id="maritalGender"
+                class="form-select form-select-sm"
+                formControlName="maritalGender"
+              >
+                <option value="" disabled>Select</option>
+                <option value="1">Male</option>
+                <option value="2">Female</option>
+                <option value="3">Other</option>
+              </select>
+              <label for="maritalGender">Gender</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="date"
+                id="maritalDob"
+                class="form-control form-control-sm"
+                formControlName="maritalDob"
+              />
+              <label for="maritalDob">DOB</label>
+            </div>
+
+            <div class="form-floating flex-fill">
+              <input
+                type="text"
+                id="maritalAge"
+                class="form-control form-control-sm"
+                formControlName="maritalAge"
+              />
+              <label for="maritalAge">Age</label>
+            </div>
+          </div>
+
+          <hr />
+
+          <!-- PASSPORT / DOCUMENTS -->
+          <h6>Passport Status</h6>
+
+          <!-- EDUCATIONAL DOCUMENTS -->
+          <div class="mt-3 mb-2 fw-semibold">
+            EDUCATIONAL DOCUMENTS (Documents to be attached and the file size should not exceed
+            500KB)
+          </div>
+
+          <!-- B.Tech -->
+          <div class="d-flex align-items-center mb-2">
+            <div class="flex-fill">
+              <div class="small mb-1">B.Tech</div>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="btechFileName"
+                readonly
+              />
+            </div>
+            <div class="ms-2 d-flex gap-2 mt-4">
+              <button type="button" class="btn btn-sm btn-secondary">⬇</button>
+              <button type="button" class="btn btn-sm btn-warning">✏</button>
+              <button type="button" class="btn btn-sm btn-danger">✕</button>
+            </div>
+          </div>
+
+          <div class="mt-4 mb-2 fw-semibold">
+            BASIC DOCUMENTS (Documents to be attached and the file size should not exceed 500KB)
+          </div>
+
+          <!-- Experience Letter -->
+          <div class="d-flex align-items-center mb-2">
+            <div class="flex-fill">
+              <div class="small mb-1">Experience Letter</div>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="experienceLetterFile"
+                readonly
+              />
+            </div>
+            <div class="ms-2 d-flex gap-2 mt-4">
+              <button type="button" class="btn btn-sm btn-secondary">⬇</button>
+              <button type="button" class="btn btn-sm btn-warning">✏</button>
+              <button type="button" class="btn btn-sm btn-danger">✕</button>
+            </div>
+          </div>
+
+          <!-- Passbook -->
+          <div class="d-flex align-items-center mb-2">
+            <div class="flex-fill">
+              <div class="small mb-1">
+                Passbook / Cancelled Cheque Leaf / Bank Account Statement
+              </div>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="passbookFile"
+                readonly
+              />
+            </div>
+            <div class="ms-2 d-flex gap-2 mt-4">
+              <button type="button" class="btn btn-sm btn-secondary">⬇</button>
+              <button type="button" class="btn btn-sm btn.warning">✏</button>
+              <button type="button" class="btn btn-sm btn-danger">✕</button>
+            </div>
+          </div>
+
+          <!-- Previous Relieving Letter -->
+          <div class="d-flex align-items-center mb-2">
+            <div class="flex-fill">
+              <div class="small mb-1">Previous Relieving Letter</div>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="relievingLetterFile"
+                readonly
+              />
+            </div>
+            <div class="ms-2 d-flex gap-2 mt-4">
+              <button type="button" class="btn btn-sm btn-secondary">⬇</button>
+              <button type="button" class="btn btn-sm btn-warning">✏</button>
+              <button type="button" class="btn btn-sm btn-danger">✕</button>
+            </div>
+          </div>
+
+          <!-- Aadhaar -->
+          <div class="d-flex align-items-center mb-4">
+            <div class="flex-fill">
+              <div class="small mb-1">Aadhaar</div>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="aadhaarFile"
+                readonly
+              />
+            </div>
+            <div class="ms-2 d-flex gap-2 mt-4">
+              <button type="button" class="btn btn-sm btn-secondary">⬇</button>
+              <button type="button" class="btn btn-sm btn-warning">✏</button>
+              <button type="button" class="btn btn-sm btn-danger">✕</button>
+            </div>
+          </div>
+
+          <!-- BUTTONS -->
+          <div class="d-flex justify-content-center gap-3 mt-4">
+            <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-
-  <!-- PAN Number -->
-  <div class="form-floating flex-fill">
-    <input 
-      type="text"
-      name="spouseName"
-      id="spouseName"
-      placeholder="Enter Spouse Name"
-      class="form-control form-control-sm"
-      required
-      ngModel
-      #spouseName="ngModel">
-      <label for="spouseName">Spouse Name</label>
-    <div *ngIf="isInvalid(spouseName)" class="text-danger small">
-      Spouse Name is Required
-    </div>
-  </div>
-
-  <!-- Aadhar Number -->
-  <div class="form-check form-switch flex-fill">
-  <input class="form-check-input" 
-         type="checkbox" 
-         id="haveChildren" 
-         name="haveChildren" 
-         ngModel>
-  <label class="form-check-label" for="haveChildren">
-    Have Childrens
-  </label>
 </div>
-
-</div>
-
-
-
-        <div class="people-wrapper gap-3">
-            <div *ngFor="let person of people; let i = index" class="d-flex gap-3 mb-3">
-          <div class="form-floating flex-fill">
-            <input type="text" 
-            name="name"
-            id="name"
-            placeholder="Enter Name*" 
-            class="form-control form-control-sm" required
-            ngModel
-            #name="ngModel">
-            <label for="name">Name</label>
-            <div *ngIf="isInvalid(name)" class="text-danger small">
-                Name is Required
-            </div>
-          </div>
-
-          <div class="form-floating flex-fill">
-    <select 
-      name="gender"
-      id="gender"
-      class="form-select form-select-sm"
-      required
-      ngModel
-      #gender="ngModel">
-      <option value="" disabled selected>Select One</option>
-      <option value="Mrs">Male.</option>
-      <option value="Miss">Female.</option>
-      <option value="Mr">Prefer Not to Say.</option>
-    </select>
-      <label for="gender">Gender</label>
-    <div *ngIf="isInvalid(gender)" class="text-danger small">
-      Gender is Required
-    </div>
-  </div>
-
-          <div class="form-floating flex-fill">
-  <input type="date" 
-         name="dob"
-         id="dob"
-         placeholder="Select DOB*" 
-         class="form-control form-control-sm"
-         required
-         [(ngModel)]="dob"
-         (change)="calculateAge()"
-         #dobCtrl="ngModel">
-  <label for="dob">DOB (dd/mm/yyyy)</label>
-  <div *ngIf="isInvalid(dobCtrl)" class="text-danger small">
-    DOB is Required
-  </div>
-</div>
-
-<div class="form-floating flex-fill">
-  <input type="text" 
-         id="age"
-         placeholder="Age*" 
-         class="form-control form-control-sm"
-         name="age"
-         [value]="age"   
-         readonly>
-  <label for="age">Age</label>
-</div>
-
-<!-- + and - buttons -->
-  <div class="d-flex align-items-start gap-3">
-    <button type="button"
-            class="btn btn-primary btn-sm align-self-start ms-5"
-            (click)="addPerson()">+</button>
-    <button *ngIf="people.length > 1"
-            type="button"
-            class="btn btn-danger btn-sm btn-same align-self-start"
-            (click)="removePerson(i)">-</button>
-  </div>
-
-</div>
-</div>
-<hr>
-
-<h5>Passport Status</h5>
-<div class="gap-3 mb-3">
-    <p>EDUCATIONAL DOCUMENTS (Documents to be attached and the file size should not exceed 500KB)</p>
-        <h6 class="mt-2">B.Tech</h6>
-        
-    <!-- First Upload -->
-<div style="width: 50%;" class="input-group input-group-sm mb-3 custom-file-group">
-  <input type="text" class="form-control" [value]="selectedFileName[0]" readonly>
-  <input type="file" #fileInput1 (change)="onFileSelected($event, 0)" hidden>
-  <button class="btn p-0 d-flex" type="button" (click)="fileInput1.click()">
-    <i class="bi bi-arrow-up up-btn"></i>
-    <i class="bi bi-arrow-down down-btn"></i>
-  </button>
-</div>
-
-<p class="mt-2">BASIC DOCUMENTS (Documents to be attached and the file size should not exceed 500KB)</p>
-</div>
-<h6 class="mt-2">Experience Letter</h6>
-
-<!-- Second Upload -->
-<div style="width: 50%;" class="input-group input-group-sm mb-3 custom-file-group">
-  <input type="text" class="form-control" [value]="selectedFileName[1]" readonly>
-  <input type="file" #fileInput2 (change)="onFileSelected($event, 1)" hidden>
-  <button class="btn p-0 d-flex" type="button" (click)="fileInput2.click()">
-    <i class="bi bi-arrow-up up-btn"></i>
-    <i class="bi bi-arrow-down down-btn"></i>
-  </button>
-</div>
-
-<!-- Second Upload Section -->
-
-
-<h6 class="mt-2">Pass Book/Cancelled Cheque Leaf/Bank Account Statement</h6>
-
-<!-- Third (Download Only for example) -->
-<div style="width: 45%;" class="input-group input-group-sm mb-3 custom-file-group">
-  <input type="text" class="form-control" [value]="selectedFileName[2]" readonly>
-  <input type="file" #fileInput3 (change)="onFileSelected($event, 2)" hidden>
-  <button class="btn p-0 d-flex" type="button" (click)="fileInput3.click()">
-    <i class="bi bi-arrow-down down-btn"></i>
-  </button>
-</div>
-<hr>
-<!-- Buttons Row -->
-<div class="d-flex justify-content-end gap-5 mt-4">
-  <button 
-    type="button" 
-    class="btn btn-primary"
-    (click)="saveDraft(form)">
-    Save Draft
-  </button>
-
-  <button 
-    type="button" 
-    class="btn btn-primary"
-    (click)="sendToApproval(form)">
-    Send to Approval
-  </button>
-</div>
-
-
-</form>
-  </div>
-

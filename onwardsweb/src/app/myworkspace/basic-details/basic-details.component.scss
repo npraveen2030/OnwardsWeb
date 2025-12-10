@@ -2,7 +2,7 @@
   padding: 0.6rem;
   border-radius: 0px;
   border: 1px solid #0a7ea4;
-  height: 84.4vh;
+  height: 81vh;
   overflow: auto;
 }
 
@@ -18,11 +18,25 @@
   align-items: flex-start; /* align top */
 }
 
+.left-section {
+  width: 25%;
+  padding: 0.3rem;
+  box-sizing: border-box;
+}
+
 :host {
   display: block;
   width: 100%;
   min-height: 100vh; /* take full screen height */
   background: white; /* force white only for this component */
+}
+
+.right-section {
+  width: 92%;
+  // background-color: #ffffff;
+
+  padding: 0.3rem;
+  box-sizing: border-box;
 }
 
 .row {
@@ -81,60 +95,3 @@ label:after {
   content: ' *';
   color: red;
 }
-
-.btn-sm {
-  padding: 2px 8px; /* reduce height */
-  font-size: 0.85rem; /* smaller text */
-  line-height: 1.2; /* tighter fit */
-  margin-top: 0px;
-}
-
-.btn-same {
-  padding: 2px 8px; /* reduce height */
-  font-size: 0.85rem; /* smaller text */
-  line-height: 1.2; /* tighter fit */
-  margin-top: 0px;
-  width: max-content;
-}
-
-.bi-arrow-up {
-  background-color: #0d6efd; /* Bootstrap primary blue */
-  color: white; /* make the arrow white */
-  padding: 4px; /* space around the icon */
-  font-size: 1rem; /* adjust size */
-  border-radius: 4px 0 0 4px;
-}
-.bi-arrow-down {
-  background-color: #ff6600;
-  color: white;
-  padding: 4px; /* space around the icon */
-  /* rounded edges */
-  font-size: 1rem;
-  border-radius: 0 4px 4px 0; /* round only right side */
-  margin-left: -1px;
-}
-.up-btn {
-  background-color: #0d6efd; /* blue */
-  color: white;
-  padding: 6px 8px;
-  border-radius: 4px 0 0 4px; /* only left corners rounded */
-  font-size: 1rem;
-}
-
-.down-btn {
-  background-color: #ff6600; /* orange */
-  color: white;
-  padding: 6px 8px;
-  border-radius: 0 4px 4px 0; /* only right corners rounded */
-  font-size: 1rem;
-  margin-left: -1px; /* overlap border so no gap */
-}
-
-.btn-primary {
-  border-radius: 20px;
-}
-
-.btn:hover {
-  opacity: 0.9;
-}
-

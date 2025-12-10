@@ -11,4 +11,15 @@ export interface LoginResponse {
   mobileNo: string;
   reportingManagerEmpCode: string;
   reportingManagerName: string;
+
+  locationName: string;
+  departmentName: string;
+  gradeValue: string;
+  doj: string | null;
+
+  administrativeManagerEmpCode: string;
+  administrativeManagerName: string;
+
+  functionalReportingManagerEmpCode: string;
+  functionalReportingManagerName: string;
 }

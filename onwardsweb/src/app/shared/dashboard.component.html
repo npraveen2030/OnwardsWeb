@@ -248,15 +248,17 @@
 
         <!-- Right: User Details -->
         <div class="profile-details">
-          <h4>Gedam Nagesh (13339)</h4>
-          <p>Sr. Software Engineer</p>
-          <p>RM - Mookambiga P V</p>
+          <h4>{{ userDetails.fullName }} ({{ userDetails.employeeCode }})</h4>
+          <p>{{ userDetails.roleName }}</p>
+          <p>
+            RM - {{ userDetails.reportingManagerName }}({{ userDetails.reportingManagerEmpCode }})
+          </p>
         </div>
       </div>
     </div>
 
     <!-- Sidebar Menu -->
-    <div class="menu">
+    <div class="menu menu-custom">
       <a href="#">My Approvals</a>
       <a href="myworkspace">My Workspace</a>
       <a href="#">Policies</a>

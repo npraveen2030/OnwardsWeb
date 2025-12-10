@@ -1,120 +1,135 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-basic-details',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './basic-details.component.html',
-  styleUrl: './basic-details.component.scss'
+  styleUrl: './basic-details.component.scss',
 })
 export class BasicDetailsComponent {
-  jobs = [
-  { companyName: '', designation: '', startDate: '', endDate: '' }
-];
+  EducationForm!: FormGroup;
 
-people: any[] = [
-    { name: '', gender: '', dob: '', age: '' }
-  ];
+  constructor(private fb: FormBuilder, private router: Router) {}
 
-  selectedFileName: string[] = ['upload file...','upload file...', 'upload file...'];
+  ngOnInit() {
+    this.EducationForm = this.fb.group({
+      /* ------------------ EDUCATION ------------------ */
+      qualification: ['', Validators.required],
+      specialization: ['', Validators.required],
+      collegeName: ['', Validators.required],
+      yearOfPassing: ['', Validators.required],
+      boardUniversity: ['', Validators.required],
+      percentage: ['', Validators.required],
 
-  constructor(private router:Router){}
+      /* ------------------ CERTIFICATION ------------------ */
+      courseName: [''],
+      instituteName: [''],
+      courseYear: [''],
 
-onFileSelected(event: Event, index: number) {
-  const input = event.target as HTMLInputElement;
-  if (input.files && input.files.length > 0) {
-    this.selectedFileName[index] = input.files[0].name; // store by index
-  }
-}
+      /* ------------------ SKILLS ------------------ */
+      primarySkill: [''],
+      secondarySkill: [''],
 
-  addPerson() {
-    this.people.push({ name: '', gender: '', dob: '', age: '' });
-  }
+      /* ------------------ EXPERIENCE (YEARS) ------------------ */
+      previousExperience: [''],
+      totalExperience: [''],
+      relevantExperience: [''],
+      currentEmployer: [''],
+      currentDesignation: [''],
+      previousOnwardExperience: [''],
+      previousOnwardEmployeeCode: [''],
 
-   removePerson(index: number) {
-    this.people.splice(index, 1);
-  }
+      /* ------------------ PREVIOUS EXPERIENCE ROW (Static) ------------------ */
+      companyName: [''],
+      designation: [''],
+      startDate: [''],
+      endDate: [''],
 
-  activeTab: string = 'personal-info';
-  dob: string = '';
-age: number | null = null;
+      /* ------------------ MARITAL STATUS ------------------ */
+      maritalStatus: ['Unmarried'],
+      title: [''],
+      spouseName: [''],
+      haveChildren: [false],
 
-addJob() {
-  this.jobs.push({ companyName: '', designation: '', startDate: '', endDate: '' });
-}
+      maritalName: [''],
+      maritalGender: [''],
+      maritalDob: [''],
+      maritalAge: [''],
 
-removeJob(index: number) {
-  this.jobs.splice(index, 1);
-}
+      /* ------------------ DOCUMENTS ------------------ */
+      btechFileName: ['upload file...'],
+      experienceLetterFile: ['upload file...'],
+      passbookFile: ['upload file...'],
+      relievingLetterFile: ['upload file...'],
+      aadhaarFile: ['upload file...'],
+    });
 
-calculateAge() {
-  if (this.dob) {
-    const birthDate = new Date(this.dob);
-    const today = new Date();
+    /* ------------------ MARITAL STATUS VALIDATION ------------------ */
+    this.EducationForm.get('maritalStatus')?.valueChanges.subscribe((value) => {
+      if (value === 'Married') {
+        this.EducationForm.get('title')?.setValidators(Validators.required);
+        this.EducationForm.get('spouseName')?.setValidators(Validators.required);
+      } else {
+        this.EducationForm.get('title')?.clearValidators();
+        this.EducationForm.get('spouseName')?.clearValidators();
+        this.EducationForm.patchValue({
+          title: '',
+          spouseName: '',
+        });
+      }
+      this.EducationForm.get('title')?.updateValueAndValidity();
+      this.EducationForm.get('spouseName')?.updateValueAndValidity();
+    });
 
-    let years = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    const dayDiff = today.getDate() - birthDate.getDate();
+    /* ------------------ AUTO AGE CALCULATION ------------------ */
+    this.EducationForm.get('maritalDob')?.valueChanges.subscribe((value) => {
+      if (!value) return;
 
-    // adjust if birthday hasn't happened yet this year
-    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-      years--;
-    }
+      const dob = new Date(value);
+      const today = new Date();
 
-    this.age = years;
-  } else {
-    this.age = null;
-  }
-}
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
 
-  setActiveTab(tab: string) {
-    this.activeTab = tab;
-  }
-
-  onCancel(form:any) {
-    form.resetForm();
-  }
-
-  isInvalid(control: any): boolean {
-    return control?.invalid && (control?.dirty || control?.touched);
-  }
-
-
-   onSubmit(form: any) {
-  if (form.valid) {
-    confirm('Form Submitted Successfully');
-  } else {
-    Object.values(form.controls).forEach((control: any) => {
-      control.markAsTouched(); // force errors to appear
+      this.EducationForm.patchValue({ maritalAge: age });
     });
   }
+
+  /* ------------------ ADD CERTIFICATION ------------------ */
+  onAddCertification() {
+    alert('Add Certification clicked (dynamic expansion can be implemented here)');
+  }
+
+  /* ------------------ ADD PREVIOUS EXPERIENCE ------------------ */
+  onAddPreviousExperience() {
+    alert('Add Previous Experience clicked (dynamic rows can be added)');
+  }
+
+  /* ------------------ DOCUMENT FILE CHANGE ------------------ */
+  onFileSelected(event: any, field: string) {
+    const file = event.target.files[0];
+    if (file) {
+      this.EducationForm.patchValue({ [field]: file.name });
+    }
+  }
+
+  /* ------------------ SUBMIT ------------------ */
+  onSubmit() {
+    if (this.EducationForm.invalid) {
+      this.EducationForm.markAllAsTouched();
+      return;
+    }
+
+    console.log('FINAL FORM DATA:', this.EducationForm.value);
+  }
+
+  /* ------------------ CANCEL BUTTON ------------------ */
+  onCancel() {
+    this.EducationForm.reset();
+  }
 }
-
- saveDraft(form: any) {
-    if (form.invalid) {
-      form.control.markAllAsTouched();
-      return;
-    }
-    const formData = form.value;
-    const blob = new Blob([JSON.stringify(formData, null, 2)], { type: 'application/json' });
-    const url = window.URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'draft.json';
-    a.click();
-
-    window.URL.revokeObjectURL(url);
-  }
-    sendToApproval(form: any) {
-    if (form.invalid) {
-      form.control.markAllAsTouched();
-      return;
-    }
-
-    this.router.navigate(['/my-approvals']);
-  }
-  }
